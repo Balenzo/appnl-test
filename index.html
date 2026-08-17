@@ -131,50 +131,109 @@
       <!-- BRABANT / ANTWERPEN -->
       <div class="tab-content active" id="tab-brabant">
 
-        <a class="competition-card" href="https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+EERSTE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130085" target="_blank">
-          <div class="competition-icon">🏆</div>
-          <div class="competition-info">
-            <div class="competition-title">Eerste Klasse</div>
-            <div class="competition-subtitle">Alle info en uitslagen</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+        <button
+  class="competition-card"
+  onclick="openCompetitionDetail(74130085)"
+  style="width:100%; border:none; cursor:pointer;">
 
-        <a class="competition-card" href="https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+TWEEDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130109" target="_blank">
-          <div class="competition-icon">🏆</div>
-          <div class="competition-info">
-            <div class="competition-title">Tweede Klasse</div>
-            <div class="competition-subtitle">Alle info en uitslagen</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <div class="competition-icon">🏆</div>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+DERDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130127" target="_blank">
-          <div class="competition-icon">🏆</div>
-          <div class="competition-info">
-            <div class="competition-title">Derde Klasse</div>
-            <div class="competition-subtitle">Alle info en uitslagen</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <div class="competition-info">
+    <div class="competition-title">Eerste Klasse</div>
+    <div class="competition-subtitle">Alle info en uitslagen</div>
+  </div>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/%2A%2A%2ABEKER%252FCOUPE+BPBF+VLAANDEREN+2026%2A%2A%2A/74130139" target="_blank">
-          <div class="competition-icon">🏆</div>
-          <div class="competition-info">
-            <div class="competition-title">Beker</div>
-            <div class="competition-subtitle">Schema en resultaten</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <div class="competition-arrow">›</div>
 
-<a class="competition-card" href="https://cuescore.com/tournament/Pool+Tweede+Divisie+Zuid+2026%252F2027/83574892" target="_blank">
-          <div class="competition-icon">🏆</div>
-          <div class="competition-info">
-            <div class="competition-title">Competitie NL</div>
-            <div class="competition-subtitle">Schema en resultaten</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+</button>
+
+        <div
+    class="competition-card"
+    onclick="openCompetitionDetail(74130109)"
+    style="cursor:pointer;"
+>
+    <div class="competition-icon">🏆</div>
+
+    <div class="competition-info">
+        <div class="competition-title">
+            Tweede Klasse
+        </div>
+
+        <div class="competition-subtitle">
+            Alle info en uitslagen
+        </div>
+    </div>
+
+    <div class="competition-arrow">
+        ›
+    </div>
+</div>
+
+        <div
+    class="competition-card"
+    onclick="openCompetitionDetail(74130127)"
+    style="cursor:pointer;"
+>
+    <div class="competition-icon">🏆</div>
+
+    <div class="competition-info">
+        <div class="competition-title">
+            Derde Klasse
+        </div>
+
+        <div class="competition-subtitle">
+            Alle info en uitslagen
+        </div>
+    </div>
+
+    <div class="competition-arrow">
+        ›
+    </div>
+</div>
+
+        <div
+    class="competition-card"
+    onclick="openCompetitionDetail(74130139)"
+    style="cursor:pointer;"
+>
+    <div class="competition-icon">🏆</div>
+
+    <div class="competition-info">
+        <div class="competition-title">
+            Beker
+        </div>
+
+        <div class="competition-subtitle">
+            Schema en resultaten
+        </div>
+    </div>
+
+    <div class="competition-arrow">
+        ›
+    </div>
+</div>
+
+<div
+    class="competition-card"
+    onclick="openCompetitionDetail(83574892)"
+    style="cursor:pointer;"
+>
+    <div class="competition-icon">🇳🇱</div>
+
+    <div class="competition-info">
+        <div class="competition-title">
+            Competitie NL
+        </div>
+
+        <div class="competition-subtitle">
+            Standen en uitslagen
+        </div>
+    </div>
+
+    <div class="competition-arrow">
+        ›
+    </div>
+</div>
 
         
       </div>
@@ -278,6 +337,371 @@
 
     </main>
   </section>
+
+<!-- =========================
+     COMPETITIE DETAIL SCREEN
+========================== -->
+<section class="screen" id="competitionDetailScreen">
+
+  <div class="page-header">
+    <button
+      onclick="closeCompetitionDetail()"
+      style="
+        background:none;
+        border:none;
+        color:white;
+        font-size:24px;
+        cursor:pointer;
+        margin-right:10px;
+      ">
+      ‹
+    </button>
+
+    <span id="competitionDetailTitle">
+      Competitie
+    </span>
+  </div>
+
+  <main class="content">
+
+    <div id="competitionDetailContent">
+
+  <!-- COMPETITIE TABS -->
+  <div class="competition-detail-tabs">
+
+    <button
+      class="competition-detail-tab active"
+      onclick="showCompetitionTab('overview', this)">
+      Overzicht
+    </button>
+
+    <button
+      class="competition-detail-tab"
+      onclick="showCompetitionTab('standings', this)">
+      Stand
+    </button>
+
+    <button
+      class="competition-detail-tab"
+      onclick="showCompetitionTab('matches', this)">
+      Wedstrijden
+    </button>
+
+    <button
+      class="competition-detail-tab"
+      onclick="showCompetitionTab('teams', this)">
+      Teams
+    </button>
+
+  </div>
+
+
+  <!-- OVERZICHT TAB -->
+<div id="competitionTabOverview"
+     class="competition-tab-panel">
+
+    <div class="competition-card">
+
+        <div class="competition-info">
+
+            <div
+                class="competition-title"
+                id="competitionName">
+                Competitie laden...
+            </div>
+
+            <div
+                class="competition-subtitle"
+                id="competitionStatus">
+            </div>
+
+            <div
+                class="competition-subtitle"
+                id="competitionDate">
+            </div>
+
+            <div
+                class="competition-subtitle"
+                id="competitionDiscipline">
+            </div>
+
+        </div>
+
+    </div>
+
+    <a
+        id="competitionCueScoreLink"
+        class="competition-cuescore-link"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        <span>🎱 Bekijk op CueScore</span>
+        <span>↗</span>
+    </a>
+
+</div>
+
+
+  <!-- STAND TAB -->
+  <div id="competitionTabStandings"
+       class="competition-tab-panel"
+       style="display:none;">
+
+    <div id="competitionStandings">
+
+      <div class="competition-title">
+        Stand
+      </div>
+
+      <div id="competitionStandingsList">
+        Stand laden...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- WEDSTRIJDEN TAB -->
+  <div id="competitionTabMatches"
+       class="competition-tab-panel"
+       style="display:none;">
+
+    <div class="competition-title">
+      Wedstrijden
+    </div>
+
+    <div id="competitionMatchesList">
+      Wedstrijden laden...
+    </div>
+
+  </div>
+
+
+  <!-- TEAMS TAB -->
+  <div id="competitionTabTeams"
+       class="competition-tab-panel"
+       style="display:none;">
+
+    <div class="competition-title">
+      Teams
+    </div>
+
+    <div id="competitionTeamsList">
+      Teams laden...
+    </div>
+
+  </div>
+
+</div>
+
+  </main>
+
+</section>
+
+<!-- =========================
+     WEDSTRIJD DETAIL SCREEN
+========================== -->
+<section class="screen" id="matchDetailScreen">
+
+  <div class="page-header">
+
+    <button
+      onclick="closeMatchDetail()"
+      style="
+        background:none;
+        border:none;
+        color:white;
+        font-size:24px;
+        cursor:pointer;
+        margin-right:10px;
+      ">
+      ‹
+    </button>
+
+    <span>
+      Wedstrijd
+    </span>
+
+  </div>
+
+  <main class="content">
+
+    <div id="matchDetailContent">
+
+      <div class="competition-card">
+
+        <div class="competition-info">
+
+          <div
+            class="competition-title"
+            id="matchDetailRound">
+            Wedstrijd laden...
+          </div>
+
+          <div
+            class="competition-subtitle"
+            id="matchDetailDate">
+          </div>
+
+          <div class="match-detail-score">
+
+  <div
+    class="match-detail-team"
+    id="matchDetailTeamA">
+  </div>
+
+  <div class="match-detail-score-value">
+    <span id="matchDetailScoreA" class="match-detail-score-box">0</span>
+    <span class="match-detail-score-dash">-</span>
+    <span id="matchDetailScoreB" class="match-detail-score-box">0</span>
+</div>
+
+  <div
+    class="match-detail-team match-detail-team-away"
+    id="matchDetailTeamB">
+  </div>
+
+</div>
+
+<div
+  class="match-detail-status"
+  id="matchDetailStatus">
+</div>
+
+<div
+  class="match-detail-venue"
+  id="matchDetailVenue">
+</div>
+
+<div class="match-individual-section">
+
+  <div class="competition-title">
+    Individuele wedstrijden
+  </div>
+
+  <div id="matchIndividualMatches">
+    Individuele wedstrijden laden...
+  </div>
+
+</div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
+<!-- ===========================
+     TEAM DETAIL
+=========================== -->
+
+<section id="teamDetailScreen" class="screen">
+
+    <div class="detail-page">
+
+        <div class="detail-header">
+
+            <button
+                class="detail-back-button"
+                onclick="closeTeamDetail()"
+                aria-label="Terug">
+                ‹
+            </button>
+
+            <h1 id="teamDetailTitle">
+                Team
+            </h1>
+
+        </div>
+
+        <div class="team-detail-card">
+
+    <h2 id="teamDetailName">
+        Team
+    </h2>
+
+    <div id="teamDetailPosition">
+    </div>
+
+    <div id="teamDetailVenue">
+    </div>
+
+</div>
+
+
+<div class="team-players-section">
+
+    <div class="competition-title">
+        Spelers
+    </div>
+
+    <div id="teamDetailPlayers">
+        Spelers laden...
+    </div>
+
+</div>
+
+    </div>
+
+</section>
+
+<!-- ===========================
+     PLAYER DETAIL SCREEN
+=========================== -->
+
+<section class="screen" id="playerDetailScreen">
+
+    <div class="detail-page">
+
+        <div class="detail-header">
+
+            <button
+                class="detail-back-button"
+                onclick="closePlayerDetail()">
+                ‹
+            </button>
+
+            <h1 id="playerDetailTitle">
+                Speler
+            </h1>
+
+        </div>
+
+
+        <div class="team-detail-card">
+
+            <h2 id="playerDetailName">
+                Speler
+            </h2>
+
+            <div id="playerDetailTeam">
+                Team
+            </div>
+
+        </div>
+
+
+        <div class="player-stats-section">
+
+            <div class="competition-title">
+                Statistieken
+            </div>
+
+            <div id="playerDetailStats">
+                Statistieken laden...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
   <!-- =========================
        CLUB SCREEN
