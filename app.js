@@ -1,4 +1,6 @@
 let currentCompetitionData = null;
+let playerDetailSource = "team";
+let currentMvpPercentage = null;
 
 // ===============================
 // FAVORIETEN
@@ -539,20 +541,34 @@ if (hasMvp && mvpContainer) {
     Array.isArray(mvpData.players) &&
     mvpData.players.length > 0
 ) {
-    const rankedPlayers =
+    const balEnzoFilter =
+    document.getElementById("competitionMvpBalEnzoOnly");
+
+const renderMvp = () => {
+    let rankedPlayers =
         mvpData.players.filter(player => player.position !== null);
 
+    if (balEnzoFilter && balEnzoFilter.checked) {
+        rankedPlayers = rankedPlayers.filter(player =>
+            player.team.toLowerCase().includes("bal")
+        );
+    }
+
     mvpContainer.innerHTML = rankedPlayers.map(player => `
-        <div class="competition-card">
+        <div
+    class="competition-card"
+    onclick="openMvpPlayerDetail('${player.player.replace(/'/g, "\\'")}', '${player.team.replace(/'/g, "\\'")}', '${player.mvp}')"
+    style="cursor:pointer;"
+>
 
             <div class="competition-icon">
-    ${
-        player.position === 1 ? "🥇" :
-        player.position === 2 ? "🥈" :
-        player.position === 3 ? "🥉" :
-        player.position
-    }
-</div>
+                ${
+                    player.position === 1 ? "🥇" :
+                    player.position === 2 ? "🥈" :
+                    player.position === 3 ? "🥉" :
+                    player.position
+                }
+            </div>
 
             <div class="competition-info">
 
@@ -572,6 +588,14 @@ if (hasMvp && mvpContainer) {
 
         </div>
     `).join("");
+};
+
+renderMvp();
+
+if (balEnzoFilter) {
+    balEnzoFilter.onchange = renderMvp;
+}
+
 }
 
     } catch (error) {
@@ -752,12 +776,33 @@ const matchesContainer =
 
 const matches = data.matches || [];
 
+const upcomingFilter =
+    document.getElementById("competitionMatchesUpcomingOnly");
+
 if (!matches.length) {
 
     matchesContainer.innerHTML =
         "<p>Geen wedstrijden beschikbaar.</p>";
 
 } else {
+
+let matchesToShow = matches;
+
+if (upcomingFilter && upcomingFilter.checked) {
+    matchesToShow = matches.filter(
+        match => match.matchstatus !== "finished"
+    );
+}
+
+const renderMatches = () => {
+
+matchesToShow = matches;
+
+if (upcomingFilter && upcomingFilter.checked) {
+    matchesToShow = matches.filter(
+        match => match.matchstatus !== "finished"
+    );
+}    
 
  // Wedstrijden sorteren op speelronde
 let sortedMatches;
@@ -785,7 +830,7 @@ if (String(tournamentId) === "74130139") {
     return cupRounds[name] ?? 999;
 }
 
-    sortedMatches = [...matches].sort((a, b) => {
+    sortedMatches = [...matchesToShow].sort((a, b) => {
 
         const orderA =
             getCupRoundOrder(a.roundName);
@@ -803,7 +848,7 @@ if (String(tournamentId) === "74130139") {
 
 } else {
 
-    sortedMatches = [...matches].sort((a, b) => {
+    sortedMatches = [...matchesToShow].sort((a, b) => {
         return (a.round || 0) - (b.round || 0);
     });
 
@@ -915,13 +960,21 @@ matchesContainer.innerHTML =
 
                 `;
 
-            }).join("")}
+           }).join("")}
 
         </div>
 
     `).join("");
 
 }
+
+renderMatches();
+
+if (upcomingFilter) {
+    upcomingFilter.onchange = renderMatches;
+}
+
+};
 
     } catch (error) {
 
@@ -1783,6 +1836,23 @@ if (scoreFor > scoreAgainst) {
     Object.entries(disciplineStats)
         .map(([discipline, stats]) => {
 
+            let ballNumber = "";
+
+const disciplineName = discipline.toLowerCase();
+
+if (disciplineName.includes("8")) {
+    ballNumber = "8";
+} else if (disciplineName.includes("9")) {
+    ballNumber = "9";
+} else if (disciplineName.includes("10")) {
+    ballNumber = "10";
+} else if (
+    disciplineName.includes("straight") ||
+    disciplineName.includes("14.1")
+) {
+    ballNumber = "14";
+}
+
             const percentage =
                 stats.played > 0
                     ? Math.round(
@@ -1792,11 +1862,17 @@ if (scoreFor > scoreAgainst) {
 
             return `
 
-                <div class="player-discipline-card">
+               <div class="player-discipline-card">
 
-                    <div class="player-discipline-name">
-                        ${discipline}
-                    </div>
+    ${ballNumber ? `
+        <div class="discipline-ball discipline-ball-${ballNumber}">
+            <span>${ballNumber}</span>
+        </div>
+    ` : ""}
+
+    <div class="player-discipline-name">
+        ${discipline}
+    </div>
 
                     <div class="player-discipline-info">
                         ${stats.played} gespeeld ·
@@ -1814,30 +1890,44 @@ if (scoreFor > scoreAgainst) {
 
         statsContainer.innerHTML = `
 
-            <div class="player-stat-card">
-                <span>Gespeeld</span>
-                <strong>${played}</strong>
-            </div>
+        ${playerDetailSource === "mvp" && currentMvpPercentage ? `
+    <div class="player-stat-card">
+    <span>MVP-score</span>
+    <strong>${currentMvpPercentage}</strong>
+    <div class="player-stat-icon">🏅</div>
+</div>
+
+` : ""}    
+        
+        <div class="player-stat-card">
+    <span>Gespeeld</span>
+    <strong>${played}</strong>
+    <div class="player-stat-icon">📋</div>
+</div>
 
             <div class="player-stat-card">
-                <span>Gewonnen</span>
-                <strong>${wins}</strong>
-            </div>
+    <span>Gewonnen</span>
+    <strong>${wins}</strong>
+    <div class="player-stat-icon">🏆</div>
+</div>
 
             <div class="player-stat-card">
-                <span>Verloren</span>
-                <strong>${losses}</strong>
-            </div>
+    <span>Verloren</span>
+    <strong>${losses}</strong>
+    <div class="player-stat-icon">❌</div>
+</div>
 
             <div class="player-stat-card">
-                <span>Gelijk</span>
-                <strong>${draws}</strong>
-            </div>
+    <span>Gelijk</span>
+    <strong>${draws}</strong>
+    <div class="player-stat-icon">🤝</div>
+</div>
 
             <div class="player-stat-card">
-                <span>Winstpercentage</span>
-                <strong>${winPercentage}%</strong>
-            </div>
+    <span>Winstpercentage</span>
+    <strong>${winPercentage}%</strong>
+    <div class="player-stat-icon">📈</div>
+</div>
 
             <div class="player-discipline-section">
 
@@ -1866,6 +1956,33 @@ if (scoreFor > scoreAgainst) {
 
 }
 
+async function openMvpPlayerDetail(playerName, teamName, mvpPercentage) {
+
+    currentMvpPercentage = mvpPercentage;
+
+    console.log("MVP speler:", {
+        playerName,
+        teamName,
+        mvpPercentage
+    });
+
+    const team = currentCompetitionData?.standings?.["1"]?.find(
+    item =>
+        item.player?.name?.trim().toLowerCase() ===
+        teamName.trim().toLowerCase()
+);
+
+console.log("MVP TEAM GEVONDEN:", team);
+
+if (!team?.player?.teamId) {
+    console.error("Geen teamId gevonden voor MVP-speler:", playerName);
+    return;
+}
+
+playerDetailSource = "mvp";
+openPlayerDetail(playerName, team.player.teamId);
+
+}
 
 /* ===========================
    CLOSE PLAYER DETAIL
@@ -1877,9 +1994,19 @@ function closePlayerDetail() {
         screen.classList.remove("active");
     });
 
+    if (playerDetailSource === "mvp") {
+
+    document
+        .getElementById("competitionDetailScreen")
+        .classList.add("active");
+
+} else {
+
     document
         .getElementById("teamDetailScreen")
         .classList.add("active");
+
+}
 }   
 
 function openLiveScores() {
