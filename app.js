@@ -30,53 +30,72 @@ const favoriteOptions = {
   'competition-first': {
     icon: '🏆',
     title: 'Eerste Klasse',
-    url: 'https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+EERSTE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130085'
-  },
-  'competition-second': {
+    url: null,
+    action: () => openCompetitionDetail("74130085")
+},
+
+'competition-second': {
     icon: '🏆',
     title: 'Tweede Klasse',
-    url: 'https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+TWEEDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130109'
-  },
-  'competition-third': {
+    url: null,
+    action: () => openCompetitionDetail("74130109")
+},
+
+'competition-third': {
     icon: '🏆',
     title: 'Derde Klasse',
-    url: 'https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+DERDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130127'
-  },
-  'competition-cup': {
+    url: null,
+    action: () => openCompetitionDetail("74130127")
+},
+
+'competition-cup': {
     icon: '🏆',
     title: 'Beker',
-    url: 'https://cuescore.com/tournament/%2A%2A%2ABEKER%252FCOUPE+BPBF+VLAANDEREN+2026%2A%2A%2A/74130139'
-  },
-  'competition-nl': {
+    url: null,
+    action: () => openCompetitionDetail("74130139")
+},
+
+'competition-nl': {
     icon: '🇳🇱',
     title: 'Competitie NL',
-    url: 'https://cuescore.com/tournament/Pool+Tweede+Divisie+Zuid+2026%252F2027/83574892'
-  },
-  'breakplay-1': {
+    url: null,
+    action: () => openCompetitionDetail("83574892")
+},
+
+'breakplay-1': {
     icon: '🎱',
     title: 'Break & Play Reeks 1',
-    url: 'https://cuescore.com/tournament/POULE+1+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928236'
-  },
-  'breakplay-2': {
+    url: null,
+    action: () => openCompetitionDetail("85928236")
+},
+
+'breakplay-2': {
     icon: '🎱',
     title: 'Break & Play Reeks 2',
-    url: 'https://cuescore.com/tournament/POULE+2+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928569'
-  },
-  'breakplay-3': {
+    url: null,
+    action: () => openCompetitionDetail("85928569")
+},
+
+'breakplay-3': {
     icon: '🎱',
     title: 'Break & Play Reeks 3',
-    url: 'https://cuescore.com/tournament/POULE+3+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928635'
-  },
-  'breakplay-4': {
+    url: null,
+    action: () => openCompetitionDetail("85928635")
+},
+
+'breakplay-4': {
     icon: '🎱',
     title: 'Break & Play Reeks 4',
-    url: 'https://cuescore.com/tournament/POULE+4+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928797'
-  },
-  'breakplay-5': {
+    url: null,
+    action: () => openCompetitionDetail("85928797")
+},
+
+'breakplay-5': {
     icon: '🎱',
     title: 'Break & Play Reeks 5',
-    url: 'https://cuescore.com/tournament/POULE+5+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85929085'
-  },
+    url: null,
+    action: () => openCompetitionDetail("85929085")
+},
   facebook: {
     icon: '📘',
     title: 'Facebook',
@@ -145,6 +164,18 @@ function renderFavorites() {
         });
       }
     }
+
+else if (item.action) {
+    card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'favorite-card';
+    card.style.border = 'none';
+    card.style.cursor = 'pointer';
+
+    card.addEventListener('click', function () {
+        item.action();
+    });
+}
 
     // 🔗 Gewone externe links
     else if (item.url && item.url !== '#') {
