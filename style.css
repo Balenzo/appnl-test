@@ -1,1591 +1,1591 @@
-/* =========================
-   BASIS
-========================= */
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: #000;
-  color: #fff;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-}
-
-/* =========================
-   SCHERMEN
-========================= */
-.screen {
-  display: none;
-  width: 100%;
-  max-width: 430px;
-  min-height: 100vh;
-  background: #000;
-  position: relative;
-  z-index: 1;
-  padding-bottom: calc(110px + env(safe-area-inset-bottom));
-}
-
-.screen.active {
-  display: block;
-}
-
-/* =========================
-   HERO
-========================= */
-.hero {
-  position: relative;
-  height: 280px;
-  overflow: hidden;
-  background:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.85)),
-    url('hero.jpg') center center / cover no-repeat;
-}
-
-.hero-logo {
-  position: absolute;
-  top: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 140px;
-  max-width: 45%;
-  z-index: 2;
-}
-
-.hero-content {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: 28px;
-  z-index: 2;
-  text-align: center;
-}
-
-.hero-content h1 {
-  margin: 0 0 8px;
-  font-size: 34px;
-  font-weight: 800;
-  line-height: 1.05;
-  text-align: center;
-}
-
-.hero-content p {
-  margin: 0;
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.85);
-  text-align: center;
-}
-
-.hero-content p {
-  margin: 0;
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* =========================
-   SECTIES
-========================= */
-.section-block {
-  padding: 24px 20px 0;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section-header h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-.link-btn {
-  background: none;
-  border: none;
-  color: #ff4d4d;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* =========================
-   FAVORIETEN
-========================= */
-.favorites-row {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-}
-
-.favorites-row::-webkit-scrollbar {
-  display: none;
-}
-
-.favorite-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 auto;
-  min-width: 120px;
-  padding: 18px 14px;
-
-  background: linear-gradient(180deg, #1a1a1a, #111);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
-
-  text-align: center;
-  text-decoration: none;
-  color: #fff;
-}
-
-.favorite-icon {
-  font-size: 26px;
-  margin-bottom: 8px;
-}
-
-.favorite-title {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-/* =========================
-   SNELLE ACTIES
-========================= */
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.quick-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px 12px;
-  border-radius: 18px;
-
-  background: linear-gradient(180deg, #b00000, #7a0000);
-  box-shadow: 0 8px 24px rgba(139, 0, 0, 0.35);
-
-  text-align: center;
-  text-decoration: none !important;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-}
-
-.quick-card * {
-  color: #fff !important;
-  text-decoration: none !important;
-}
-
-.quick-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-}
-
-.quick-title {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-/* =========================
-   PAGINA HEADER
-========================= */
-.page-header {
-  padding: 28px 20px 20px;
-  font-size: 28px;
-  font-weight: 800;
-}
-
-/* =========================
-   TABS
-========================= */
-.tab-bar {
-  display: flex;
-  gap: 8px;
-  padding: 0 20px 20px;
-}
-
-.tab {
-  flex: 1;
-  border: none;
-  border-radius: 12px;
-  padding: 12px;
-  background: #1c1c1c;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.tab.active {
-  background: linear-gradient(180deg, #d60000, #8b0000);
-}
-
-/* =========================
-   TAB CONTENT
-========================= */
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-/* =========================
-   CONTENT
-========================= */
-.content {
-  padding: 0 20px;
-}
-
-/* =========================
-   COMPETITIEKAARTEN
-========================= */
-.competition-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-
-  width: 100%;
-  padding: 18px;
-  margin-bottom: 14px;
-
-  background: linear-gradient(180deg, #181818, #101010);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
-
-  text-decoration: none;
-  color: #fff;
-}
-
-button.competition-card {
-  border: none;
-  font: inherit;
-  text-align: left;
-}
-
-.competition-icon {
-  font-size: 28px;
-}
-
-.competition-info {
-  flex: 1;
-}
-
-.competition-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.competition-subtitle {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.competition-arrow {
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.35);
-}
-
-/* =========================
-   BOTTOM NAVIGATION
-========================= */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 100%;
-  max-width: 430px;
-
-  display: flex;
-
-  background: rgba(10, 10, 10, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-
-  padding-bottom: env(safe-area-inset-bottom);
-
-  z-index: 99999;
-}
-
-.nav-item {
-  flex: 1;
-
-  border: none;
-  background: none;
-
-  color: rgba(255, 255, 255, 0.65);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-
-  font-size: 20px;
-  font-weight: 500;
-
-  cursor: pointer;
-
-  padding: 12px 8px calc(12px + env(safe-area-inset-bottom));
-}
-
-.nav-item.active {
-  color: #ff4d4d;
-}
-
-.nav-label {
-  font-size: 11px;
-  font-weight: 600;
-}
-
-/* =========================
-   MODAL
-========================= */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2000;
-
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  /* Scrollbaar */
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-
-  /* Ruimte rondom */
-  padding: 20px;
-}
-
-.modal.show {
-  display: block;
-}
-
-/* Modal box */
-.modal-content {
-  width: 100%;
-  max-width: 420px;
-  margin: 40px auto calc(40px + env(safe-area-inset-bottom));
-
-  background: #111;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 24px;
-  padding: 24px;
-}
-
-.modal-content h3 {
-  margin: 0 0 20px;
-  font-size: 22px;
-}
-
-/* Favorietenlijst */
-.favorite-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  font-size: 16px;
-}
-
-.favorite-option input {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-/* Actieknoppen */
-.modal-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.modal-btn {
-  flex: 1;
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.modal-btn.secondary {
-  background: #2a2a2a;
-  color: #fff;
-}
-
-.modal-btn.primary {
-  background: linear-gradient(180deg, #d60000, #8b0000);
-  color: #fff;
-}
-
-/* Snelle Acties met foto's */
-.quick-action-card {
-  display: flex;
-  flex-direction: column;
-  background: #111;
-  border: 1px solid rgba(255, 0, 0, 0.5);
-  border-radius: 18px;
-  overflow: hidden;
-  text-decoration: none;
-  color: #fff;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.quick-action-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.quick-action-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  display: block;
-}
-
-.quick-action-content {
-  padding: 14px;
-}
-
-.quick-action-title {
-  font-size: 0.95rem !important;
-  font-weight: 700 !important;
-  line-height: 1.2 !important;
-  margin-bottom: 6px !important;
-  word-break: keep-all !important;
-  overflow-wrap: normal !important;
-  white-space: normal !important;
-  hyphens: none !important;
-}
-
-.quick-action-subtitle {
-  font-size: 0.65rem !important;
-  color: #bdbdbd !important;
-  line-height: 1.3 !important;
-  word-break: break-word !important;
-  overflow-wrap: break-word !important;
-}
-
-.quick-action-external {
-  margin-top: auto !important;
-  text-align: right !important;
-  font-size: 1.2rem !important;
-  color: #ffffff !important;
-}
-
-.competition-icon img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-
-/* ===========================
-   COMPETITIE DETAIL TABS
-=========================== */
-
-.competition-detail-tabs {
+  /* =========================
+    BASIS
+  ========================= */
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #000;
+    color: #fff;
+  }
+
+  body {
     display: flex;
-    gap: 6px;
-    margin-bottom: 16px;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
+    justify-content: center;
+  }
 
-.competition-detail-tabs::-webkit-scrollbar {
+  /* =========================
+    SCHERMEN
+  ========================= */
+  .screen {
     display: none;
-}
-
-.competition-detail-tab {
-    flex: 1;
-    min-width: max-content;
-    padding: 10px 12px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #1a1a1a;
-    color: #aaa;
-
-    font-size: 12px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
-
-.competition-detail-tab.active {
-    background: #e50914;
-    color: white;
-}
-
-/* ===========================
-   COMPETITIE STAND
-=========================== */
-
-.standings-scroll {
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    max-width: 430px;
+    min-height: 100vh;
+    background: #000;
+    position: relative;
+    z-index: 1;
+    padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  }
 
-    margin-top: 12px;
-    padding-bottom: 6px;
-}
+  .screen.active {
+    display: block;
+  }
 
-.standings-scroll::-webkit-scrollbar {
-    height: 6px;
-}
+  /* =========================
+    HERO
+  ========================= */
+  .hero {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.85)),
+      url('hero.jpg') center center / cover no-repeat;
+  }
 
-.standings-scroll::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-}
-
-.standings-table {
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 14px;
-
-    overflow: visible;
-}
-
-.standings-table-full {
-    min-width: 1050px;
-}
-
-.standings-row {
-    display: grid;
-
-    grid-template-columns:
-    32px
-    120px
-    38px
-    42px
-    38px
-    38px
-    38px
-    42px
-    42px
-    46px
-    58px
-    58px
-    52px
-    58px
-    46px;
-
-    align-items: center;
-
-    min-height: 48px;
-
-    padding: 0 10px;
-
-    border-bottom: 1px solid #242424;
-
-    font-size: 12px;
-}
-
-.standings-row:last-child {
-    border-bottom: none;
-}
-
-.standings-row > div:not(.standings-team) {
-    text-align: center;
-}
-
-
-/* HEADER */
-
-.standings-header {
-    min-height: 42px;
-
-    background: #1b1b1b;
-
-    color: #888;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    position: sticky;
-    top: 0;
+  .hero-logo {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    max-width: 45%;
     z-index: 2;
-}
+  }
 
+  .hero-content {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 28px;
+    z-index: 2;
+    text-align: center;
+  }
 
-/* TEAM */
-
-.standings-team {
-    color: #fff;
-    font-weight: 700;
-
-    white-space: normal;
-    overflow-wrap: anywhere;
-    line-height: 1.2;
-}
-
-.standings-position {
-    color: #888;
-    font-weight: 700;
-}
-
-.standings-points {
-    color: #fff;
+  .hero-content h1 {
+    margin: 0 0 8px;
+    font-size: 34px;
     font-weight: 800;
-}
-
-
-/* BAL ENZO ACCENT */
-
-.standings-row.balenzo-team {
-    background: rgba(229, 9, 20, 0.15);
-}
-
-.standings-row.balenzo-team .standings-team,
-.standings-row.balenzo-team .standings-points {
-    color: #ff3340;
-}
-
-/* ===========================
-   VASTE KOLOMMEN STAND
-=========================== */
-
-.standings-row > div:nth-child(1),
-.standings-row > div:nth-child(2) {
-    position: sticky;
-    z-index: 3;
-}
-
-.standings-row > div:nth-child(1) {
-    left: 0;
-    background: #111;
-}
-
-.standings-row > div:nth-child(2) {
-    left: 32px;
-    background: #111;
-}
-
-
-/* HEADER OOK VAST */
-
-.standings-header > div:nth-child(1),
-.standings-header > div:nth-child(2) {
-    background: #1b1b1b;
-    z-index: 5;
-}
-
-
-/* BAL ENZO RIJEN */
-
-.standings-row.balenzo-team > div:nth-child(1),
-.standings-row.balenzo-team > div:nth-child(2) {
-    background: #2a1012;
-}
-
-
-/* SCHEIDING NA TEAMNAAM */
-
-.standings-row > div:nth-child(2) {
-    box-shadow: 6px 0 8px -8px rgba(0, 0, 0, 0.9);
-}
-
-/* ===========================
-   COMPETITIE WEDSTRIJDEN
-=========================== */
-
-.competition-round {
-    margin-bottom: 22px;
-}
-
-.competition-round-title {
-    margin-bottom: 8px;
-
-    color: #888;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-
-/* WEDSTRIJDKAART */
-
-.competition-match-card {
-    margin-bottom: 8px;
-    padding: 12px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 12px;
-}
-
-
-/* DATUM */
-
-.competition-match-date {
-    margin-bottom: 10px;
-
-    color: #777;
-    font-size: 10px;
-    font-weight: 600;
-}
-
-
-/* TEAMS + SCORE */
-
-.competition-match-teams {
-    display: grid;
-    grid-template-columns: 1fr 48px 1fr;
-    gap: 8px;
-
-    align-items: center;
-}
-
-.competition-match-team {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.competition-match-team-away {
-    text-align: right;
-}
-
-.competition-match-score {
+    line-height: 1.05;
     text-align: center;
+  }
 
-    color: #fff;
-    font-size: 16px;
-    font-weight: 800;
-}
-
-
-/* STATUS */
-
-.competition-match-status {
-    margin-top: 8px;
-
-    color: #666;
-    font-size: 9px;
-    font-weight: 600;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.competition-match-venue {
-    margin-top: 7px;
-
-    color: #777;
-    font-size: 9px;
-    font-weight: 500;
-
-    text-align: center;
-}
-
-.competition-match-card.balenzo-match {
-    background: rgba(229, 9, 20, 0.12);
-    border-color: rgba(229, 9, 20, 0.35);
-}
-
-/* ===========================
-   WEDSTRIJD DETAIL
-=========================== */
-
-.match-detail-score {
-    display: grid;
-    grid-template-columns: 1fr 60px 1fr;
-    align-items: center;
-    gap: 8px;
-
-    margin-top: 18px;
-}
-
-.match-detail-team {
-    color: #fff;
+  .hero-content p {
+    margin: 0;
     font-size: 15px;
-    font-weight: 700;
-    line-height: 1.25;
-}
-
-.match-detail-team-away {
-    text-align: right;
-}
-
-.match-detail-score-value {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    flex-shrink: 0;
-}
-
-.match-detail-score-box {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #181818;
-    border: 1px solid #303030;
-    border-radius: 10px;
-
-    color: #fff;
-    font-size: 24px;
-    font-weight: 800;
-    line-height: 1;
-}
-
-.match-detail-score-dash {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 800;
-}
-
-.match-detail-status {
-    display: table;
-
-    margin: 12px auto 0;
-    padding: 5px 10px;
-
-    border-radius: 20px;
-
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-/* Gespeelde wedstrijd */
-
-.match-detail-status.finished {
-    color: #aaa;
-    background: #202020;
-    border: 1px solid #303030;
-}
-
-/* Geplande wedstrijd */
-
-.match-detail-status.planned {
-    color: #ff2d2d;
-    background: rgba(255, 45, 45, 0.10);
-    border: 1px solid rgba(255, 45, 45, 0.30);
-}
-
-.match-detail-venue {
-    margin-top: 8px;
-
-    color: #888;
-    font-size: 10px;
-
+    color: rgba(255, 255, 255, 0.85);
     text-align: center;
-}
+  }
 
-/* ===========================
-   INDIVIDUELE WEDSTRIJDEN
-=========================== */
+  .hero-content p {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.85);
+  }
 
-.match-individual-section {
-    margin-top: 20px;
-}
+  /* =========================
+    SECTIES
+  ========================= */
+  .section-block {
+    padding: 24px 20px 0;
+  }
 
-#matchIndividualMatches {
-    margin-top: 10px;
-}
-
-.individual-match-card {
-    margin-bottom: 10px;
-    padding: 12px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 12px;
-}
-
-.individual-match-header {
+  .section-header {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-
-    margin-bottom: 10px;
-
-    color: #777;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.individual-match-score {
-    display: grid;
-    grid-template-columns: 1fr 52px 1fr;
     align-items: center;
-    gap: 8px;
-}
+    margin-bottom: 16px;
+  }
 
-.individual-match-player {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.individual-match-player-away {
-    text-align: right;
-}
-
-.individual-match-score-value {
-    text-align: center;
-
-    color: #fff;
-    font-size: 17px;
-    font-weight: 800;
-}
-
-.individual-match-meta {
-    margin-top: 9px;
-
-    color: #666;
-    font-size: 9px;
-    text-align: center;
-}
-
-/* Winnaar individuele wedstrijd */
-
-.individual-match-player.winner {
-    color: #ff2d2d;
-}
-
-.match-detail-team.winner {
-    color: #ff2d2d;
-}
-
-/* ===========================
-   TEAM DETAIL
-=========================== */
-
-#teamDetailScreen {
-    background: #000;
-}
-
-.detail-page {
-    padding: 20px;
-    padding-bottom: 100px;
-}
-
-.detail-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-bottom: 18px;
-}
-
-.detail-header h1 {
+  .section-header h2 {
     margin: 0;
-
-    color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
-}
+  }
 
-.detail-back-button {
+  .link-btn {
     background: none;
     border: none;
-    padding: 0;
-
-    color: #fff;
-    font-size: 26px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-.team-detail-card {
-    padding: 16px;
-
-    background: linear-gradient(
-        180deg,
-        #181818,
-        #111
-    );
-
-    border: 1px solid #242424;
-    border-radius: 14px;
-}
-
-.team-detail-card h2 {
-    margin: 0 0 8px;
-
-    color: #fff;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-#teamDetailPosition {
-    margin-bottom: 8px;
-
-    color: #aaa;
-    font-size: 12px;
-}
-
-#teamDetailVenue {
-    color: #888;
-    font-size: 11px;
-}
-
-/* ===========================
-   TEAM DETAIL - SPELERS
-=========================== */
-
-.team-players-section {
-    margin-top: 16px;
-}
-
-.team-players-section > .competition-title {
-    margin-bottom: 8px;
-}
-
-#teamDetailPlayers {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.team-player-card {
-    display: flex;
-    align-items: center;
-
-    min-height: 38px;
-    padding: 0 12px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 9px;
-
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.team-player-card {
-    justify-content: space-between;
-    cursor: pointer;
-}
-
-.team-player-arrow {
-    color: #666;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 1;
-}
-
-/* ===========================
-   PLAYER DETAIL - STATS
-=========================== */
-
-.player-stats-section {
-    margin-top: 16px;
-}
-
-.player-stats-section > .competition-title {
-    margin-bottom: 8px;
-}
-
-#playerDetailStats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 7px;
-}
-
-.player-stat-card {
-    min-height: 58px;
-    padding: 10px 12px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 9px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.player-stat-card span {
-    color: #888;
-    font-size: 9px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.player-stat-card strong {
-    margin-top: 3px;
-
-    color: #fff;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-/* Winstpercentage over volledige breedte */
-
-.player-stat-card:last-child {
-    grid-column: 1 / -1;
-
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.player-stat-card:last-child strong {
-    margin-top: 0;
-    color: #ff2b2b;
-}
-
-/* ===========================
-   PLAYER DETAIL - DISCIPLINES
-=========================== */
-
-.player-discipline-section {
-    grid-column: 1 / -1;
-    margin-top: 8px;
-}
-
-.player-discipline-section > .competition-title {
-    margin-bottom: 8px;
-}
-
-.player-discipline-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    min-height: 46px;
-    padding: 8px 12px;
-    margin-bottom: 6px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 9px;
-}
-
-.player-discipline-name {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.player-discipline-info {
-    color: #888;
-    font-size: 9px;
-    text-align: right;
-}
-
-.player-discipline-info strong {
-    display: block;
-    margin-top: 2px;
-
-    color: #fff;
-    font-size: 13px;
-}
-
-/* ===========================
-   CUESCORE LINK
-=========================== */
-
-.competition-cuescore-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-top: 12px;
-    padding: 14px 16px;
-
-    background: #111;
-    border: 1px solid #242424;
-    border-radius: 12px;
-
-    color: #fff;
+    color: #ff4d4d;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* =========================
+    FAVORIETEN
+  ========================= */
+  .favorites-row {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .favorites-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .favorite-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+    min-width: 120px;
+    padding: 18px 14px;
+
+    background: linear-gradient(180deg, #1a1a1a, #111);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+
+    text-align: center;
     text-decoration: none;
+    color: #fff;
+  }
 
-    transition: 0.2s;
-}
+  .favorite-icon {
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
 
-.competition-cuescore-link:hover {
-    background: #181818;
-    border-color: #333;
-}
+  .favorite-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
 
-.competition-cuescore-link:active {
-    transform: scale(0.98);
-}
+  /* =========================
+    SNELLE ACTIES
+  ========================= */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
 
-/* ===========================
-   LIVE SCORES
-=========================== */
+  .quick-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-.live-scores-frame {
+    padding: 18px 12px;
+    border-radius: 18px;
+
+    background: linear-gradient(180deg, #b00000, #7a0000);
+    box-shadow: 0 8px 24px rgba(139, 0, 0, 0.35);
+
+    text-align: center;
+    text-decoration: none !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  .quick-card * {
+    color: #fff !important;
+    text-decoration: none !important;
+  }
+
+  .quick-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .quick-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* =========================
+    PAGINA HEADER
+  ========================= */
+  .page-header {
+    padding: 28px 20px 20px;
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  /* =========================
+    TABS
+  ========================= */
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px 20px;
+  }
+
+  .tab {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    background: #1c1c1c;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    background: linear-gradient(180deg, #d60000, #8b0000);
+  }
+
+  /* =========================
+    TAB CONTENT
+  ========================= */
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  /* =========================
+    CONTENT
+  ========================= */
+  .content {
+    padding: 0 20px;
+  }
+
+  /* =========================
+    COMPETITIEKAARTEN
+  ========================= */
+  .competition-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
     width: 100%;
-    height: calc(100vh - 130px);
+    padding: 18px;
+    margin-bottom: 14px;
+
+    background: linear-gradient(180deg, #181818, #101010);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+
+    text-decoration: none;
+    color: #fff;
+  }
+
+  button.competition-card {
+    border: none;
+    font: inherit;
+    text-align: left;
+  }
+
+  .competition-icon {
+    font-size: 28px;
+  }
+
+  .competition-info {
+    flex: 1;
+  }
+
+  .competition-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .competition-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .competition-arrow {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  /* =========================
+    BOTTOM NAVIGATION
+  ========================= */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 100%;
+    max-width: 430px;
+
+    display: flex;
+
+    background: rgba(10, 10, 10, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    padding-bottom: env(safe-area-inset-bottom);
+
+    z-index: 99999;
+  }
+
+  .nav-item {
+    flex: 1;
+
+    border: none;
+    background: none;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    font-size: 20px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    padding: 12px 8px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .nav-item.active {
+    color: #ff4d4d;
+  }
+
+  .nav-label {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* =========================
+    MODAL
+  ========================= */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    /* Scrollbaar */
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    /* Ruimte rondom */
+    padding: 20px;
+  }
+
+  .modal.show {
+    display: block;
+  }
+
+  /* Modal box */
+  .modal-content {
+    width: 100%;
+    max-width: 420px;
+    margin: 40px auto calc(40px + env(safe-area-inset-bottom));
+
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .modal-content h3 {
+    margin: 0 0 20px;
+    font-size: 22px;
+  }
+
+  /* Favorietenlijst */
+  .favorite-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 16px;
+  }
+
+  .favorite-option input {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  /* Actieknoppen */
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .modal-btn {
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .modal-btn.secondary {
+    background: #2a2a2a;
+    color: #fff;
+  }
+
+  .modal-btn.primary {
+    background: linear-gradient(180deg, #d60000, #8b0000);
+    color: #fff;
+  }
+
+  /* Snelle Acties met foto's */
+  .quick-action-card {
+    display: flex;
+    flex-direction: column;
+    background: #111;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #fff;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .quick-action-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .quick-action-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .quick-action-content {
+    padding: 14px;
+  }
+
+  .quick-action-title {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin-bottom: 6px !important;
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    white-space: normal !important;
+    hyphens: none !important;
+  }
+
+  .quick-action-subtitle {
+    font-size: 0.65rem !important;
+    color: #bdbdbd !important;
+    line-height: 1.3 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .quick-action-external {
+    margin-top: auto !important;
+    text-align: right !important;
+    font-size: 1.2rem !important;
+    color: #ffffff !important;
+  }
+
+  .competition-icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  /* ===========================
+    COMPETITIE DETAIL TABS
+  =========================== */
+
+  .competition-detail-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+  }
+
+  .competition-detail-tabs::-webkit-scrollbar {
+      display: none;
+  }
+
+  .competition-detail-tab {
+      flex: 1;
+      min-width: max-content;
+      padding: 10px 12px;
+
+      border: 1px solid rgba(229, 9, 20, 0.55);
+      border-radius: 10px;
+
+      background: #1a1a1a;
+      color: #aaa;
+
+      font-size: 12px;
+      font-weight: 600;
+
+      cursor: pointer;
+  }
+
+  .competition-detail-tab.active {
+      background: #e50914;
+      color: white;
+  }
+
+  /* ===========================
+    COMPETITIE STAND
+  =========================== */
+
+  .standings-scroll {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+
+      margin-top: 12px;
+      padding-bottom: 6px;
+  }
+
+  .standings-scroll::-webkit-scrollbar {
+      height: 6px;
+  }
+
+  .standings-scroll::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+  }
+
+  .standings-table {
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 14px;
+
+      overflow: visible;
+  }
+
+  .standings-table-full {
+      min-width: 1050px;
+  }
+
+  .standings-row {
+      display: grid;
+
+      grid-template-columns:
+      32px
+      120px
+      38px
+      42px
+      38px
+      38px
+      38px
+      42px
+      42px
+      46px
+      58px
+      58px
+      52px
+      58px
+      46px;
+
+      align-items: center;
+
+      min-height: 48px;
+
+      padding: 0 10px;
+
+      border-bottom: 1px solid #242424;
+
+      font-size: 12px;
+  }
+
+  .standings-row:last-child {
+      border-bottom: none;
+  }
+
+  .standings-row > div:not(.standings-team) {
+      text-align: center;
+  }
+
+
+  /* HEADER */
+
+  .standings-header {
+      min-height: 42px;
+
+      background: #1b1b1b;
+
+      color: #888;
+
+      font-size: 10px;
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+      position: sticky;
+      top: 0;
+      z-index: 2;
+  }
+
+
+  /* TEAM */
+
+  .standings-team {
+      color: #fff;
+      font-weight: 700;
+
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.2;
+  }
+
+  .standings-position {
+      color: #888;
+      font-weight: 700;
+  }
+
+  .standings-points {
+      color: #fff;
+      font-weight: 800;
+  }
+
+
+  /* BAL ENZO ACCENT */
+
+  .standings-row.balenzo-team {
+      background: rgba(229, 9, 20, 0.15);
+  }
+
+  .standings-row.balenzo-team .standings-team,
+  .standings-row.balenzo-team .standings-points {
+      color: #ff3340;
+  }
+
+  /* ===========================
+    VASTE KOLOMMEN STAND
+  =========================== */
+
+  .standings-row > div:nth-child(1),
+  .standings-row > div:nth-child(2) {
+      position: sticky;
+      z-index: 3;
+  }
+
+  .standings-row > div:nth-child(1) {
+      left: 0;
+      background: #111;
+  }
+
+  .standings-row > div:nth-child(2) {
+      left: 32px;
+      background: #111;
+  }
+
+
+  /* HEADER OOK VAST */
+
+  .standings-header > div:nth-child(1),
+  .standings-header > div:nth-child(2) {
+      background: #1b1b1b;
+      z-index: 5;
+  }
+
+
+  /* BAL ENZO RIJEN */
+
+  .standings-row.balenzo-team > div:nth-child(1),
+  .standings-row.balenzo-team > div:nth-child(2) {
+      background: #2a1012;
+  }
+
+
+  /* SCHEIDING NA TEAMNAAM */
+
+  .standings-row > div:nth-child(2) {
+      box-shadow: 6px 0 8px -8px rgba(0, 0, 0, 0.9);
+  }
+
+  /* ===========================
+    COMPETITIE WEDSTRIJDEN
+  =========================== */
+
+  .competition-round {
+      margin-bottom: 22px;
+  }
+
+  .competition-round-title {
+      margin-bottom: 8px;
+
+      color: #888;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+  }
+
+
+  /* WEDSTRIJDKAART */
+
+  .competition-match-card {
+      margin-bottom: 8px;
+      padding: 12px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 12px;
+  }
+
+
+  /* DATUM */
+
+  .competition-match-date {
+      margin-bottom: 10px;
+
+      color: #777;
+      font-size: 10px;
+      font-weight: 600;
+  }
+
+
+  /* TEAMS + SCORE */
+
+  .competition-match-teams {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      gap: 8px;
+
+      align-items: center;
+  }
+
+  .competition-match-team {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+  }
+
+  .competition-match-team-away {
+      text-align: right;
+  }
+
+  .competition-match-score {
+      text-align: center;
+
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+  }
+
+
+  /* STATUS */
+
+  .competition-match-status {
+      margin-top: 8px;
+
+      color: #666;
+      font-size: 9px;
+      font-weight: 600;
+      text-align: center;
+      text-transform: uppercase;
+  }
+
+  .competition-match-venue {
+      margin-top: 7px;
+
+      color: #777;
+      font-size: 9px;
+      font-weight: 500;
+
+      text-align: center;
+  }
+
+  .competition-match-card.balenzo-match {
+      background: rgba(229, 9, 20, 0.12);
+      border-color: rgba(229, 9, 20, 0.35);
+  }
+
+  /* ===========================
+    WEDSTRIJD DETAIL
+  =========================== */
+
+  .match-detail-score {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      align-items: center;
+      gap: 8px;
+
+      margin-top: 18px;
+  }
+
+  .match-detail-team {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.25;
+  }
+
+  .match-detail-team-away {
+      text-align: right;
+  }
+
+  .match-detail-score-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      flex-shrink: 0;
+  }
+
+  .match-detail-score-box {
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #181818;
+      border: 1px solid #303030;
+      border-radius: 10px;
+
+      color: #fff;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+  }
+
+  .match-detail-score-dash {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+  }
+
+  .match-detail-status {
+      display: table;
+
+      margin: 12px auto 0;
+      padding: 5px 10px;
+
+      border-radius: 20px;
+
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+  }
+
+  /* Gespeelde wedstrijd */
+
+  .match-detail-status.finished {
+      color: #aaa;
+      background: #202020;
+      border: 1px solid #303030;
+  }
+
+  /* Geplande wedstrijd */
+
+  .match-detail-status.planned {
+      color: #ff2d2d;
+      background: rgba(255, 45, 45, 0.10);
+      border: 1px solid rgba(255, 45, 45, 0.30);
+  }
+
+  .match-detail-venue {
+      margin-top: 8px;
+
+      color: #888;
+      font-size: 10px;
+
+      text-align: center;
+  }
+
+  /* ===========================
+    INDIVIDUELE WEDSTRIJDEN
+  =========================== */
+
+  .match-individual-section {
+      margin-top: 20px;
+  }
+
+  #matchIndividualMatches {
+      margin-top: 10px;
+  }
+
+  .individual-match-card {
+      margin-bottom: 10px;
+      padding: 12px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 12px;
+  }
+
+  .individual-match-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+
+      margin-bottom: 10px;
+
+      color: #777;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+  }
+
+  .individual-match-score {
+      display: grid;
+      grid-template-columns: 1fr 52px 1fr;
+      align-items: center;
+      gap: 8px;
+  }
+
+  .individual-match-player {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+  }
+
+  .individual-match-player-away {
+      text-align: right;
+  }
+
+  .individual-match-score-value {
+      text-align: center;
+
+      color: #fff;
+      font-size: 17px;
+      font-weight: 800;
+  }
+
+  .individual-match-meta {
+      margin-top: 9px;
+
+      color: #666;
+      font-size: 9px;
+      text-align: center;
+  }
+
+  /* Winnaar individuele wedstrijd */
+
+  .individual-match-player.winner {
+      color: #ff2d2d;
+  }
+
+  .match-detail-team.winner {
+      color: #ff2d2d;
+  }
+
+  /* ===========================
+    TEAM DETAIL
+  =========================== */
+
+  #teamDetailScreen {
+      background: #000;
+  }
+
+  .detail-page {
+      padding: 20px;
+      padding-bottom: 100px;
+  }
+
+  .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      margin-bottom: 18px;
+  }
+
+  .detail-header h1 {
+      margin: 0;
+
+      color: #fff;
+      font-size: 24px;
+      font-weight: 700;
+  }
+
+  .detail-back-button {
+      background: none;
+      border: none;
+      padding: 0;
+
+      color: #fff;
+      font-size: 26px;
+      line-height: 1;
+
+      cursor: pointer;
+  }
+
+  .team-detail-card {
+      padding: 16px;
+
+      background: linear-gradient(
+          180deg,
+          #181818,
+          #111
+      );
+
+      border: 1px solid #242424;
+      border-radius: 14px;
+  }
+
+  .team-detail-card h2 {
+      margin: 0 0 8px;
+
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+  }
+
+  #teamDetailPosition {
+      margin-bottom: 8px;
+
+      color: #aaa;
+      font-size: 12px;
+  }
+
+  #teamDetailVenue {
+      color: #888;
+      font-size: 11px;
+  }
+
+  /* ===========================
+    TEAM DETAIL - SPELERS
+  =========================== */
+
+  .team-players-section {
+      margin-top: 16px;
+  }
+
+  .team-players-section > .competition-title {
+      margin-bottom: 8px;
+  }
+
+  #teamDetailPlayers {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+  }
+
+  .team-player-card {
+      display: flex;
+      align-items: center;
+
+      min-height: 38px;
+      padding: 0 12px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 9px;
+
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+  }
+
+  .team-player-card {
+      justify-content: space-between;
+      cursor: pointer;
+  }
+
+  .team-player-arrow {
+      color: #666;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1;
+  }
+
+  /* ===========================
+    PLAYER DETAIL - STATS
+  =========================== */
+
+  .player-stats-section {
+      margin-top: 16px;
+  }
+
+  .player-stats-section > .competition-title {
+      margin-bottom: 8px;
+  }
+
+  #playerDetailStats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 7px;
+  }
+
+  .player-stat-card {
+      min-height: 58px;
+      padding: 10px 12px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 9px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+
+  .player-stat-card span {
+      color: #888;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+  }
+
+  .player-stat-card strong {
+      margin-top: 3px;
+
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+  }
+
+  /* Winstpercentage over volledige breedte */
+
+  .player-stat-card:last-child {
+      grid-column: 1 / -1;
+
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .player-stat-card:last-child strong {
+      margin-top: 0;
+      color: #ff2b2b;
+  }
+
+  /* ===========================
+    PLAYER DETAIL - DISCIPLINES
+  =========================== */
+
+  .player-discipline-section {
+      grid-column: 1 / -1;
+      margin-top: 8px;
+  }
+
+  .player-discipline-section > .competition-title {
+      margin-bottom: 8px;
+  }
+
+  .player-discipline-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      min-height: 46px;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 9px;
+  }
+
+  .player-discipline-name {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+  }
+
+  .player-discipline-info {
+      color: #888;
+      font-size: 9px;
+      text-align: right;
+  }
+
+  .player-discipline-info strong {
+      display: block;
+      margin-top: 2px;
+
+      color: #fff;
+      font-size: 13px;
+  }
+
+  /* ===========================
+    CUESCORE LINK
+  =========================== */
+
+  .competition-cuescore-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-top: 12px;
+      padding: 14px 16px;
+
+      background: #111;
+      border: 1px solid #242424;
+      border-radius: 12px;
+
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+
+      transition: 0.2s;
+  }
+
+  .competition-cuescore-link:hover {
+      background: #181818;
+      border-color: #333;
+  }
+
+  .competition-cuescore-link:active {
+      transform: scale(0.98);
+  }
+
+  /* ===========================
+    LIVE SCORES
+  =========================== */
+
+  .live-scores-frame {
+      width: 100%;
+      height: calc(100vh - 130px);
+      overflow: hidden;
+      border-radius: 12px;
+      background: #111;
+  }
+
+  .live-scores-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+  }
+
+  /* ===========================
+    BAL ENZO LIVE SCORES
+  =========================== */
+
+  .balenzo-live-scores {
+    width: 100%;
+  }
+
+  .live-scores-intro {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .live-scores-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .live-scores-status {
+    font-size: 13px;
+    opacity: 0.65;
+  }
+
+  .live-tables-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .live-table-card {
+    background: linear-gradient(180deg, #1a1a1a, #111);
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
+
+  .live-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  .live-table-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+  }
+
+  .live-table-live {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .live-table-free-text {
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.45;
+    padding: 10px 0 5px;
+  }
+
+  .live-table-match {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .live-player {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .live-player:last-child {
+    text-align: right;
+  }
+
+  .live-score {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 23px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .live-score-dash {
+    opacity: 0.4;
+    font-size: 18px;
+  }
+
+
+  /* Groter scherm */
+
+  @media (min-width: 600px) {
+
+    .live-tables-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+  }
+
+  /* ===========================
+    TAFEL RESERVEREN
+  =========================== */
+
+  .reservation-container {
+    width: 100%;
+  }
+
+  .reservation-intro {
+    margin-bottom: 12px;
+  }
+
+  .reservation-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .reservation-subtitle {
+    font-size: 14px;
+    color: #aaa;
+  }
+
+  .reservation-frame {
+    width: 100%;
+    height: calc(100vh - 190px);
+    min-height: 550px;
     overflow: hidden;
     border-radius: 12px;
-    background: #111;
-}
+    background: #fff;
+  }
 
-.live-scores-frame iframe {
+  .reservation-frame iframe {
     width: 100%;
     height: 100%;
     border: none;
     display: block;
-}
-
-/* ===========================
-   BAL ENZO LIVE SCORES
-=========================== */
-
-.balenzo-live-scores {
-  width: 100%;
-}
-
-.live-scores-intro {
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-.live-scores-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.live-scores-status {
-  font-size: 13px;
-  opacity: 0.65;
-}
-
-.live-tables-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-.live-table-card {
-  background: linear-gradient(180deg, #1a1a1a, #111);
-  border-radius: 14px;
-  padding: 16px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-.live-table-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 14px;
-}
-
-.live-table-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #555;
-}
-
-.live-table-live {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
-.live-table-free-text {
-  text-align: center;
-  font-size: 16px;
-  opacity: 0.45;
-  padding: 10px 0 5px;
-}
-
-.live-table-match {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 10px;
-}
-
-.live-player {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.25;
-}
-
-.live-player:last-child {
-  text-align: right;
-}
-
-.live-score {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 23px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.live-score-dash {
-  opacity: 0.4;
-  font-size: 18px;
-}
-
-
-/* Groter scherm */
-
-@media (min-width: 600px) {
-
-  .live-tables-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
-}
+  .competition-match-card.match-finished {
+      background: #181818;
+  }
 
-/* ===========================
-   TAFEL RESERVEREN
-=========================== */
+  .mvp-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
 
-.reservation-container {
-  width: 100%;
-}
+      margin: 0 0 14px 0;
+      padding: 9px 14px;
 
-.reservation-intro {
-  margin-bottom: 12px;
-}
+      background: #1f1f1f;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
 
-.reservation-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
 
-.reservation-subtitle {
-  font-size: 14px;
-  color: #aaa;
-}
+      cursor: pointer;
+      user-select: none;
+  }
 
-.reservation-frame {
-  width: 100%;
-  height: calc(100vh - 190px);
-  min-height: 550px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #fff;
-}
+  .mvp-filter input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
 
-.reservation-frame iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-}
+      cursor: pointer;
+      accent-color: #fff;
+  }
 
-.competition-match-card.match-finished {
-    background: #181818;
-}
+  .mvp-filter:has(input:checked) {
+      background: #ed1b2f;
+      border-color: #ed1b2f;
+  }
 
-.mvp-filter {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .matches-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
 
-    margin: 0 0 14px 0;
-    padding: 9px 14px;
+      margin: 0 0 14px 0;
+      padding: 9px 14px;
 
-    background: #1f1f1f;
-    border: 1px solid #3a3a3a;
-    border-radius: 10px;
+      background: #1f1f1f;
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
 
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
 
-    cursor: pointer;
-    user-select: none;
-}
+      cursor: pointer;
+      user-select: none;
+  }
 
-.mvp-filter input {
-    width: 17px;
-    height: 17px;
-    margin: 0;
+  .matches-filter input {
+      width: 17px;
+      height: 17px;
+      margin: 0;
 
-    cursor: pointer;
-    accent-color: #fff;
-}
+      cursor: pointer;
+      accent-color: #fff;
+  }
 
-.mvp-filter:has(input:checked) {
-    background: #ed1b2f;
-    border-color: #ed1b2f;
-}
+  .matches-filter:has(input:checked) {
+      background: #ed1b2f;
+      border-color: #ed1b2f;
+  }
 
-.matches-filter {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  .discipline-ball {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
 
-    margin: 0 0 14px 0;
-    padding: 9px 14px;
+      border-radius: 50%;
 
-    background: #1f1f1f;
-    border: 1px solid #3a3a3a;
-    border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
+      font-weight: 800;
+      font-size: 15px;
 
-    cursor: pointer;
-    user-select: none;
-}
+      box-shadow:
+          inset -5px -5px 8px rgba(0, 0, 0, 0.35),
+          inset 4px 4px 6px rgba(255, 255, 255, 0.25);
 
-.matches-filter input {
-    width: 17px;
-    height: 17px;
-    margin: 0;
+      margin-right: 12px;
+  }
 
-    cursor: pointer;
-    accent-color: #fff;
-}
+  .discipline-ball span {
+      width: 19px;
+      height: 19px;
 
-.matches-filter:has(input:checked) {
-    background: #ed1b2f;
-    border-color: #ed1b2f;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-.discipline-ball {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
+      background: white;
+      color: black;
+      border-radius: 50%;
 
-    border-radius: 50%;
+      font-size: 12px;
+      font-weight: 900;
+  }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* 8-ball */
+  .discipline-ball-8 {
+      background: #111;
+  }
 
-    font-weight: 800;
-    font-size: 15px;
+  /* 9-ball */
+  .discipline-ball-9 {
+      background: linear-gradient(
+          to bottom,
+          #f4c430 0%,
+          #f4c430 30%,
+          #fff 30%,
+          #fff 70%,
+          #f4c430 70%,
+          #f4c430 100%
+      );
+  }
 
-    box-shadow:
-        inset -5px -5px 8px rgba(0, 0, 0, 0.35),
-        inset 4px 4px 6px rgba(255, 255, 255, 0.25);
+  /* 10-ball */
+  .discipline-ball-10 {
+      background: linear-gradient(
+          to bottom,
+          #1756a9 0%,
+          #1756a9 30%,
+          #fff 30%,
+          #fff 70%,
+          #1756a9 70%,
+          #1756a9 100%
+      );
+  }
 
-    margin-right: 12px;
-}
+  /* 14-ball voor Straightpool */
+  .discipline-ball-14 {
+      background: linear-gradient(
+          to bottom,
+          #d2691e 0%,
+          #d2691e 30%,
+          #fff 30%,
+          #fff 70%,
+          #d2691e 70%,
+          #d2691e 100%
+      );
+  }
 
-.discipline-ball span {
-    width: 19px;
-    height: 19px;
+  /* ===========================
+    PLAYER STAT ICONS
+  =========================== */
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .player-stat-card {
+      position: relative;
+      overflow: hidden;
+  }
 
-    background: white;
-    color: black;
-    border-radius: 50%;
+  .player-stat-icon {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
 
-    font-size: 12px;
-    font-weight: 900;
-}
+      font-size: 24px;
+      line-height: 1;
 
-/* 8-ball */
-.discipline-ball-8 {
-    background: #111;
-}
-
-/* 9-ball */
-.discipline-ball-9 {
-    background: linear-gradient(
-        to bottom,
-        #f4c430 0%,
-        #f4c430 30%,
-        #fff 30%,
-        #fff 70%,
-        #f4c430 70%,
-        #f4c430 100%
-    );
-}
-
-/* 10-ball */
-.discipline-ball-10 {
-    background: linear-gradient(
-        to bottom,
-        #1756a9 0%,
-        #1756a9 30%,
-        #fff 30%,
-        #fff 70%,
-        #1756a9 70%,
-        #1756a9 100%
-    );
-}
-
-/* 14-ball voor Straightpool */
-.discipline-ball-14 {
-    background: linear-gradient(
-        to bottom,
-        #d2691e 0%,
-        #d2691e 30%,
-        #fff 30%,
-        #fff 70%,
-        #d2691e 70%,
-        #d2691e 100%
-    );
-}
-
-/* ===========================
-   PLAYER STAT ICONS
-=========================== */
-
-.player-stat-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.player-stat-icon {
-    position: absolute;
-    right: 14px;
-    bottom: 12px;
-
-    font-size: 24px;
-    line-height: 1;
-
-    opacity: 0.9;
-}
+      opacity: 0.9;
+  }

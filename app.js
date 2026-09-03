@@ -2241,7 +2241,7 @@ function connectCueScoreLive() {
     try {
 
         liveScoresSocket =
-            new WebSocket("wss://ws.cuescore.com");
+            new WebSocket("wss://ws.cuescore.com:10443/");
 
         liveScoresSocket.addEventListener(
             "open",
