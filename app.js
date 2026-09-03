@@ -384,6 +384,30 @@ testCueScoreAPI();
 
 async function openCompetitionDetail(tournamentId) {
 
+document.querySelectorAll(".competition-tab-panel").forEach(panel => {
+    panel.style.display = "none";
+});
+
+document.querySelectorAll(".competition-detail-tab").forEach(tab => {
+    tab.classList.remove("active");
+});
+
+const overviewPanel =
+    document.getElementById("competitionTabOverview");
+
+const overviewTab =
+    document.querySelector(
+        '.competition-detail-tab[onclick*="overview"]'
+    );
+
+if (overviewPanel) {
+    overviewPanel.style.display = "block";
+}
+
+if (overviewTab) {
+    overviewTab.classList.add("active");
+}
+
     document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
     });
@@ -437,6 +461,23 @@ if (cueScoreLink) {
         '.competition-detail-tab[onclick*="standings"]'
     );
 
+const mvpTab =
+    document.getElementById("competitionMvpTab");
+
+const mvpPanel =
+    document.getElementById("competitionTabMvp");
+
+const hasMvp = [
+    "74130085",
+    "74130109",
+    "74130127"
+].includes(String(tournamentId));
+
+if (mvpTab && mvpPanel) {
+    mvpTab.style.display = hasMvp ? "" : "none";
+    mvpPanel.style.display = "none";
+}
+
 const standingsPanel =
     document.getElementById("competitionTabStandings");
 
@@ -455,7 +496,13 @@ if (String(tournamentId) === "74130139") {
     "74130109": "Tweede Klasse",
     "74130127": "Derde Klasse",
     "74130139": "Beker",
-    "83574892": "Competitie NL"
+    "83574892": "Competitie NL",
+
+    "85928236": "Break & Play Reeks 1",
+    "85928569": "Break & Play Reeks 2",
+    "85928635": "Break & Play Reeks 3",
+    "85928797": "Break & Play Reeks 4",
+    "85929085": "Break & Play Reeks 5"
 };
 
 document.getElementById("competitionDetailTitle").textContent =
@@ -473,10 +520,77 @@ document.getElementById("competitionDetailTitle").textContent =
         document.getElementById("competitionDiscipline").textContent =
             `Discipline: ${data.discipline}`;
 
+const mvpContainer =
+    document.getElementById("competitionMvpList");
+
+if (hasMvp && mvpContainer) {
+    mvpContainer.innerHTML = "MVP laden...";
+
+    try {
+        const mvpResponse = await fetch(
+            `https://balenzo-cuescore.nicolasmintjens.workers.dev/?tournamentId=${tournamentId}&type=mvp`
+        );
+
+        const mvpData = await mvpResponse.json();
+
+        console.log("🏆 MVP DATA:", mvpData);
+        if (
+    mvpData.success &&
+    Array.isArray(mvpData.players) &&
+    mvpData.players.length > 0
+) {
+    const rankedPlayers =
+        mvpData.players.filter(player => player.position !== null);
+
+    mvpContainer.innerHTML = rankedPlayers.map(player => `
+        <div class="competition-card">
+
+            <div class="competition-icon">
+    ${
+        player.position === 1 ? "🥇" :
+        player.position === 2 ? "🥈" :
+        player.position === 3 ? "🥉" :
+        player.position
+    }
+</div>
+
+            <div class="competition-info">
+
+                <div class="competition-title">
+                    ${player.player}
+                </div>
+
+                <div class="competition-subtitle">
+                    ${player.team}
+                </div>
+
+            </div>
+
+            <div class="standings-points">
+                ${player.mvp}
+            </div>
+
+        </div>
+    `).join("");
+}
+
+    } catch (error) {
+        console.error("MVP laden mislukt:", error);
+    }
+}
+
             const standingsContainer =
     document.getElementById("competitionStandingsList");
 
-const standings =
+const isBreakAndPlay = [
+    "85928236",
+    "85928569",
+    "85928635",
+    "85928797",
+    "85929085"
+].includes(String(tournamentId));
+
+    const standings =
     data.standings && data.standings["1"]
         ? data.standings["1"]
         : [];
@@ -498,7 +612,7 @@ if (!standings.length) {
                 <div>#</div>
                 <div>Team</div>
                 <div>G</div>
-                <div>MP</div>
+                <div>${isBreakAndPlay ? "PTN" : "MP"}</div>
                 <div>W</div>
                 <div>G</div>
                 <div>V</div>
@@ -541,7 +655,7 @@ if (!standings.length) {
                         </div>
 
                         <div>${team.played}</div>
-                        <div>${team.teamMatchPoints}</div>
+                        <div>${isBreakAndPlay ? team.points : team.teamMatchPoints}</div>
                         <div>${team.wins}</div>
                         <div>${team.ties}</div>
                         <div>${team.losses}</div>
@@ -756,7 +870,7 @@ matchesContainer.innerHTML =
                 return `
 
                     <div
-    class="competition-match-card ${isBalEnzoMatch ? "balenzo-match" : ""}"
+    class="competition-match-card ${isBalEnzoMatch ? "balenzo-match" : ""} ${isFinished ? "match-finished" : ""}"
     onclick="openMatchDetail(${match.matchId}, ${tournamentId})"
 >
 
@@ -1767,3 +1881,455 @@ function closePlayerDetail() {
         .getElementById("teamDetailScreen")
         .classList.add("active");
 }   
+
+function openLiveScores() {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("liveScoresScreen")
+        .classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function closeLiveScores() {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("homeScreen")
+        .classList.add("active");
+}
+
+/* ===========================
+   BAL ENZO LIVE SCORES
+=========================== */
+
+const balEnzoTables = [
+    { id: 1280980, name: "1" },
+    { id: 1280983, name: "2" },
+    { id: 1280984, name: "3" },
+    { id: 1280985, name: "4" },
+    { id: 1280986, name: "5" },
+    { id: 1280987, name: "6" },
+    { id: 1280988, name: "7" },
+    { id: 1280989, name: "8" },
+    { id: 1280990, name: "9" },
+    { id: 49084987, name: "10" }
+];
+
+let liveScoresSocket = null;
+let liveScoresData = {};
+
+
+/* ===========================
+   LIVE SCORE KAARTEN
+=========================== */
+
+function renderLiveTables() {
+
+    const container =
+        document.getElementById("liveTablesGrid");
+
+    if (!container) return;
+
+    container.innerHTML = balEnzoTables.map(table => {
+
+        const match = liveScoresData[table.id];
+
+        if (!match) {
+
+            return `
+                <div class="live-table-card live-table-free">
+
+                    <div class="live-table-header">
+                        <span>TAFEL ${table.name}</span>
+                        <span class="live-table-dot"></span>
+                    </div>
+
+                    <div class="live-table-free-text">
+                        Vrij
+                    </div>
+
+                </div>
+            `;
+        }
+
+        return `
+            <div class="live-table-card live-table-active">
+
+                <div class="live-table-header">
+                    <span>TAFEL ${table.name}</span>
+                    <span class="live-table-live">LIVE</span>
+                </div>
+
+                <div class="live-table-match">
+
+                    <div class="live-player">
+                        ${match.playerA || "Speler 1"}
+                    </div>
+
+                    <div class="live-score">
+                        <span>${match.scoreA ?? 0}</span>
+                        <span class="live-score-dash">-</span>
+                        <span>${match.scoreB ?? 0}</span>
+                    </div>
+
+                    <div class="live-player">
+                        ${match.playerB || "Speler 2"}
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+/* ===========================
+   TAFELS OPHALEN
+=========================== */
+
+async function loadBalEnzoTables() {
+
+    const status =
+        document.getElementById("liveScoresStatus");
+
+    if (status) {
+        status.textContent = "Live gegevens laden...";
+    }
+
+    renderLiveTables();
+
+    try {
+
+        await Promise.all(
+
+            balEnzoTables.map(async table => {
+
+                try {
+
+                    const response = await fetch(
+                        `https://api.cuescore.com/table/?tableId=${table.id}`
+                    );
+
+                    if (!response.ok) return;
+
+                    const data = await response.json();
+
+                    console.log(
+                        `🎱 Tafel ${table.name}:`,
+                        data
+                    );
+
+                } catch (error) {
+
+                    console.warn(
+                        `Tafel ${table.name} kon niet geladen worden`,
+                        error
+                    );
+
+                }
+
+            })
+
+        );
+
+        if (status) {
+            status.textContent =
+                "● Live · wachten op wedstrijden";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Live Scores laden mislukt:",
+            error
+        );
+
+        if (status) {
+            status.textContent =
+                "Live verbinding niet beschikbaar";
+        }
+
+    }
+
+}
+
+
+/* ===========================
+   CUESCORE WEBSOCKET
+=========================== */
+
+function connectCueScoreLive() {
+
+    if (liveScoresSocket) {
+        try {
+            liveScoresSocket.close();
+        } catch (e) {}
+    }
+
+    try {
+
+        liveScoresSocket =
+            new WebSocket("wss://ws.cuescore.com");
+
+        liveScoresSocket.addEventListener(
+            "open",
+            function () {
+
+                console.log(
+                    "🟢 CueScore WebSocket verbonden"
+                );
+
+                const status =
+                    document.getElementById(
+                        "liveScoresStatus"
+                    );
+
+                if (status) {
+                    status.textContent =
+                        "● Live verbinding actief";
+                }
+
+                /*
+                 * Venue Bal Enzo
+                 */
+                liveScoresSocket.send(
+                    JSON.stringify({
+                        subscribeTo: [
+                            1280972
+                        ]
+                    })
+                );
+
+            }
+        );
+
+
+        liveScoresSocket.addEventListener(
+            "message",
+            function (event) {
+
+                console.log(
+                    "📡 CueScore LIVE:",
+                    event.data
+                );
+
+                processCueScoreLiveMessage(
+                    event.data
+                );
+
+            }
+        );
+
+
+        liveScoresSocket.addEventListener(
+            "close",
+            function () {
+
+                console.log(
+                    "🔴 CueScore WebSocket gesloten"
+                );
+
+                const status =
+                    document.getElementById(
+                        "liveScoresStatus"
+                    );
+
+                if (status) {
+                    status.textContent =
+                        "Live verbinding verbroken";
+                }
+
+            }
+        );
+
+
+        liveScoresSocket.addEventListener(
+            "error",
+            function (error) {
+
+                console.warn(
+                    "CueScore WebSocket fout:",
+                    error
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "WebSocket kon niet worden gestart:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ===========================
+   LIVE BERICHT VERWERKEN
+=========================== */
+
+function processCueScoreLiveMessage(message) {
+
+    let data;
+
+    try {
+
+        data =
+            typeof message === "string"
+                ? JSON.parse(message)
+                : message;
+
+    } catch (error) {
+
+        return;
+
+    }
+
+    console.log(
+        "🔎 Live data:",
+        data
+    );
+
+    /*
+     * Voorlopig zoeken we automatisch
+     * naar wedstrijdinformatie.
+     */
+
+    const possibleMatches = [];
+
+    function scanObject(obj) {
+
+        if (!obj || typeof obj !== "object") {
+            return;
+        }
+
+        if (
+            obj.tableId &&
+            (
+                obj.playerA ||
+                obj.playerB ||
+                obj.scoreA != null ||
+                obj.scoreB != null
+            )
+        ) {
+
+            possibleMatches.push(obj);
+
+        }
+
+        Object.values(obj).forEach(value => {
+
+            if (
+                value &&
+                typeof value === "object"
+            ) {
+                scanObject(value);
+            }
+
+        });
+
+    }
+
+    scanObject(data);
+
+
+    possibleMatches.forEach(match => {
+
+        const tableId =
+            Number(match.tableId);
+
+        if (!tableId) return;
+
+        liveScoresData[tableId] = {
+
+            playerA:
+                typeof match.playerA === "object"
+                    ? match.playerA.name
+                    : match.playerA,
+
+            playerB:
+                typeof match.playerB === "object"
+                    ? match.playerB.name
+                    : match.playerB,
+
+            scoreA:
+                match.scoreA ?? 0,
+
+            scoreB:
+                match.scoreB ?? 0
+
+        };
+
+    });
+
+
+    renderLiveTables();
+
+}
+
+
+/* ===========================
+   LIVE SCORES OPENEN
+=========================== */
+
+const originalOpenLiveScores =
+    openLiveScores;
+
+openLiveScores = function () {
+
+    originalOpenLiveScores();
+
+    loadBalEnzoTables();
+    connectCueScoreLive();
+
+};
+
+/* ===========================
+   TAFEL RESERVEREN
+=========================== */
+
+function openTableReservation() {
+
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const screen =
+    document.getElementById("tableReservationScreen");
+
+  if (screen) {
+    screen.classList.add("active");
+  }
+
+}
+
+
+function closeTableReservation() {
+
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const home =
+    document.getElementById("homeScreen");
+
+  if (home) {
+    home.classList.add("active");
+  }
+
+}
