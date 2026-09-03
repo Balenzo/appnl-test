@@ -49,26 +49,29 @@
 
       <div class="quick-grid">
 
-       <a class="quick-action-card"
-   href="https://cuescore.com/venue/table/jumbotron/?venueId=1280972&branchId=1"
-   target="_blank"
-   rel="noopener noreferrer">
+       <button
+    class="quick-action-card"
+    onclick="openLiveScores()"
+    style="border:none; cursor:pointer; padding:0;"
+>
 
   <img src="livescores.jpg" alt="Live Scores">
 
   <div class="quick-action-content">
     <div class="quick-action-title">Live Scores</div>
     <div class="quick-action-subtitle">
-      Volg wedstrijden live op CueScore
+      Volg wedstrijden live
     </div>
-    <div class="quick-action-external">↗</div>
+    <div class="quick-action-external">›</div>
   </div>
-</a>
 
-       <a class="quick-action-card"
-   href="https://www.bal-enzo.be/reservaties/"
-   target="_blank"
-   rel="noopener noreferrer">
+</button>
+
+<button
+  class="quick-action-card"
+  onclick="openTableReservation()"
+  style="border:none; cursor:pointer; padding:0;"
+>
 
   <img src="tafelreserveren.jpg" alt="Tafel reserveren">
 
@@ -77,9 +80,10 @@
     <div class="quick-action-subtitle">
       Reserveer eenvoudig online
     </div>
-    <div class="quick-action-external">↗</div>
+    <div class="quick-action-external">›</div>
   </div>
-</a>
+
+</button>
 
         <a class="quick-action-card"
    href="https://cuescore.com/bal-enzobilliardsdarts"
@@ -101,6 +105,117 @@
     </section>
 
   </section>
+
+  <!-- =========================
+     LIVE SCORES SCREEN
+========================== -->
+
+<section class="screen" id="liveScoresScreen">
+
+  <div class="page-header">
+
+    <button
+      onclick="closeLiveScores()"
+      style="
+        background:none;
+        border:none;
+        color:white;
+        font-size:24px;
+        cursor:pointer;
+        margin-right:10px;
+      ">
+      ‹
+    </button>
+
+    <span>
+      Live Scores
+    </span>
+
+  </div>
+
+  <main class="content">
+
+    <div id="balEnzoLiveScores" class="balenzo-live-scores">
+
+  <div class="live-scores-intro">
+    <div class="live-scores-title">🎱 Bal Enzo Live Scores</div>
+    <div class="live-scores-status" id="liveScoresStatus">
+      Live verbinding maken...
+    </div>
+  </div>
+
+  <div id="liveTablesGrid" class="live-tables-grid"></div>
+
+</div>
+
+  </main>
+
+</section>
+
+<!-- =========================
+     TAFEL RESERVEREN SCREEN
+========================= -->
+
+<section class="screen" id="tableReservationScreen">
+
+  <div class="page-header">
+
+    <button
+      onclick="closeTableReservation()"
+      style="
+        background:none;
+        border:none;
+        color:white;
+        font-size:24px;
+        cursor:pointer;
+        margin-right:10px;
+      ">
+      ‹
+    </button>
+
+    <span>
+      Tafel reserveren
+    </span>
+
+  </div>
+
+  <main class="content">
+
+    <div class="reservation-container">
+
+      <div class="reservation-intro">
+        <div class="reservation-title">
+          🎱 Reserveer je tafel
+        </div>
+
+        <div class="reservation-subtitle">
+          Kies je gewenste moment en reserveer eenvoudig online.
+        </div>
+      </div>
+
+      <div class="reservation-frame">
+
+        <iframe
+  src="https://www.bal-enzo.be/reservaties/"
+  title="Tafel reserveren"
+  loading="lazy"
+  style="
+    width:100%;
+    height:calc(100vh - 220px);
+    min-height:600px;
+    border:none;
+    border-radius:12px;
+    display:block;
+  ">
+</iframe>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
 
   <!-- =========================
        COMPETITIES SCREEN
@@ -239,49 +354,76 @@
       </div>
 
       <!-- BREAK & PLAY -->
-      <div class="tab-content" id="tab-breakplay">
+<div class="tab-content" id="tab-breakplay">
 
-        <a class="competition-card" href="https://cuescore.com/tournament/POULE+1+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928236" target="_blank">
-          <div class="competition-icon">🎱</div>
-          <div class="competition-info">
-            <div class="competition-title">Break & Play Reeks 1</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <h3 class="competition-section-title">Break & Play</h3>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/POULE+2+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928569" target="_blank">
-          <div class="competition-icon">🎱</div>
-          <div class="competition-info">
-            <div class="competition-title">Break & Play Reeks 2</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <!-- REEKS 1 -->
+  <div
+    class="competition-card"
+    onclick="openCompetitionDetail(85928236)"
+    style="cursor:pointer;"
+  >
+    <div class="competition-icon">🎱</div>
+    <div class="competition-info">
+      <div class="competition-title">Break & Play Reeks 1</div>
+    </div>
+    <div class="competition-arrow">›</div>
+  </div>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/POULE+3+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928635" target="_blank">
-          <div class="competition-icon">🎱</div>
-          <div class="competition-info">
-            <div class="competition-title">Break & Play Reeks 3</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <!-- REEKS 2 -->
+  <div
+    class="competition-card"
+    onclick="openCompetitionDetail(85928569)"
+    style="cursor:pointer;"
+  >
+    <div class="competition-icon">🎱</div>
+    <div class="competition-info">
+      <div class="competition-title">Break & Play Reeks 2</div>
+    </div>
+    <div class="competition-arrow">›</div>
+  </div>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/POULE+4+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928797" target="_blank">
-          <div class="competition-icon">🎱</div>
-          <div class="competition-info">
-            <div class="competition-title">Break & Play Reeks 4</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <!-- REEKS 3 -->
+  <div
+    class="competition-card"
+    onclick="openCompetitionDetail(85928635)"
+    style="cursor:pointer;"
+  >
+    <div class="competition-icon">🎱</div>
+    <div class="competition-info">
+      <div class="competition-title">Break & Play Reeks 3</div>
+    </div>
+    <div class="competition-arrow">›</div>
+  </div>
 
-        <a class="competition-card" href="https://cuescore.com/tournament/POULE+5+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85929085" target="_blank">
-          <div class="competition-icon">🎱</div>
-          <div class="competition-info">
-            <div class="competition-title">Break & Play Reeks 5</div>
-          </div>
-          <div class="competition-arrow">›</div>
-        </a>
+  <!-- REEKS 4 -->
+  <div
+    class="competition-card"
+    onclick="openCompetitionDetail(85928797)"
+    style="cursor:pointer;"
+  >
+    <div class="competition-icon">🎱</div>
+    <div class="competition-info">
+      <div class="competition-title">Break & Play Reeks 4</div>
+    </div>
+    <div class="competition-arrow">›</div>
+  </div>
 
-      </div>
+  <!-- REEKS 5 -->
+  <div
+    class="competition-card"
+    onclick="openCompetitionDetail(85929085)"
+    style="cursor:pointer;"
+  >
+    <div class="competition-icon">🎱</div>
+    <div class="competition-info">
+      <div class="competition-title">Break & Play Reeks 5</div>
+    </div>
+    <div class="competition-arrow">›</div>
+  </div>
+
+</div>
 
 <!-- BAL ENZO ZOMERCOMPETITIE DUBBELS -->
       <div class="tab-content" id="tab-summerpool">
@@ -382,6 +524,13 @@
     </button>
 
     <button
+  class="competition-detail-tab"
+  id="competitionMvpTab"
+  onclick="showCompetitionTab('mvp', this)">
+  MVP
+</button>
+
+    <button
       class="competition-detail-tab"
       onclick="showCompetitionTab('matches', this)">
       Wedstrijden
@@ -462,6 +611,20 @@
 
   </div>
 
+  <!-- MVP TAB -->
+  <div id="competitionTabMvp"
+       class="competition-tab-panel"
+       style="display:none;">
+
+    <div class="competition-title">
+      MVP
+    </div>
+
+    <div id="competitionMvpList">
+      MVP laden...
+    </div>
+
+  </div>
 
   <!-- WEDSTRIJDEN TAB -->
   <div id="competitionTabMatches"

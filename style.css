@@ -647,7 +647,9 @@ button.competition-card {
     color: #fff;
     font-weight: 700;
 
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
 }
 
 .standings-position {
@@ -1245,4 +1247,176 @@ button.competition-card {
 
 .competition-cuescore-link:active {
     transform: scale(0.98);
+}
+
+/* ===========================
+   LIVE SCORES
+=========================== */
+
+.live-scores-frame {
+    width: 100%;
+    height: calc(100vh - 130px);
+    overflow: hidden;
+    border-radius: 12px;
+    background: #111;
+}
+
+.live-scores-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* ===========================
+   BAL ENZO LIVE SCORES
+=========================== */
+
+.balenzo-live-scores {
+  width: 100%;
+}
+
+.live-scores-intro {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.live-scores-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.live-scores-status {
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+.live-tables-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.live-table-card {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.live-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.live-table-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #555;
+}
+
+.live-table-live {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.live-table-free-text {
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.45;
+  padding: 10px 0 5px;
+}
+
+.live-table-match {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.live-player {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.live-player:last-child {
+  text-align: right;
+}
+
+.live-score {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 23px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.live-score-dash {
+  opacity: 0.4;
+  font-size: 18px;
+}
+
+
+/* Groter scherm */
+
+@media (min-width: 600px) {
+
+  .live-tables-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+/* ===========================
+   TAFEL RESERVEREN
+=========================== */
+
+.reservation-container {
+  width: 100%;
+}
+
+.reservation-intro {
+  margin-bottom: 12px;
+}
+
+.reservation-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.reservation-subtitle {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.reservation-frame {
+  width: 100%;
+  height: calc(100vh - 190px);
+  min-height: 550px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.reservation-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.competition-match-card.match-finished {
+    background: #181818;
 }
