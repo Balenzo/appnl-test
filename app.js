@@ -2077,11 +2077,11 @@ const balEnzoTables = [
     { id: 1280983, name: "2" },
     { id: 1280984, name: "3" },
     { id: 1280985, name: "4" },
-    { id: 1280986, name: "5" },
-    { id: 1280987, name: "6" },
-    { id: 1280988, name: "7" },
-    { id: 1280989, name: "8" },
-    { id: 1280990, name: "9" },
+    { id: 1280989, name: "5" },
+    { id: 1280990, name: "6" },
+    { id: 7982044, name: "7" },
+    { id: 7982046, name: "8" },
+    { id: 49084792, name: "9" },
     { id: 49084987, name: "10" }
 ];
 
@@ -2136,11 +2136,19 @@ function renderLiveTables() {
                         ${match.playerA || "Speler 1"}
                     </div>
 
-                    <div class="live-score">
-                        <span>${match.scoreA ?? 0}</span>
-                        <span class="live-score-dash">-</span>
-                        <span>${match.scoreB ?? 0}</span>
-                    </div>
+                   <div class="live-score-wrap">
+
+    <div class="live-score">
+        <span>${match.scoreA ?? 0}</span>
+        <span class="live-score-dash">-</span>
+        <span>${match.scoreB ?? 0}</span>
+    </div>
+
+    <div class="live-race-to">
+        RT ${match.raceTo ?? "-"}
+    </div>
+
+</div>
 
                     <div class="live-player">
                         ${match.playerB || "Speler 2"}
@@ -2170,61 +2178,87 @@ async function loadBalEnzoTables() {
 
     renderLiveTables();
 
+}
+
+const balEnzoCueScoreEvents = [];
+
+async function loadCueScoreActiveMatches() {
+
     try {
 
-        await Promise.all(
+        const today = new Date().toISOString().slice(0, 10);
 
-            balEnzoTables.map(async table => {
+const eventsResponse = await fetch(
+    `https://api.cuescore.com/venue/events/?venueId=1280972&date=${today}`
+);
 
-                try {
+const eventsData = await eventsResponse.json();
 
-                    const response = await fetch(
-                        `https://api.cuescore.com/table/?tableId=${table.id}`
-                    );
+const eventIds = eventsData.events || [];
 
-                    if (!response.ok) return;
+balEnzoCueScoreEvents.splice(
+    0,
+    balEnzoCueScoreEvents.length,
+    ...eventIds
+);
 
-                    const data = await response.json();
+for (const tournamentId of eventIds) {
 
-                    console.log(
-                        `🎱 Tafel ${table.name}:`,
-                        data
-                    );
+    const response = await fetch(
+        `https://api.cuescore.com/tournament/?lang=en&id=${tournamentId}`
+    );
 
-                } catch (error) {
+        const data = await response.json();
 
-                    console.warn(
-                        `Tafel ${table.name} kon niet geladen worden`,
-                        error
-                    );
+const activeMatches = data.matches.filter(
+    match => match.matchstatusCode === 1
+);
 
-                }
+activeMatches.forEach(match => {
 
-            })
+    const tableId =
+        Number(match.table?.tableId);
 
-        );
+    if (!tableId) return;
 
-        if (status) {
-            status.textContent =
-                "● Live · wachten op wedstrijden";
-        }
+    liveScoresData[tableId] = {
+
+    matchId:
+        match.matchId,
+
+    raceTo:
+    match.raceTo,    
+
+    playerA:
+            match.playerA?.name || "",
+
+        playerB:
+            match.playerB?.name || "",
+
+        scoreA:
+            match.scoreA ?? 0,
+
+        scoreB:
+            match.scoreB ?? 0
+
+    };
+
+});
+
+renderLiveTables();
+
+}   
 
     } catch (error) {
 
         console.error(
-            "Live Scores laden mislukt:",
-            error
-        );
-
-        if (status) {
-            status.textContent =
-                "Live verbinding niet beschikbaar";
-        }
+    "❌ CueScore livegegevens laden mislukt:",
+    error
+);
 
     }
 
 }
-
 
 /* ===========================
    CUESCORE WEBSOCKET
@@ -2241,7 +2275,7 @@ function connectCueScoreLive() {
     try {
 
         liveScoresSocket =
-            new WebSocket("wss://ws.cuescore.com:10443/");
+            new WebSocket("wss://ws.cuescore.com:11443/");
 
         liveScoresSocket.addEventListener(
             "open",
@@ -2265,12 +2299,13 @@ function connectCueScoreLive() {
                  * Venue Bal Enzo
                  */
                 liveScoresSocket.send(
-                    JSON.stringify({
-                        subscribeTo: [
-                            1280972
-                        ]
-                    })
-                );
+    JSON.stringify({
+        subscribeTo: [
+    ...balEnzoCueScoreEvents,
+    1280972
+]
+    })
+);
 
             }
         );
@@ -2379,18 +2414,19 @@ function processCueScoreLiveMessage(message) {
         }
 
         if (
-            obj.tableId &&
-            (
-                obj.playerA ||
-                obj.playerB ||
-                obj.scoreA != null ||
-                obj.scoreB != null
-            )
-        ) {
+    obj.table &&
+    obj.table.tableId &&
+    (
+        obj.playerA ||
+        obj.playerB ||
+        obj.scoreA != null ||
+        obj.scoreB != null
+    )
+) {
 
-            possibleMatches.push(obj);
+    possibleMatches.push(obj);
 
-        }
+}
 
         Object.values(obj).forEach(value => {
 
@@ -2410,33 +2446,60 @@ function processCueScoreLiveMessage(message) {
 
     possibleMatches.forEach(match => {
 
-        const tableId =
-            Number(match.tableId);
+    const tableId =
+        Number(match.table.tableId);
 
-        if (!tableId) return;
+    if (!tableId) return;
 
-        liveScoresData[tableId] = {
+    if (
+        match.matchstatusCode !== 1 ||
+        match.matchstatus !== "playing"
+    ) {
+        delete liveScoresData[tableId];
+        return;
+    }
 
-            playerA:
-                typeof match.playerA === "object"
-                    ? match.playerA.name
-                    : match.playerA,
+    Object.keys(liveScoresData).forEach(existingTableId => {
 
-            playerB:
-                typeof match.playerB === "object"
-                    ? match.playerB.name
-                    : match.playerB,
+        const existingMatch =
+            liveScoresData[existingTableId];
 
-            scoreA:
-                match.scoreA ?? 0,
-
-            scoreB:
-                match.scoreB ?? 0
-
-        };
+        if (
+            existingMatch?.matchId === match.matchId &&
+            Number(existingTableId) !== tableId
+        ) {
+            delete liveScoresData[existingTableId];
+        }
 
     });
 
+    liveScoresData[tableId] = {
+
+        matchId:
+            match.matchId,
+
+        raceTo:
+            match.raceTo,    
+
+        playerA:
+            typeof match.playerA === "object"
+                ? match.playerA.name
+                : match.playerA,
+
+        playerB:
+            typeof match.playerB === "object"
+                ? match.playerB.name
+                : match.playerB,
+
+        scoreA:
+            match.scoreA ?? 0,
+
+        scoreB:
+            match.scoreB ?? 0
+
+    };
+
+});
 
     renderLiveTables();
 
@@ -2450,11 +2513,12 @@ function processCueScoreLiveMessage(message) {
 const originalOpenLiveScores =
     openLiveScores;
 
-openLiveScores = function () {
+openLiveScores = async function () {
 
     originalOpenLiveScores();
 
     loadBalEnzoTables();
+    await loadCueScoreActiveMatches();
     connectCueScoreLive();
 
 };
