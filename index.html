@@ -213,21 +213,266 @@
 
       <div class="reservation-frame">
 
-        <iframe
-  src="https://www.bal-enzo.be/reservaties/"
-  title="Tafel reserveren"
-  loading="lazy"
-  style="
-    width:100%;
-    height:calc(100vh - 220px);
-    min-height:600px;
-    border:none;
-    border-radius:12px;
-    display:block;
-  ">
-</iframe>
+  <div class="reservation-step" id="reservationStepGame">
 
-      </div>
+    <div class="reservation-step-title">
+      Wat wil je spelen?
+    </div>
+
+    <div class="reservation-step-subtitle">
+      Kies je discipline
+    </div>
+
+    <div class="reservation-game-grid">
+
+      <button
+    class="reservation-game-card"
+    type="button"
+    onclick="selectReservationGame('pool')">
+    <span class="reservation-game-icon">🎱</span>
+    <span>Pool</span>
+</button>
+
+      <button
+  class="reservation-game-card"
+  type="button"
+  onclick="selectReservationGame('snooker')">
+
+  <span class="reservation-game-icon">🔴</span>
+  <span>Snooker</span>
+
+</button>
+
+    </div>
+
+  </div>
+
+
+  <!-- STAP 2: DATUM KIEZEN -->
+
+  <div class="reservation-step" id="reservationStepDate" style="display:none;">
+
+    <div class="reservation-step-title">
+      Wanneer wil je spelen?
+    </div>
+
+    <div class="reservation-step-subtitle">
+      Kies je datum
+    </div>
+
+    <div class="reservation-calendar-header">
+
+  <button
+    class="reservation-back-button"
+    type="button"
+    onclick="backToReservationGame()">
+    ‹
+  </button>
+
+  <div class="reservation-calendar-month" id="reservationCalendarMonth">
+    September 2026
+  </div>
+
+  <div class="reservation-calendar-nav">
+  <button
+    type="button"
+    onclick="changeReservationMonth(-1)">‹</button>
+
+  <button
+    type="button"
+    onclick="changeReservationMonth(1)">›</button>
+</div>
+
+</div>
+
+<div class="reservation-calendar" id="reservationCalendar">
+</div>
+
+  </div>
+
+  <!-- STAP 3: UUR EN DUUR KIEZEN -->
+
+<div class="reservation-step" id="reservationStepTime" style="display:none;">
+
+  <div class="reservation-step-title">
+    Hoe laat wil je spelen?
+  </div>
+
+  <div class="reservation-step-subtitle" id="reservationSelectedDateText">
+    Kies je startuur
+  </div>
+
+  <div class="reservation-time-header">
+
+    <button
+      class="reservation-back-button"
+      type="button"
+      onclick="backToReservationDate()">
+      ‹
+    </button>
+
+    <div class="reservation-time-heading">
+      Beschikbare uren
+    </div>
+
+  </div>
+
+  <div class="reservation-time-grid" id="reservationTimeGrid">
+  </div>
+
+  <div
+    class="reservation-duration-section"
+    id="reservationDurationSection"
+    style="display:none;">
+
+    <div class="reservation-step-title reservation-duration-title">
+      Hoe lang wil je spelen?
+    </div>
+
+    <div class="reservation-duration-grid" id="reservationDurationGrid">
+    </div>
+
+  </div>
+
+  <button
+    class="reservation-next-button"
+    id="reservationTimeNextButton"
+    type="button"
+    disabled
+    onclick="continueReservationTime()">
+
+    Volgende
+
+    </button>
+
+</div>
+
+
+<!-- STAP 4: KLANTGEGEVENS -->
+
+<div class="reservation-step" id="reservationStepCustomer" style="display:none;">
+
+  <div class="reservation-step-title">
+    Jouw gegevens
+  </div>
+
+  <div class="reservation-step-subtitle">
+    Vul je gegevens in om de reservatie af te ronden.
+  </div>
+
+  <div class="reservation-time-header">
+
+    <button
+      class="reservation-back-button"
+      type="button"
+      onclick="backToReservationTime()">
+      ‹
+    </button>
+
+    <div class="reservation-time-heading">
+      Gegevens invullen
+    </div>
+
+  </div>
+
+  <div class="reservation-summary-card" id="reservationSummaryCard">
+  </div>
+
+  <div class="reservation-form">
+
+    <label class="reservation-field">
+      <span>Naam</span>
+      <input
+        type="text"
+        id="reservationCustomerName"
+        autocomplete="name"
+        placeholder="Je naam">
+    </label>
+
+    <label class="reservation-field">
+      <span>E-mail</span>
+      <input
+        type="email"
+        id="reservationCustomerEmail"
+        autocomplete="email"
+        placeholder="naam@voorbeeld.be">
+    </label>
+
+    <label class="reservation-field">
+      <span>Telefoon</span>
+      <input
+        type="tel"
+        id="reservationCustomerPhone"
+        autocomplete="tel"
+        placeholder="+32 ...">
+    </label>
+
+    <label class="reservation-field">
+      <span>Opmerking <small>(optioneel)</small></span>
+      <textarea
+        id="reservationCustomerComments"
+        rows="3"
+        placeholder="Eventuele opmerking"></textarea>
+    </label>
+
+  </div>
+
+  <button
+    class="reservation-next-button"
+    id="reservationCustomerNextButton"
+    type="button"
+    onclick="continueReservationCustomer()">
+
+    Reservatie controleren
+
+  </button>
+
+</div>
+
+
+<!-- STAP 5: CONTROLE -->
+
+<div class="reservation-step" id="reservationStepConfirm" style="display:none;">
+
+  <div class="reservation-step-title">
+    Controleer je reservatie
+  </div>
+
+  <div class="reservation-step-subtitle">
+    Kijk alles nog even na voor je bevestigt.
+  </div>
+
+  <div class="reservation-time-header">
+
+    <button
+      class="reservation-back-button"
+      type="button"
+      onclick="backToReservationCustomer()">
+      ‹
+    </button>
+
+    <div class="reservation-time-heading">
+      Overzicht
+    </div>
+
+  </div>
+
+  <div class="reservation-summary-card" id="reservationFinalSummary">
+  </div>
+
+  <button
+    class="reservation-next-button"
+    type="button"
+    onclick="submitReservation()">
+
+    Reservatie bevestigen
+
+  </button>
+
+</div>
+
+
+</div>
 
     </div>
 

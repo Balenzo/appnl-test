@@ -1402,13 +1402,20 @@
   }
 
   .reservation-frame {
+
     width: 100%;
-    height: calc(100vh - 190px);
-    min-height: 550px;
-    overflow: hidden;
+
+    height: auto;
+
+    min-height: 0;
+
+    overflow: visible;
+
     border-radius: 12px;
-    background: #fff;
-  }
+
+    background: transparent;
+
+}
 
   .reservation-frame iframe {
     width: 100%;
@@ -1589,3 +1596,323 @@
 
       opacity: 0.9;
   }
+
+  .reservation-step {
+    width: 100%;
+}
+
+.reservation-step-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.reservation-step-subtitle {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 16px;
+}
+
+.reservation-game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.reservation-game-card {
+    min-height: 120px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.reservation-game-icon {
+    font-size: 34px;
+}
+
+.reservation-calendar-header {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.reservation-back-button,
+.reservation-calendar-nav button {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.reservation-calendar-month {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.reservation-calendar-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.reservation-calendar {
+    width: 100%;
+}
+
+.reservation-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.reservation-calendar-weekdays span {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+}
+
+.reservation-calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.reservation-calendar-day {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reservation-calendar-empty {
+    aspect-ratio: 1 / 1;
+}
+
+/* ===========================
+   RESERVATIE KALENDER STATUS
+=========================== */
+
+.reservation-calendar-day.disabled {
+    opacity: 0.22;
+    cursor: not-allowed;
+}
+
+.reservation-calendar-day.today {
+    border-color: rgba(255,255,255,0.55);
+}
+
+.reservation-calendar-day.selected {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.reservation-calendar-nav button:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.reservation-next-button {
+    width: 100%;
+    height: 48px;
+    margin-top: 18px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #fff;
+    color: #000;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.reservation-next-button:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   RESERVATIE UUR & DUUR
+=========================== */
+
+.reservation-time-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.reservation-time-heading {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.reservation-time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.reservation-time-button,
+.reservation-duration-button {
+    min-height: 44px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.reservation-time-button.selected,
+.reservation-duration-button.selected {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.reservation-duration-section {
+    margin-top: 24px;
+}
+
+.reservation-duration-title {
+    font-size: 17px;
+    margin-bottom: 12px;
+}
+
+.reservation-duration-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+#reservationStepTime {
+    padding-bottom: 80px;
+}
+
+/* ===========================
+   RESERVATIE FORMULIER
+=========================== */
+
+#reservationStepCustomer,
+#reservationStepConfirm {
+    padding-bottom: 80px;
+}
+
+.reservation-summary-card {
+    padding: 14px;
+    margin-bottom: 20px;
+
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+
+    background: rgba(255,255,255,0.05);
+}
+
+.reservation-summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 7px 0;
+
+    font-size: 13px;
+}
+
+.reservation-summary-row span {
+    color: #aaa;
+}
+
+.reservation-summary-row strong {
+    text-align: right;
+    color: #fff;
+}
+
+.reservation-summary-divider {
+    height: 1px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.10);
+}
+
+.reservation-summary-comments {
+    align-items: flex-start;
+}
+
+.reservation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.reservation-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.reservation-field span {
+    color: #ddd;
+}
+
+.reservation-field small {
+    color: #777;
+    font-weight: 500;
+}
+
+.reservation-field input,
+.reservation-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+
+    padding: 12px;
+
+    font-size: 14px;
+    font-family: inherit;
+
+    outline: none;
+}
+
+.reservation-field textarea {
+    resize: vertical;
+}
+
+.reservation-field input:focus,
+.reservation-field textarea:focus {
+    border-color: rgba(255,255,255,0.5);
+}

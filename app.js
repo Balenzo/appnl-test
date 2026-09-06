@@ -2555,3 +2555,905 @@ function closeTableReservation() {
   }
 
 }
+
+function selectReservationGame(gameType) {
+
+    reservationSelectedGameType = gameType;
+reservationSelectedDate = null;
+
+const now = new Date();
+
+reservationCalendarYear =
+    now.getFullYear();
+
+reservationCalendarMonth =
+    now.getMonth();
+
+    console.log("Gekozen discipline:", gameType);
+
+    const gameStep = document.getElementById("reservationStepGame");
+    const dateStep = document.getElementById("reservationStepDate");
+
+    if (gameStep) {
+        gameStep.style.display = "none";
+    }
+
+    if (dateStep) {
+        dateStep.style.display = "block";
+    }
+
+    renderReservationCalendar(
+    reservationCalendarYear,
+    reservationCalendarMonth
+);
+}
+
+function backToReservationGame() {
+
+    const gameStep = document.getElementById("reservationStepGame");
+    const dateStep = document.getElementById("reservationStepDate");
+
+    if (dateStep) {
+        dateStep.style.display = "none";
+    }
+
+    if (gameStep) {
+        gameStep.style.display = "block";
+    }
+}
+
+/* ===========================
+   RESERVATIE KALENDER
+=========================== */
+
+let reservationCalendarYear = new Date().getFullYear();
+let reservationCalendarMonth = new Date().getMonth();
+
+let reservationSelectedGameType = null;
+let reservationSelectedDate = null;
+
+
+function renderReservationCalendar(year, month) {
+
+    const calendar =
+        document.getElementById("reservationCalendar");
+
+    const monthLabel =
+        document.getElementById("reservationCalendarMonth");
+
+    if (!calendar || !monthLabel) return;
+
+
+    const monthNames = [
+        "Januari",
+        "Februari",
+        "Maart",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Augustus",
+        "September",
+        "Oktober",
+        "November",
+        "December"
+    ];
+
+
+    monthLabel.textContent =
+        `${monthNames[month]} ${year}`;
+
+
+    const firstDay =
+        new Date(year, month, 1);
+
+    const daysInMonth =
+        new Date(year, month + 1, 0).getDate();
+
+
+    // Zondag = 0 in JavaScript.
+    // Wij willen maandag als eerste dag.
+    const startDay =
+        (firstDay.getDay() + 6) % 7;
+
+
+    const today = new Date();
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    let html = `
+
+        <div class="reservation-calendar-weekdays">
+
+            <span>MA</span>
+            <span>DI</span>
+            <span>WO</span>
+            <span>DO</span>
+            <span>VR</span>
+            <span>ZA</span>
+            <span>ZO</span>
+
+        </div>
+
+
+        <div class="reservation-calendar-days">
+
+    `;
+
+
+    // Lege vakken vóór de eerste dag van de maand
+    for (let i = 0; i < startDay; i++) {
+
+        html += `
+            <span class="reservation-calendar-empty"></span>
+        `;
+
+    }
+
+
+    // Kalenderdagen
+    for (let day = 1; day <= daysInMonth; day++) {
+
+        const dayDate =
+            new Date(year, month, day);
+
+        dayDate.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const dateValue =
+            `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+
+        const isPast =
+            dayDate < today;
+
+        const isToday =
+            dayDate.getTime() === today.getTime();
+
+        const isSelected =
+            reservationSelectedDate === dateValue;
+
+
+        let className =
+            "reservation-calendar-day";
+
+        if (isPast) {
+            className += " disabled";
+        }
+
+        if (isToday) {
+            className += " today";
+        }
+
+        if (isSelected) {
+            className += " selected";
+        }
+
+
+        html += `
+
+            <button
+                class="${className}"
+                type="button"
+                ${isPast ? "disabled" : ""}
+                onclick="selectReservationDate('${dateValue}', this)">
+                ${day}
+            </button>
+
+        `;
+
+    }
+
+
+    html += `
+
+        </div>
+
+
+        <button
+            class="reservation-next-button"
+            id="reservationDateNextButton"
+            type="button"
+            ${reservationSelectedDate ? "" : "disabled"}
+            onclick="continueReservationDate()">
+
+            Volgende
+
+        </button>
+
+    `;
+
+
+    calendar.innerHTML = html;
+
+
+    updateReservationMonthButtons();
+
+}
+
+
+function changeReservationMonth(offset) {
+
+    const newDate =
+        new Date(
+            reservationCalendarYear,
+            reservationCalendarMonth + offset,
+            1
+        );
+
+
+    const currentMonth =
+        new Date();
+
+    currentMonth.setDate(1);
+
+    currentMonth.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    // Niet naar maanden in het verleden
+    if (newDate < currentMonth) {
+        return;
+    }
+
+
+    reservationCalendarYear =
+        newDate.getFullYear();
+
+    reservationCalendarMonth =
+        newDate.getMonth();
+
+
+    renderReservationCalendar(
+        reservationCalendarYear,
+        reservationCalendarMonth
+    );
+
+}
+
+
+function updateReservationMonthButtons() {
+
+    const buttons =
+        document.querySelectorAll(
+            ".reservation-calendar-nav button"
+        );
+
+    if (buttons.length < 2) return;
+
+
+    const previousButton =
+        buttons[0];
+
+
+    const now =
+        new Date();
+
+    const isCurrentMonth =
+        reservationCalendarYear === now.getFullYear() &&
+        reservationCalendarMonth === now.getMonth();
+
+
+    previousButton.disabled =
+        isCurrentMonth;
+
+}
+
+
+function selectReservationDate(date, button) {
+
+    reservationSelectedDate =
+        date;
+
+
+    document
+        .querySelectorAll(".reservation-calendar-day")
+        .forEach(dayButton => {
+
+            dayButton.classList.remove("selected");
+
+        });
+
+
+    if (button) {
+        button.classList.add("selected");
+    }
+
+
+    const nextButton =
+        document.getElementById(
+            "reservationDateNextButton"
+        );
+
+
+    if (nextButton) {
+        nextButton.disabled = false;
+    }
+
+
+    console.log(
+        "Gekozen datum:",
+        reservationSelectedDate
+    );
+
+}
+
+
+function continueReservationDate() {
+
+    if (!reservationSelectedDate) {
+        return;
+    }
+
+
+    console.log(
+        "Verder met reservatie:",
+        {
+            gameType: reservationSelectedGameType,
+            date: reservationSelectedDate
+        }
+    );
+
+
+    // Hier koppelen we straks stap 3:
+    // beschikbare starturen
+
+}   
+
+/* ===========================
+   RESERVATIE UUR & DUUR
+=========================== */
+
+let reservationSelectedTime = null;
+let reservationSelectedDuration = null;
+
+
+function continueReservationDate() {
+
+    if (!reservationSelectedDate) {
+        return;
+    }
+
+    const dateStep =
+        document.getElementById("reservationStepDate");
+
+    const timeStep =
+        document.getElementById("reservationStepTime");
+
+    if (dateStep) {
+        dateStep.style.display = "none";
+    }
+
+    if (timeStep) {
+        timeStep.style.display = "block";
+    }
+
+
+    reservationSelectedTime = null;
+    reservationSelectedDuration = null;
+
+
+    const dateText =
+        document.getElementById("reservationSelectedDateText");
+
+    if (dateText) {
+
+        const parts =
+            reservationSelectedDate.split("-");
+
+        const formattedDate =
+            `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+        dateText.textContent =
+            `Gekozen datum: ${formattedDate}`;
+    }
+
+
+    renderReservationTestTimes();
+}
+
+
+function renderReservationTestTimes() {
+
+    const container =
+        document.getElementById("reservationTimeGrid");
+
+    if (!container) return;
+
+
+    /*
+     * Tijdelijke testuren.
+     * Deze vervangen we later door de echte
+     * SportsClubAdmin beschikbaarheid.
+     */
+    const times = [
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+        "18:00",
+        "18:30",
+        "19:00",
+        "19:30",
+        "20:00",
+        "20:30"
+    ];
+
+
+    container.innerHTML =
+        times.map(time => `
+
+            <button
+                class="reservation-time-button"
+                type="button"
+                onclick="selectReservationTime('${time}', this)">
+                ${time}
+            </button>
+
+        `).join("");
+
+
+    const durationSection =
+        document.getElementById("reservationDurationSection");
+
+    if (durationSection) {
+        durationSection.style.display = "none";
+    }
+
+
+    const nextButton =
+        document.getElementById("reservationTimeNextButton");
+
+    if (nextButton) {
+        nextButton.disabled = true;
+    }
+}
+
+
+function selectReservationTime(time, button) {
+
+    reservationSelectedTime =
+        time;
+
+    reservationSelectedDuration =
+        null;
+
+
+    document
+        .querySelectorAll(".reservation-time-button")
+        .forEach(timeButton => {
+
+            timeButton.classList.remove("selected");
+
+        });
+
+
+    button.classList.add("selected");
+
+
+    renderReservationDurations();
+}
+
+
+function renderReservationDurations() {
+
+    const section =
+        document.getElementById("reservationDurationSection");
+
+    const container =
+        document.getElementById("reservationDurationGrid");
+
+    if (!section || !container) return;
+
+
+    section.style.display =
+        "block";
+
+
+    /*
+     * Tijdelijke testduren.
+     * Later komen deze rechtstreeks uit
+     * available_durations van SportsClubAdmin.
+     */
+    const durations = [
+        { minutes: 60, label: "1 uur" },
+        { minutes: 90, label: "1u30" },
+        { minutes: 120, label: "2 uur" },
+        { minutes: 150, label: "2u30" },
+        { minutes: 180, label: "3 uur" }
+    ];
+
+
+    container.innerHTML =
+        durations.map(duration => `
+
+            <button
+                class="reservation-duration-button"
+                type="button"
+                onclick="selectReservationDuration(${duration.minutes}, this)">
+                ${duration.label}
+            </button>
+
+        `).join("");
+
+
+    const nextButton =
+        document.getElementById("reservationTimeNextButton");
+
+    if (nextButton) {
+        nextButton.disabled = true;
+    }
+}
+
+
+function selectReservationDuration(duration, button) {
+
+    reservationSelectedDuration =
+        duration;
+
+
+    document
+        .querySelectorAll(".reservation-duration-button")
+        .forEach(durationButton => {
+
+            durationButton.classList.remove("selected");
+
+        });
+
+
+    button.classList.add("selected");
+
+
+    const nextButton =
+        document.getElementById("reservationTimeNextButton");
+
+    if (nextButton) {
+        nextButton.disabled = false;
+    }
+}
+
+
+function backToReservationDate() {
+
+    const timeStep =
+        document.getElementById("reservationStepTime");
+
+    const dateStep =
+        document.getElementById("reservationStepDate");
+
+    if (timeStep) {
+        timeStep.style.display = "none";
+    }
+
+    if (dateStep) {
+        dateStep.style.display = "block";
+    }
+}
+
+
+function continueReservationTime() {
+
+    if (
+        !reservationSelectedTime ||
+        !reservationSelectedDuration
+    ) {
+        return;
+    }
+
+    const timeStep =
+        document.getElementById("reservationStepTime");
+
+    const customerStep =
+        document.getElementById("reservationStepCustomer");
+
+    if (timeStep) {
+        timeStep.style.display = "none";
+    }
+
+    if (customerStep) {
+        customerStep.style.display = "block";
+    }
+
+    renderReservationSummary();
+}
+
+function backToReservationTime() {
+
+    const customerStep =
+        document.getElementById("reservationStepCustomer");
+
+    const timeStep =
+        document.getElementById("reservationStepTime");
+
+    if (customerStep) {
+        customerStep.style.display = "none";
+    }
+
+    if (timeStep) {
+        timeStep.style.display = "block";
+    }
+}
+
+
+function renderReservationSummary() {
+
+    const container =
+        document.getElementById("reservationSummaryCard");
+
+    if (!container) return;
+
+    const dateParts =
+        reservationSelectedDate.split("-");
+
+    const formattedDate =
+        `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+    const gameLabel =
+        reservationSelectedGameType === "snooker"
+            ? "Snooker"
+            : "Pool";
+
+    const durationLabel =
+        formatReservationDuration(
+            reservationSelectedDuration
+        );
+
+    container.innerHTML = `
+        <div class="reservation-summary-row">
+            <span>Discipline</span>
+            <strong>${gameLabel}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Datum</span>
+            <strong>${formattedDate}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Startuur</span>
+            <strong>${reservationSelectedTime}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Speelduur</span>
+            <strong>${durationLabel}</strong>
+        </div>
+    `;
+}
+
+
+function formatReservationDuration(minutes) {
+
+    const hours =
+        Math.floor(minutes / 60);
+
+    const remainingMinutes =
+        minutes % 60;
+
+    if (hours && remainingMinutes) {
+        return `${hours}u${remainingMinutes}`;
+    }
+
+    if (hours) {
+        return `${hours} uur`;
+    }
+
+    return `${remainingMinutes} min`;
+}
+
+
+function continueReservationCustomer() {
+
+    const name =
+        document
+            .getElementById("reservationCustomerName")
+            .value
+            .trim();
+
+    const email =
+        document
+            .getElementById("reservationCustomerEmail")
+            .value
+            .trim();
+
+    const phone =
+        document
+            .getElementById("reservationCustomerPhone")
+            .value
+            .trim();
+
+    const comments =
+        document
+            .getElementById("reservationCustomerComments")
+            .value
+            .trim();
+
+    if (!name) {
+        alert("Vul je naam in.");
+        return;
+    }
+
+    if (!email) {
+        alert("Vul je e-mailadres in.");
+        return;
+    }
+
+    if (!phone) {
+        alert("Vul je telefoonnummer in.");
+        return;
+    }
+
+    const customerStep =
+        document.getElementById("reservationStepCustomer");
+
+    const confirmStep =
+        document.getElementById("reservationStepConfirm");
+
+    if (customerStep) {
+        customerStep.style.display = "none";
+    }
+
+    if (confirmStep) {
+        confirmStep.style.display = "block";
+    }
+
+    renderReservationFinalSummary(
+        name,
+        email,
+        phone,
+        comments
+    );
+}
+
+
+function renderReservationFinalSummary(
+    name,
+    email,
+    phone,
+    comments
+) {
+
+    const container =
+        document.getElementById("reservationFinalSummary");
+
+    if (!container) return;
+
+    const dateParts =
+        reservationSelectedDate.split("-");
+
+    const formattedDate =
+        `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+    const gameLabel =
+        reservationSelectedGameType === "snooker"
+            ? "Snooker"
+            : "Pool";
+
+    container.innerHTML = `
+
+        <div class="reservation-summary-row">
+            <span>Discipline</span>
+            <strong>${gameLabel}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Datum</span>
+            <strong>${formattedDate}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Startuur</span>
+            <strong>${reservationSelectedTime}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Speelduur</span>
+            <strong>${formatReservationDuration(reservationSelectedDuration)}</strong>
+        </div>
+
+        <div class="reservation-summary-divider"></div>
+
+        <div class="reservation-summary-row">
+            <span>Naam</span>
+            <strong>${name}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>E-mail</span>
+            <strong>${email}</strong>
+        </div>
+
+        <div class="reservation-summary-row">
+            <span>Telefoon</span>
+            <strong>${phone}</strong>
+        </div>
+
+        ${
+            comments
+                ? `
+                    <div class="reservation-summary-row reservation-summary-comments">
+                        <span>Opmerking</span>
+                        <strong>${comments}</strong>
+                    </div>
+                `
+                : ""
+        }
+
+    `;
+}
+
+
+function backToReservationCustomer() {
+
+    const confirmStep =
+        document.getElementById("reservationStepConfirm");
+
+    const customerStep =
+        document.getElementById("reservationStepCustomer");
+
+    if (confirmStep) {
+        confirmStep.style.display = "none";
+    }
+
+    if (customerStep) {
+        customerStep.style.display = "block";
+    }
+}
+
+
+function submitReservation() {
+
+    console.log(
+        "Reservatie klaar voor verzending:",
+        {
+            game_type:
+                reservationSelectedGameType,
+
+            date:
+                reservationSelectedDate,
+
+            start_time:
+                reservationSelectedTime,
+
+            duration:
+                reservationSelectedDuration,
+
+            customer_name:
+                document.getElementById("reservationCustomerName").value.trim(),
+
+            customer_email:
+                document.getElementById("reservationCustomerEmail").value.trim(),
+
+            customer_phone:
+                document.getElementById("reservationCustomerPhone").value.trim(),
+
+            comments:
+                document.getElementById("reservationCustomerComments").value.trim()
+        }
+    );
+
+    alert(
+        "Test geslaagd. De reservatie wordt nog niet echt verstuurd."
+    );
+}
