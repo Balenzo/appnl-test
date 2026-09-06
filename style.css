@@ -2094,11 +2094,11 @@
 
 .moneygames-form-card input[type="date"],
 .moneygames-form-card input[type="time"] {
+  display: block;
   min-width: 0;
   max-width: 100%;
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
+  width: -webkit-fill-available;
+  box-sizing: border-box;
 }
 
 .moneygames-choice-grid {
