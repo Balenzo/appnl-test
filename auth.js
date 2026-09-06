@@ -636,13 +636,71 @@ function showMyMoneygames() {
 }
 
 
+function updateMoneygameDateTimeDisplays() {
+  const dateInput = moneygameEl("moneygamesDate");
+  const timeInput = moneygameEl("moneygamesTime");
+
+  const dateDisplay = moneygameEl("moneygamesDateDisplay");
+  const timeDisplay = moneygameEl("moneygamesTimeDisplay");
+
+  if (dateDisplay) {
+    if (dateInput?.value) {
+      const [year, month, day] = dateInput.value
+        .split("-")
+        .map(Number);
+
+      const date = new Date(year, month - 1, day);
+
+      dateDisplay.textContent = date.toLocaleDateString(
+        moneygameLocale(),
+        {
+          day: "numeric",
+          month: "short",
+          year: "numeric"
+        }
+      );
+    } else {
+      dateDisplay.textContent =
+        moneygameTr("moneygames.chooseDate", "Kies datum");
+    }
+  }
+
+  if (timeDisplay) {
+    timeDisplay.textContent =
+      timeInput?.value ||
+      moneygameTr("moneygames.chooseStartTime", "Kies starttijd");
+  }
+}
+
+
 function showNewMoneygameForm() {
   const form = moneygameEl("newMoneygameForm");
+  const dateInput = moneygameEl("moneygamesDate");
+  const timeInput = moneygameEl("moneygamesTime");
 
   if (form) {
     form.style.display = "block";
   }
 
+  if (dateInput && !dateInput.dataset.moneygameDisplayListener) {
+    dateInput.addEventListener(
+      "change",
+      updateMoneygameDateTimeDisplays
+    );
+
+    dateInput.dataset.moneygameDisplayListener = "true";
+  }
+
+  if (timeInput && !timeInput.dataset.moneygameDisplayListener) {
+    timeInput.addEventListener(
+      "change",
+      updateMoneygameDateTimeDisplays
+    );
+
+    timeInput.dataset.moneygameDisplayListener = "true";
+  }
+
+  updateMoneygameDateTimeDisplays();
   loadMoneygamePartnerOptions();
 }
 

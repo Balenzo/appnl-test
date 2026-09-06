@@ -2092,44 +2092,46 @@
   font-size: 14px;
 }
 
-.moneygames-native-field {
+.moneygames-picker-field {
+  position: relative;
   width: 100%;
-  min-width: 0;
-}
-
-.moneygames-native-field input[type="date"],
-.moneygames-native-field input[type="time"] {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
   height: 48px;
   box-sizing: border-box;
 
-  background: #0e0e0e;
-  color: #fff;
+  display: flex;
+  align-items: center;
 
+  background: #0e0e0e;
   border: 1px solid #303030;
   border-radius: 10px;
 
   padding: 0 12px;
 
+  color: #fff;
   font-family: inherit;
   font-size: 14px;
-  text-align: left;
+
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.moneygames-native-field input[type="date"]::-webkit-date-and-time-value,
-.moneygames-native-field input[type="time"]::-webkit-date-and-time-value {
-  text-align: left !important;
-  width: 100%;
-}
-
-.moneygames-native-field input[type="date"]::-webkit-datetime-edit,
-.moneygames-native-field input[type="time"]::-webkit-datetime-edit {
+.moneygames-picker-field span {
   display: block;
-  text-align: left !important;
   width: 100%;
+  text-align: left;
+  pointer-events: none;
+}
+
+.moneygames-picker-field input[type="date"],
+.moneygames-picker-field input[type="time"] {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  cursor: pointer;
 }
 
 .moneygames-choice-grid {
