@@ -1402,19 +1402,12 @@
   }
 
   .reservation-frame {
-
     width: 100%;
-
-    height: auto;
-
-    min-height: 0;
-
-    overflow: visible;
-
+    height: calc(100vh - 190px);
+    min-height: 650px;
+    overflow: hidden;
     border-radius: 12px;
-
     background: transparent;
-
 }
 
   .reservation-frame iframe {
