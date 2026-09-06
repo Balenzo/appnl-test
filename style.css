@@ -2092,6 +2092,15 @@
   font-size: 14px;
 }
 
+.moneygames-form-card input[type="date"],
+.moneygames-form-card input[type="time"] {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .moneygames-choice-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
