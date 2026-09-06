@@ -141,7 +141,7 @@
 
   flex: 0 0 auto;
   min-width: 110px;
-  padding: 12px 10px;
+  padding: 4px 10px;
 
   background: linear-gradient(180deg, #1a1a1a, #111);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -454,7 +454,7 @@
     display: flex;
     flex-direction: column;
     background: #111;
-    border: 1px solid rgba(255, 0, 0, 0.5);
+    border: 1px solid transparent;
     border-radius: 18px;
     overflow: hidden;
     text-decoration: none;
@@ -1916,3 +1916,1160 @@
 .reservation-field textarea:focus {
     border-color: rgba(255,255,255,0.5);
 }
+
+/* ===========================
+   MONEYGAMES AUTH
+=========================== */
+
+.moneygames-auth-card {
+  background: linear-gradient(180deg, #181818, #101010);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.moneygames-auth-card h2 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.moneygames-auth-text {
+  margin: 0 0 18px;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.moneygames-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.moneygames-auth-tab {
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  padding: 10px;
+  background: #1a1a1a;
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-auth-tab.active {
+  background: #e50914;
+  border-color: #e50914;
+  color: #fff;
+}
+
+#moneygamesLoginForm,
+#moneygamesRegisterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#moneygamesLoginForm input,
+#moneygamesRegisterForm input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #2b2b2b;
+  border-radius: 10px;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+#moneygamesLoginForm input:focus,
+#moneygamesRegisterForm input:focus {
+  border-color: #e50914;
+}
+
+.moneygames-primary-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #e50914;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-auth-message {
+  margin-top: 12px;
+  min-height: 18px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.moneygames-main-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.moneygames-main-tab {
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  padding: 11px 8px;
+  background: #171717;
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-main-tab.active {
+  background: #e50914;
+  border-color: #e50914;
+  color: white;
+}
+
+/* ===========================
+   MONEYGAMES
+=========================== */
+
+.moneygames-new-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin-bottom: 14px;
+  background: #e50914;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moneygames-form-card {
+  background: #141414;
+  border: 1px solid #292929;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.moneygames-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.moneygames-form-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.moneygames-close-form {
+  border: none;
+  background: none;
+  color: #aaa;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.moneygames-form-card label {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 700;
+}
+
+.moneygames-form-card input,
+.moneygames-form-card select {
+  width: 100%;
+  box-sizing: border-box;
+  background: #0e0e0e;
+  color: white;
+  border: 1px solid #303030;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.moneygames-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.moneygames-choice-btn {
+  border: 1px solid #303030;
+  border-radius: 10px;
+  padding: 11px;
+  background: #191919;
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-choice-btn.active {
+  background: #e50914;
+  border-color: #e50914;
+  color: white;
+}
+
+.moneygames-filter-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 14px;
+  padding-bottom: 2px;
+}
+
+.moneygames-filter-btn {
+  flex: 0 0 auto;
+  border: 1px solid #303030;
+  border-radius: 20px;
+  padding: 8px 12px;
+  background: #171717;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-filter-btn.active {
+  background: #e50914;
+  border-color: #e50914;
+  color: white;
+}
+
+.moneygames-empty-state {
+  background: #141414;
+  border: 1px solid #252525;
+  border-radius: 12px;
+  padding: 16px;
+  color: #888;
+  text-align: center;
+  font-size: 13px;
+}
+
+.moneygames-form-message {
+  min-height: 18px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.moneygames-my-section {
+  margin-bottom: 22px;
+}
+
+.moneygames-my-section h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.moneygames-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.moneygames-stat-card {
+  background: #141414;
+  border: 1px solid #282828;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.moneygames-stat-card span {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.moneygames-stat-card small {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 11px;
+}
+
+.moneygames-open-card {
+  background: #141414;
+  border: 1px solid #292929;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.moneygames-open-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.moneygames-game-type {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: #e50914;
+  border-radius: 20px;
+  padding: 5px 9px;
+}
+
+.moneygames-discipline {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 700;
+}
+
+.moneygames-open-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.moneygames-open-info strong {
+  color: #fff;
+  font-size: 15px;
+}
+
+.moneygames-player-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.moneygames-react-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: #e50914;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moneygames-react-btn.reacted {
+  background: #242424;
+  color: #aaa;
+  cursor: default;
+}
+
+.moneygames-own-label {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: rgba(229, 9, 20, 0.15);
+  border: 1px solid #e50914;
+  color: #ff4d55;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.moneygames-pending-label {
+  margin-top: 12px;
+  color: #f0b429;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.moneygames-account-section {
+  margin-top: 24px;
+  margin-bottom: 20px;
+}
+
+.moneygames-account-btn {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  background: #171717;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-account-panel {
+  margin-top: 8px;
+  padding: 12px;
+  background: #141414;
+  border: 1px solid #292929;
+  border-radius: 12px;
+}
+
+.moneygames-account-panel label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #aaa;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.moneygames-account-panel input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #303030;
+  border-radius: 10px;
+  background: #191919;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+}
+
+.moneygames-account-panel input:focus {
+  border-color: #e50914;
+}
+
+.moneygames-account-divider {
+  height: 1px;
+  background: #2a2a2a;
+  margin: 18px 0;
+}
+
+.moneygames-secondary-btn {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #303030;
+  border-radius: 10px;
+  background: #191919;
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-secondary-btn:hover {
+  color: #fff;
+  border-color: #555;
+}
+
+.moneygames-password-reset-panel {
+  margin-top: 8px;
+  padding: 10px;
+  background: #191919;
+  border-radius: 10px;
+}
+
+.moneygames-account-row {
+  margin-bottom: 10px;
+  color: #aaa;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.moneygames-logout-btn {
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-reaction-title {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a2a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.moneygames-no-reactions {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #2a2a2a;
+  color: #777;
+  font-size: 12px;
+}
+
+.moneygames-candidate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moneygames-candidate {
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.moneygames-candidate-name {
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.moneygames-select-opponent-btn {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: #e50914;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moneygames-planned-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid #3a3a3a;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+}
+
+.moneygames-versus {
+  margin: 10px 0 14px;
+  padding: 12px;
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.moneygames-versus-player {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.moneygames-versus-vs {
+  margin: 5px 0;
+  color: #e50914;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.moneygames-result-box {
+  margin-top: 14px;
+  padding: 12px;
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 10px;
+}
+
+.moneygames-result-status {
+  margin-bottom: 10px;
+  color: #f0b429;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.moneygames-result-status.confirmed {
+  color: #7adf8b;
+}
+
+.moneygames-result-score {
+  margin: 8px 0;
+  text-align: center;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.moneygames-score-inputs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: end;
+}
+
+.moneygames-score-inputs div {
+  text-align: center;
+}
+
+.moneygames-score-inputs span {
+  display: block;
+  min-height: 30px;
+  margin-bottom: 5px;
+  color: #aaa;
+  font-size: 10px;
+}
+
+.moneygames-score-inputs input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #303030;
+  border-radius: 8px;
+  background: #151515;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+}
+
+.moneygames-submit-result-btn,
+.moneygames-confirm-result-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #e50914;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moneygames-result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.moneygames-reject-result-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.moneygames-result-notice {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #141414;
+  color: #888;
+  text-align: center;
+  font-size: 11px;
+}
+
+/* =========================================================
+   BAL ENZO MONEYGAMES V2
+   EXTRA STYLING
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   ALGEMENE INTERACTIE
+--------------------------------------------------------- */
+
+.moneygames-cancel-open-btn,
+.moneygames-withdraw-reaction-btn,
+.moneygames-cancel-match-btn,
+.moneygames-forfeit-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Open oproep annuleren */
+
+.moneygames-cancel-open-btn {
+  border: 1px solid #4a4a4a;
+  background: #1b1b1b;
+  color: #fff;
+}
+
+.moneygames-cancel-open-btn:hover {
+  background: #252525;
+}
+
+/* Reactie intrekken */
+
+.moneygames-withdraw-reaction-btn {
+  border: 1px solid #444;
+  background: #181818;
+  color: #aaa;
+}
+
+.moneygames-withdraw-reaction-btn:hover {
+  background: #242424;
+  color: #fff;
+}
+
+/* Geplande match annuleren */
+
+.moneygames-cancel-match-btn {
+  border: 1px solid #4a4a4a;
+  background: #1b1b1b;
+  color: #fff;
+}
+
+.moneygames-cancel-match-btn:hover {
+  background: #292929;
+}
+
+
+/* ---------------------------------------------------------
+   DOUBLES KANDIDAAT
+--------------------------------------------------------- */
+
+.moneygames-candidate-meta {
+  margin-top: -3px;
+  margin-bottom: 8px;
+
+  color: #888;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+
+/* ---------------------------------------------------------
+   RESULTAAT / FORFAIT
+--------------------------------------------------------- */
+
+.moneygames-forfeit-btn {
+  border: 1px solid rgba(229, 9, 20, 0.45);
+  background: rgba(229, 9, 20, 0.08);
+  color: #ff4d55;
+}
+
+.moneygames-forfeit-btn:hover {
+  background: rgba(229, 9, 20, 0.16);
+}
+
+
+/* ---------------------------------------------------------
+   RESULTAAT STATUSSEN
+--------------------------------------------------------- */
+
+.moneygames-result-status.rejected {
+  color: #ff4d55;
+}
+
+.moneygames-result-status.pending {
+  color: #f0b429;
+}
+
+.moneygames-result-status.confirmed {
+  color: #7adf8b;
+}
+
+.moneygames-result-status.forfeit {
+  color: #ff8a65;
+}
+
+
+/* ---------------------------------------------------------
+   HISTORIEK
+--------------------------------------------------------- */
+
+.moneygames-history-card {
+  background: #141414;
+  border: 1px solid #292929;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.moneygames-history-opponent {
+  margin-top: 10px;
+
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.moneygames-history-status {
+  display: inline-block;
+
+  margin-top: 10px;
+  padding: 5px 9px;
+
+  border-radius: 20px;
+  border: 1px solid #303030;
+
+  background: #1d1d1d;
+  color: #aaa;
+
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.moneygames-history-status.won {
+  background: rgba(70, 190, 90, 0.12);
+  border-color: rgba(70, 190, 90, 0.35);
+  color: #7adf8b;
+}
+
+.moneygames-history-status.lost {
+  background: rgba(229, 9, 20, 0.10);
+  border-color: rgba(229, 9, 20, 0.35);
+  color: #ff4d55;
+}
+
+.moneygames-history-status.cancelled,
+.moneygames-history-status.expired,
+.moneygames-history-status.no-result {
+  background: #191919;
+  border-color: #303030;
+  color: #888;
+}
+
+
+/* ---------------------------------------------------------
+   BADGES
+--------------------------------------------------------- */
+
+.moneygames-badge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.moneygames-badge-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px;
+
+  background: #141414;
+  border: 1px solid #292929;
+  border-radius: 12px;
+}
+
+.moneygames-badge-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #1d1d1d;
+
+  font-size: 20px;
+}
+
+.moneygames-badge-name {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.moneygames-badge-description {
+  margin-top: 3px;
+
+  color: #777;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+
+/* ---------------------------------------------------------
+   STATISTIEKEN - UITBREIDING
+--------------------------------------------------------- */
+
+.moneygames-stats-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.moneygames-stat-card.wide {
+  grid-column: 1 / -1;
+}
+
+.moneygames-stat-label {
+  display: block;
+  margin-bottom: 4px;
+
+  color: #777;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.moneygames-stat-value {
+  display: block;
+
+  color: #fff;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.moneygames-stat-value.positive {
+  color: #7adf8b;
+}
+
+.moneygames-stat-value.negative {
+  color: #ff4d55;
+}
+
+
+/* ---------------------------------------------------------
+   DOUBLES TEAMS
+--------------------------------------------------------- */
+
+.moneygames-team {
+  padding: 10px;
+
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 10px;
+
+  text-align: center;
+}
+
+.moneygames-team-label {
+  margin-bottom: 4px;
+
+  color: #777;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moneygames-team-player {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+
+/* ---------------------------------------------------------
+   RESULTAAT KNOPPEN
+--------------------------------------------------------- */
+
+.moneygames-submit-result-btn:disabled,
+.moneygames-confirm-result-btn:disabled,
+.moneygames-reject-result-btn:disabled,
+.moneygames-forfeit-btn:disabled,
+.moneygames-cancel-open-btn:disabled,
+.moneygames-cancel-match-btn:disabled,
+.moneygames-withdraw-reaction-btn:disabled,
+.moneygames-select-opponent-btn:disabled,
+.moneygames-react-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* ---------------------------------------------------------
+   INPUT FOCUS
+--------------------------------------------------------- */
+
+.moneygames-score-inputs input:focus,
+.moneygames-form-card input:focus,
+.moneygames-form-card select:focus {
+  outline: none;
+  border-color: #e50914;
+}
+
+
+/* ---------------------------------------------------------
+   MOBIEL
+--------------------------------------------------------- */
+
+@media (max-width: 360px) {
+
+  .moneygames-stats-grid,
+  .moneygames-stats-secondary,
+  .moneygames-badge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .moneygames-score-inputs {
+    grid-template-columns: 1fr 20px 1fr;
+  }
+
+  .moneygames-open-card,
+  .moneygames-history-card {
+    padding: 12px;
+  }
+
+}
+
+/* ===========================
+   WEDSTRIJD FILTERS
+=========================== */
+
+.matches-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: nowrap;
+}
+
+.matches-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0 14px;
+
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.matches-filter input {
+    margin: 0;
+}
+
+.matches-team-filter {
+    height: 40px;
+    box-sizing: border-box;
+    padding: 0 36px 0 12px;
+
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.matches-team-filter:focus {
+    outline: none;
+    border-color: #e50914;
+}
+
+.matches-team-filter option {
+    background: #1b1b1b;
+    color: #fff;
+}
+
+@media (max-width: 420px) {
+
+    .matches-filters {
+        gap: 6px;
+    }
+
+    .matches-filter {
+        padding: 0 10px;
+        font-size: 13px;
+    }
+
+    .matches-team-filter {
+        flex: 1;
+        min-width: 120px;
+        font-size: 13px;
+    }
+}
+
+.matches-filters {
+    display: flex;
+    align-items: flex-start;
+}
+
+.matches-team-filter {
+    margin-top: 0 !important;
+}
+
+.matches-filter {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.matches-team-filter {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ===========================
+   TAALKEUZE
+=========================== */
+
+.language-card {
+  align-items: center;
+}
+
+.language-selector {
+  flex: 0 0 auto;
+  min-width: 112px;
+  max-width: 132px;
+  height: 40px;
+
+  padding: 0 34px 0 12px;
+
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 10px;
+
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.language-selector:focus {
+  border-color: #e50914;
+}
+
+.language-selector option {
+  background: #1b1b1b;
+  color: #fff;
+}
+
+@media (max-width: 380px) {
+  .language-card {
+    gap: 10px;
+    padding: 16px 14px;
+  }
+
+  .language-selector {
+    min-width: 104px;
+    max-width: 116px;
+    padding-left: 10px;
+    font-size: 12px;
+  }
+}
+

@@ -2,6 +2,117 @@ let currentCompetitionData = null;
 let playerDetailSource = "team";
 let currentMvpPercentage = null;
 
+function tr(key, fallback, params = {}) {
+  if (typeof t !== "function") {
+    return fallback;
+  }
+
+  const translated = t(key, params);
+  return translated === key ? fallback : translated;
+}
+
+function appLocale() {
+  return typeof getLocale === "function"
+    ? getLocale()
+    : "nl-BE";
+}
+
+function translateCompetitionRoundName(roundName, roundNumber = "") {
+  const raw = String(roundName || "").trim();
+
+  if (!raw) {
+    return tr(
+      "competition.roundNumber",
+      "Ronde {{number}}",
+      { number: roundNumber || "" }
+    ).trim();
+  }
+
+  const normalized = raw.toLowerCase().trim();
+
+  let match = normalized.match(/^round\s+(\d+)$/i);
+  if (match) {
+    return tr(
+      "competition.roundNumber",
+      "Ronde {{number}}",
+      { number: match[1] }
+    );
+  }
+
+  match = normalized.match(/^winner(?:s)?\s+round\s+(\d+)$/i);
+  if (match) {
+    return tr(
+      "competition.winnersRoundNumber",
+      "Winnaarsronde {{number}}",
+      { number: match[1] }
+    );
+  }
+
+  match = normalized.match(/^loser(?:s)?\s+round\s+(\d+)$/i);
+  if (match) {
+    return tr(
+      "competition.losersRoundNumber",
+      "Verliezersronde {{number}}",
+      { number: match[1] }
+    );
+  }
+
+  const exactNames = {
+    "winners qualification": [
+      "competition.winnersQualification",
+      "Winnaarskwalificatie"
+    ],
+    "winner qualification": [
+      "competition.winnersQualification",
+      "Winnaarskwalificatie"
+    ],
+    "losers qualification": [
+      "competition.losersQualification",
+      "Verliezerskwalificatie"
+    ],
+    "loser qualification": [
+      "competition.losersQualification",
+      "Verliezerskwalificatie"
+    ],
+    "quarter final": [
+      "competition.quarterFinal",
+      "Kwartfinale"
+    ],
+    "quarter finals": [
+      "competition.quarterFinal",
+      "Kwartfinale"
+    ],
+    "semi final": [
+      "competition.semiFinal",
+      "Halve finale"
+    ],
+    "semi finals": [
+      "competition.semiFinal",
+      "Halve finale"
+    ],
+    "final": [
+      "competition.final",
+      "Finale"
+    ],
+    "third place": [
+      "competition.thirdPlace",
+      "Troostfinale"
+    ],
+    "bronze final": [
+      "competition.thirdPlace",
+      "Troostfinale"
+    ]
+  };
+
+  const exact = exactNames[normalized];
+
+  if (exact) {
+    return tr(exact[0], exact[1]);
+  }
+
+  return raw;
+}
+
 // ===============================
 // FAVORIETEN
 // ===============================
@@ -9,7 +120,7 @@ let currentMvpPercentage = null;
 const favoriteOptions = {
   myProfile: {
     icon: '👤',
-    title: 'Mijn profiel',
+    title: tr('favorites.myProfile', 'Mijn profiel'),
     url: null
   },
   'club-live': {
@@ -19,80 +130,80 @@ const favoriteOptions = {
   },
   'club-reservation': {
     icon: '🪑',
-    title: 'Tafel reserveren',
+    title: tr('favorites.reserveTable', 'Tafel reserveren'),
     url: 'https://www.bal-enzo.be/reservaties/'
   },
   'club-page': {
     icon: '🎱',
-    title: 'Clubpagina',
+    title: tr('favorites.clubPage', 'Clubpagina'),
     url: 'https://cuescore.com/bal-enzobilliardsdarts'
   },
   'competition-first': {
     icon: '🏆',
-    title: 'Eerste Klasse',
+    title: tr('competition.firstDivision', 'Eerste Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130085")
 },
 
 'competition-second': {
     icon: '🏆',
-    title: 'Tweede Klasse',
+    title: tr('competition.secondDivision', 'Tweede Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130109")
 },
 
 'competition-third': {
     icon: '🏆',
-    title: 'Derde Klasse',
+    title: tr('competition.thirdDivision', 'Derde Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130127")
 },
 
 'competition-cup': {
     icon: '🏆',
-    title: 'Beker',
+    title: tr('competition.cup', 'Beker'),
     url: null,
     action: () => openCompetitionDetail("74130139")
 },
 
 'competition-nl': {
     icon: '🇳🇱',
-    title: 'Competitie NL',
+    title: tr('competition.netherlands', 'Competitie NL'),
     url: null,
     action: () => openCompetitionDetail("83574892")
 },
 
 'breakplay-1': {
     icon: '🎱',
-    title: 'Break & Play Reeks 1',
+    title: tr('competition.breakPlay1', 'Break & Play Reeks 1'),
     url: null,
     action: () => openCompetitionDetail("85928236")
 },
 
 'breakplay-2': {
     icon: '🎱',
-    title: 'Break & Play Reeks 2',
+    title: tr('competition.breakPlay2', 'Break & Play Reeks 2'),
     url: null,
     action: () => openCompetitionDetail("85928569")
 },
 
 'breakplay-3': {
     icon: '🎱',
-    title: 'Break & Play Reeks 3',
+    title: tr('competition.breakPlay3', 'Break & Play Reeks 3'),
     url: null,
     action: () => openCompetitionDetail("85928635")
 },
 
 'breakplay-4': {
     icon: '🎱',
-    title: 'Break & Play Reeks 4',
+    title: tr('competition.breakPlay4', 'Break & Play Reeks 4'),
     url: null,
     action: () => openCompetitionDetail("85928797")
 },
 
 'breakplay-5': {
     icon: '🎱',
-    title: 'Break & Play Reeks 5',
+    title: tr('competition.breakPlay5', 'Break & Play Reeks 5'),
     url: null,
     action: () => openCompetitionDetail("85929085")
 },
@@ -261,18 +372,18 @@ function saveFavoritesSelection() {
 // ===============================
 
 function setProfile() {
-  const url = prompt('Voer de link van je CueScore-profiel in:');
+  const url = prompt(tr('profile.enterCueScoreUrl', 'Voer de link van je CueScore-profiel in:'));
   if (!url) return;
 
   localStorage.setItem('myProfileUrl', url);
-  alert('Profiel opgeslagen.');
+  alert(tr('profile.saved', 'Profiel opgeslagen.'));
 }
 
 function openProfile() {
   const url = localStorage.getItem('myProfileUrl');
 
   if (!url) {
-    alert('Je hebt nog geen profiel ingesteld.');
+    alert(tr('profile.notSet', 'Je hebt nog geen profiel ingesteld.'));
     return;
   }
 
@@ -350,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Als er al een nieuwe versie klaarstaat
       if (registration.waiting) {
-        if (confirm('Er is een nieuwe versie van de app beschikbaar. Wil je nu vernieuwen?')) {
+        if (confirm(tr('app.updateAvailable', 'Er is een nieuwe versie van de app beschikbaar. Wil je nu vernieuwen?'))) {
           registration.waiting.postMessage({ type: 'SKIP_WAITING' });
           window.location.reload();
         }
@@ -367,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
             newWorker.state === 'installed' &&
             navigator.serviceWorker.controller
           ) {
-            if (confirm('Er is een nieuwe versie van de app beschikbaar. Wil je nu vernieuwen?')) {
+            if (confirm(tr('app.updateAvailable', 'Er is een nieuwe versie van de app beschikbaar. Wil je nu vernieuwen?'))) {
               newWorker.postMessage({ type: 'SKIP_WAITING' });
               window.location.reload();
             }
@@ -525,17 +636,17 @@ if (String(tournamentId) === "74130139") {
 }
 
         const competitionTitles = {
-    "74130085": "Eerste Klasse",
-    "74130109": "Tweede Klasse",
-    "74130127": "Derde Klasse",
-    "74130139": "Beker",
+    "74130085": tr("competition.firstDivision", "Eerste Klasse"),
+    "74130109": tr("competition.secondDivision", "Tweede Klasse"),
+    "74130127": tr("competition.thirdDivision", "Derde Klasse"),
+    "74130139": tr("competition.cup", "Beker"),
     "83574892": "Competitie NL",
 
-    "85928236": "Break & Play Reeks 1",
-    "85928569": "Break & Play Reeks 2",
-    "85928635": "Break & Play Reeks 3",
-    "85928797": "Break & Play Reeks 4",
-    "85929085": "Break & Play Reeks 5"
+    "85928236": tr("competition.breakPlay1", "Break & Play Reeks 1"),
+    "85928569": tr("competition.breakPlay2", "Break & Play Reeks 2"),
+    "85928635": tr("competition.breakPlay3", "Break & Play Reeks 3"),
+    "85928797": tr("competition.breakPlay4", "Break & Play Reeks 4"),
+    "85929085": tr("competition.breakPlay5", "Break & Play Reeks 5")
 };
 
 document.getElementById("competitionDetailTitle").textContent =
@@ -551,7 +662,7 @@ document.getElementById("competitionDetailTitle").textContent =
             `Periode: ${data.displayDate}`;
 
         document.getElementById("competitionDiscipline").textContent =
-            `Discipline: ${data.discipline}`;
+            `${tr("common.discipline", "Discipline")}: ${data.discipline}`;
 
 const mvpContainer =
     document.getElementById("competitionMvpList");
@@ -645,6 +756,24 @@ const isBreakAndPlay = [
     "85929085"
 ].includes(String(tournamentId));
 
+const teamsTab =
+    document.querySelector(
+        '.competition-detail-tab[onclick*="teams"]'
+    );
+
+const teamsPanel =
+    document.getElementById("competitionTabTeams");
+
+if (teamsTab && teamsPanel) {
+
+    if (isBreakAndPlay) {
+        teamsTab.style.display = "none";
+        teamsPanel.style.display = "none";
+    } else {
+        teamsTab.style.display = "";
+    }
+}
+
     const standings =
     data.standings && data.standings["1"]
         ? data.standings["1"]
@@ -653,7 +782,7 @@ const isBreakAndPlay = [
 if (!standings.length) {
 
     standingsContainer.innerHTML =
-        "<p>Geen stand beschikbaar.</p>";
+        `<p>${tr("competition.noStandings", "Geen stand beschikbaar.")}</p>`;
 
 } else {
 
@@ -665,7 +794,7 @@ if (!standings.length) {
 
             <div class="standings-row standings-header">
                 <div>#</div>
-                <div>Team</div>
+                <div>${tr("common.team", "Team")}</div>
                 <div>G</div>
                 <div>${isBreakAndPlay ? "PTN" : "MP"}</div>
                 <div>W</div>
@@ -768,7 +897,7 @@ const teams =
 if (!teams.length) {
 
     teamsContainer.innerHTML =
-        "<p>Geen teams beschikbaar.</p>";
+        `<p>${tr("competition.noTeams", "Geen teams beschikbaar.")}</p>`;
 
 } else {
 
@@ -787,7 +916,7 @@ if (!teams.length) {
             </div>
 
             <div class="competition-subtitle">
-    ${team.position}e plaats
+    ${team.position}${tr("competition.placeSuffix", "e")} ${tr("competition.place", "plaats")}
 </div>
 
         </div>
@@ -810,10 +939,49 @@ const matches = data.matches || [];
 const upcomingFilter =
     document.getElementById("competitionMatchesUpcomingOnly");
 
+const teamFilter =
+    document.getElementById("competitionMatchesTeamFilter");
+
+// Teams voor het keuzemenu verzamelen
+if (teamFilter) {
+
+    const teamNames = new Set();
+
+    matches.forEach(match => {
+
+        if (match.playerA?.name) {
+            teamNames.add(match.playerA.name);
+        }
+
+        if (match.playerB?.name) {
+            teamNames.add(match.playerB.name);
+        }
+
+    });
+
+    const sortedTeamNames =
+        [...teamNames].sort((a, b) =>
+            a.localeCompare(b, "nl")
+        );
+
+    teamFilter.innerHTML = `
+    <option value="">
+        ${isBreakAndPlay ? tr("filters.allPlayers", "Alle spelers") : tr("filters.allTeams", "Alle teams")}
+    </option>
+
+    ${sortedTeamNames.map(teamName => `
+        <option value="${teamName}">
+            ${teamName}
+        </option>
+    `).join("")}
+`;
+
+}
+
 if (!matches.length) {
 
     matchesContainer.innerHTML =
-        "<p>Geen wedstrijden beschikbaar.</p>";
+        `<p>${tr("competition.noMatches", "Geen wedstrijden beschikbaar.")}</p>`;
 
 } else {
 
@@ -827,13 +995,25 @@ if (upcomingFilter && upcomingFilter.checked) {
 
 const renderMatches = () => {
 
-matchesToShow = matches;
+    matchesToShow = matches;
 
-if (upcomingFilter && upcomingFilter.checked) {
-    matchesToShow = matches.filter(
-        match => match.matchstatus !== "finished"
-    );
-}    
+    // Alleen nog te spelen
+    if (upcomingFilter && upcomingFilter.checked) {
+        matchesToShow = matchesToShow.filter(
+            match => match.matchstatus !== "finished"
+        );
+    }
+
+    // Filter op gekozen team
+    if (teamFilter && teamFilter.value) {
+
+        const selectedTeam = teamFilter.value;
+
+        matchesToShow = matchesToShow.filter(match =>
+            match.playerA?.name === selectedTeam ||
+            match.playerB?.name === selectedTeam
+        );
+    }
 
  // Wedstrijden sorteren op speelronde
 let sortedMatches;
@@ -892,7 +1072,7 @@ const matchesByRound = {};
 sortedMatches.forEach(match => {
 
     const roundName =
-        match.roundName || `Speelronde ${match.round || ""}`;
+        match.roundName || `${tr("competition.round", "Speelronde")} ${match.round || ""}`;
 
     if (!matchesByRound[roundName]) {
         matchesByRound[roundName] = [];
@@ -910,7 +1090,7 @@ matchesContainer.innerHTML =
         <div class="competition-round">
 
             <div class="competition-round-title">
-                ${roundName}
+                ${translateCompetitionRoundName(roundName, roundMatches?.[0]?.round)}
             </div>
 
             ${roundMatches.map(match => {
@@ -924,18 +1104,18 @@ matchesContainer.innerHTML =
 
                 const date = match.starttime
                     ? new Date(match.starttime).toLocaleDateString(
-                        "nl-BE",
+                        appLocale(),
                         {
                             day: "2-digit",
                             month: "2-digit",
                             year: "numeric"
                         }
                     )
-                    : "Datum onbekend";
+                    : tr("common.unknownDate", "Datum onbekend");
 
                 const time = match.starttime
                     ? new Date(match.starttime).toLocaleTimeString(
-                        "nl-BE",
+                        appLocale(),
                         {
                             hour: "2-digit",
                             minute: "2-digit"
@@ -978,7 +1158,7 @@ matchesContainer.innerHTML =
                         <div class="competition-match-status">
 
                             ${isFinished
-                                ? "Gespeeld"
+                                ? tr("common.played", "Gespeeld")
                                 : "Gepland"}
 
                         </div>
@@ -1003,6 +1183,10 @@ renderMatches();
 
 if (upcomingFilter) {
     upcomingFilter.onchange = renderMatches;
+}
+
+if (teamFilter) {
+    teamFilter.onchange = renderMatches;
 }
 
 };
@@ -1090,20 +1274,20 @@ async function openMatchDetail(matchId, tournamentId) {
         .getElementById("matchDetailScreen")
         .classList.add("active");
 
-    const roundName = match.roundName || "Wedstrijd";
+    const roundName = match.roundName || tr("common.match", "Wedstrijd");
 
 document.getElementById("matchDetailRound").textContent =
     roundName.replace(/^Round\s+/i, "Ronde ");
 
     const dateText = match.starttime
-        ? new Date(match.starttime).toLocaleString("nl-BE", {
+        ? new Date(match.starttime).toLocaleString(appLocale(), {
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
             hour: "2-digit",
             minute: "2-digit"
         })
-        : "Datum onbekend";
+        : tr("common.unknownDate", "Datum onbekend");
 
     document.getElementById("matchDetailDate").textContent =
         dateText;
@@ -1159,9 +1343,9 @@ if (match.matchstatus === "finished") {
 if (match.matchstatus === "finished") {
 
     if (Number(match.scoreA) === Number(match.scoreB)) {
-        statusElement.textContent = "Gelijkspel";
+        statusElement.textContent = tr("common.draw", "Gelijkspel");
     } else {
-        statusElement.textContent = "Gespeeld";
+        statusElement.textContent = tr("common.played", "Gespeeld");
     }
 
 } else {
@@ -1207,7 +1391,7 @@ if (match.playerA?.venue?.name) {
     }
 
     individualContainer.innerHTML =
-        "<p>Individuele wedstrijden laden...</p>";
+        `<p>${tr("match.loadingIndividual", "Individuele wedstrijden laden...")}</p>`;
 
     try {
 
@@ -1224,7 +1408,7 @@ if (match.playerA?.venue?.name) {
         ) {
 
             individualContainer.innerHTML =
-                "<p>Geen individuele wedstrijden beschikbaar.</p>";
+                `<p>${tr("match.noIndividual", "Geen individuele wedstrijden beschikbaar.")}</p>`;
 
             return;
         }
@@ -1237,7 +1421,7 @@ if (match.playerA?.venue?.name) {
                     <div class="individual-match-header">
 
                         <span>
-                            Wedstrijd ${individualMatch.matchNo}
+                            ${tr("common.match", "Wedstrijd")} ${individualMatch.matchNo}
                         </span>
 
                         <span>
@@ -1295,7 +1479,7 @@ if (match.playerA?.venue?.name) {
         );
 
         individualContainer.innerHTML =
-            "<p>Individuele wedstrijden konden niet geladen worden.</p>";
+            `<p>${tr("match.individualLoadFailed", "Individuele wedstrijden konden niet geladen worden.")}</p>`;
 
     }
 }
@@ -1339,13 +1523,13 @@ async function openTeamDetail(teamId) {
         .classList.add("active");
 
     document.getElementById("teamDetailTitle").textContent =
-        team.player?.name || "Team";
+        team.player?.name || tr("common.team", "Team");
 
     document.getElementById("teamDetailName").textContent =
-        team.player?.name || "Onbekend";
+        team.player?.name || tr("common.unknown", "Onbekend");
 
     document.getElementById("teamDetailPosition").textContent =
-        `${team.position}e plaats`;
+        `${team.position}${tr("competition.placeSuffix", "e")} ${tr("competition.place", "plaats")}`;
 
     const venueElement =
         document.getElementById("teamDetailVenue");
@@ -1373,7 +1557,7 @@ async function openTeamDetail(teamId) {
         document.getElementById("teamDetailPlayers");
 
     playersContainer.innerHTML =
-        "Spelers laden...";
+        tr("team.loadingPlayers", "Spelers laden...");
 
 
     const teamMatches =
@@ -1620,7 +1804,7 @@ const sortedPlayers =
         if (!sortedPlayers.length) {
 
             playersContainer.innerHTML =
-                "<p>Geen spelers gevonden.</p>";
+                `<p>${tr("team.noPlayers", "Geen spelers gevonden.")}</p>`;
 
             return;
         }
@@ -1651,7 +1835,7 @@ const sortedPlayers =
         );
 
         playersContainer.innerHTML =
-            "<p>Spelers konden niet geladen worden.</p>";
+            `<p>${tr("team.playersLoadFailed", "Spelers konden niet geladen worden.")}</p>`;
 
     }
 }
@@ -1712,13 +1896,13 @@ async function openPlayerDetail(playerName, teamId) {
         playerName;
 
     document.getElementById("playerDetailTeam").textContent =
-        team.player?.name || "Team";
+        team.player?.name || tr("common.team", "Team");
 
     const statsContainer =
         document.getElementById("playerDetailStats");
 
     statsContainer.innerHTML =
-        "Statistieken laden...";
+        tr("player.loadingStats", "Statistieken laden...");
 
 
     const teamMatches =
@@ -1816,7 +2000,7 @@ async function openPlayerDetail(playerName, teamId) {
                         : individualMatch.scoreA;
 
 const discipline =
-    individualMatch.discipline || "Onbekend";
+    individualMatch.discipline || tr("common.unknown", "Onbekend");
 
 if (!disciplineStats[discipline]) {
 
@@ -1906,7 +2090,7 @@ if (disciplineName.includes("8")) {
     </div>
 
                     <div class="player-discipline-info">
-                        ${stats.played} gespeeld ·
+                        ${stats.played} ${tr("common.playedLower", "gespeeld")} ·
                         ${stats.wins} gewonnen ·
                         <strong>${percentage}%</strong>
                     </div>
@@ -1931,7 +2115,7 @@ if (disciplineName.includes("8")) {
 ` : ""}    
         
         <div class="player-stat-card">
-    <span>Gespeeld</span>
+    <span>${tr("common.played", "Gespeeld")}</span>
     <strong>${played}</strong>
     <div class="player-stat-icon">📋</div>
 </div>
@@ -1949,13 +2133,13 @@ if (disciplineName.includes("8")) {
 </div>
 
             <div class="player-stat-card">
-    <span>Gelijk</span>
+    <span>${tr("common.drawShort", "Gelijk")}</span>
     <strong>${draws}</strong>
     <div class="player-stat-icon">🤝</div>
 </div>
 
             <div class="player-stat-card">
-    <span>Winstpercentage</span>
+    <span>${tr("player.winPercentage", "Winstpercentage")}</span>
     <strong>${winPercentage}%</strong>
     <div class="player-stat-icon">📈</div>
 </div>
@@ -1963,7 +2147,7 @@ if (disciplineName.includes("8")) {
             <div class="player-discipline-section">
 
     <div class="competition-title">
-        Per discipline
+        ${tr("player.perDiscipline", "Per discipline")}
     </div>
 
     ${disciplineHTML}
@@ -1981,7 +2165,7 @@ if (disciplineName.includes("8")) {
         );
 
         statsContainer.innerHTML =
-            "<p>Statistieken konden niet geladen worden.</p>";
+            `<p>${tr("player.statsLoadFailed", "Statistieken konden niet geladen worden.")}</p>`;
 
     }
 
@@ -2110,7 +2294,7 @@ function renderLiveTables() {
                 <div class="live-table-card live-table-free">
 
                     <div class="live-table-header">
-                        <span>TAFEL ${table.name}</span>
+                        <span>${tr("live.table", "TAFEL")} ${table.name}</span>
                         <span class="live-table-dot"></span>
                     </div>
 
@@ -2126,14 +2310,14 @@ function renderLiveTables() {
             <div class="live-table-card live-table-active">
 
                 <div class="live-table-header">
-                    <span>TAFEL ${table.name}</span>
+                    <span>${tr("live.table", "TAFEL")} ${table.name}</span>
                     <span class="live-table-live">LIVE</span>
                 </div>
 
                 <div class="live-table-match">
 
                     <div class="live-player">
-                        ${match.playerA || "Speler 1"}
+                        ${match.playerA || tr("live.player1", "Speler 1")}
                     </div>
 
                    <div class="live-score-wrap">
@@ -2151,7 +2335,7 @@ function renderLiveTables() {
 </div>
 
                     <div class="live-player">
-                        ${match.playerB || "Speler 2"}
+                        ${match.playerB || tr("live.player2", "Speler 2")}
                     </div>
 
                 </div>
@@ -2173,7 +2357,7 @@ async function loadBalEnzoTables() {
         document.getElementById("liveScoresStatus");
 
     if (status) {
-        status.textContent = "Live gegevens laden...";
+        status.textContent = tr("live.loading", "Live gegevens laden...");
     }
 
     renderLiveTables();
@@ -2292,7 +2476,7 @@ function connectCueScoreLive() {
 
                 if (status) {
                     status.textContent =
-                        "● Live verbinding actief";
+                        tr("live.connected", "● Live verbinding actief");
                 }
 
                 /*
@@ -2343,7 +2527,7 @@ function connectCueScoreLive() {
 
                 if (status) {
                     status.textContent =
-                        "Live verbinding verbroken";
+                        tr("live.disconnected", "Live verbinding verbroken");
                 }
 
             }
@@ -2768,7 +2952,7 @@ function renderReservationCalendar(year, month) {
             ${reservationSelectedDate ? "" : "disabled"}
             onclick="continueReservationDate()">
 
-            Volgende
+            ${tr("common.next", "Volgende")}
 
         </button>
 
@@ -2960,7 +3144,7 @@ function continueReservationDate() {
             `${parts[2]}/${parts[1]}/${parts[0]}`;
 
         dateText.textContent =
-            `Gekozen datum: ${formattedDate}`;
+            `${tr("reservation.selectedDate", "Gekozen datum")}: ${formattedDate}`;
     }
 
 
@@ -3077,11 +3261,11 @@ function renderReservationDurations() {
      * available_durations van SportsClubAdmin.
      */
     const durations = [
-        { minutes: 60, label: "1 uur" },
+        { minutes: 60, label: tr("reservation.oneHour", "1 uur") },
         { minutes: 90, label: "1u30" },
-        { minutes: 120, label: "2 uur" },
+        { minutes: 120, label: tr("reservation.twoHours", "2 uur") },
         { minutes: 150, label: "2u30" },
-        { minutes: 180, label: "3 uur" }
+        { minutes: 180, label: tr("reservation.threeHours", "3 uur") }
     ];
 
 
@@ -3221,22 +3405,22 @@ function renderReservationSummary() {
 
     container.innerHTML = `
         <div class="reservation-summary-row">
-            <span>Discipline</span>
+            <span>${tr("common.discipline", "Discipline")}</span>
             <strong>${gameLabel}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Datum</span>
+            <span>${tr("common.date", "Datum")}</span>
             <strong>${formattedDate}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Startuur</span>
+            <span>${tr("reservation.startTime", "Startuur")}</span>
             <strong>${reservationSelectedTime}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Speelduur</span>
+            <span>${tr("reservation.duration", "Speelduur")}</span>
             <strong>${durationLabel}</strong>
         </div>
     `;
@@ -3256,7 +3440,7 @@ function formatReservationDuration(minutes) {
     }
 
     if (hours) {
-        return `${hours} uur`;
+        return `${hours} ${tr("reservation.hours", "uur")}`;
     }
 
     return `${remainingMinutes} min`;
@@ -3353,22 +3537,22 @@ function renderReservationFinalSummary(
     container.innerHTML = `
 
         <div class="reservation-summary-row">
-            <span>Discipline</span>
+            <span>${tr("common.discipline", "Discipline")}</span>
             <strong>${gameLabel}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Datum</span>
+            <span>${tr("common.date", "Datum")}</span>
             <strong>${formattedDate}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Startuur</span>
+            <span>${tr("reservation.startTime", "Startuur")}</span>
             <strong>${reservationSelectedTime}</strong>
         </div>
 
         <div class="reservation-summary-row">
-            <span>Speelduur</span>
+            <span>${tr("reservation.duration", "Speelduur")}</span>
             <strong>${formatReservationDuration(reservationSelectedDuration)}</strong>
         </div>
 
@@ -3454,6 +3638,30 @@ function submitReservation() {
     );
 
     alert(
-        "Test geslaagd. De reservatie wordt nog niet echt verstuurd."
+        tr("reservation.testSuccess", "Test geslaagd. De reservatie wordt nog niet echt verstuurd.")
     );
+}
+
+async function openMoneygames() {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById("moneygamesScreen").classList.add("active");
+  window.scrollTo(0, 0);
+
+  const user = await getCurrentUser();
+
+  if (user) {
+    showOpenMoneygames();
+  }
+}
+
+function closeMoneygames() {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById("homeScreen").classList.add("active");
+  window.scrollTo(0, 0);
 }

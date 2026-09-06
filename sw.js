@@ -1,10 +1,11 @@
-const CACHE_NAME = 'bal-enzo-v37';
+const CACHE_NAME = 'bal-enzo-v38';
 
 const FILES_TO_CACHE = [
   './',
   './index.html',
   './style.css',
   './app.js',
+  './translations.js',
   './manifest.json',
   './icon.png',
   './logo.png',
