@@ -2092,12 +2092,18 @@
   font-size: 14px;
 }
 
-.moneygames-form-card input[type="date"],
-.moneygames-form-card input[type="time"] {
+.moneygames-native-field {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.moneygames-native-field input[type="date"],
+.moneygames-native-field input[type="time"] {
   display: block;
+  width: 100%;
   min-width: 0;
   max-width: 100%;
-  width: -webkit-fill-available;
   box-sizing: border-box;
 }
 
