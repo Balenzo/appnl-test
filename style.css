@@ -2121,8 +2121,15 @@
 
 .moneygames-native-field input[type="date"]::-webkit-date-and-time-value,
 .moneygames-native-field input[type="time"]::-webkit-date-and-time-value {
-  text-align: left;
-  margin: 0;
+  text-align: left !important;
+  width: 100%;
+}
+
+.moneygames-native-field input[type="date"]::-webkit-datetime-edit,
+.moneygames-native-field input[type="time"]::-webkit-datetime-edit {
+  display: block;
+  text-align: left !important;
+  width: 100%;
 }
 
 .moneygames-choice-grid {
