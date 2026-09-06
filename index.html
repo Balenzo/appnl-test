@@ -1,1036 +1,1572 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="nl">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
-<title>Bal Enzo Club App</title>
-<link href="style.css" rel="stylesheet"/>
-<link href="manifest.json" rel="manifest"/>
-<meta content="#000000" name="theme-color"/>
-<link href="icon.png" rel="apple-touch-icon"/>
-</head>
-<body>
-<!-- =========================
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <title>Bal Enzo Club App</title>
+    <link href="style.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <meta content="#000000" name="theme-color" />
+    <link href="icon.png" rel="apple-touch-icon" />
+  </head>
+  <body>
+    <!-- =========================
        HOME SCREEN
   ========================== -->
-<section class="screen active" id="homeScreen">
-<!-- HERO -->
-<header class="hero">
-<img alt="Bal Enzo" class="hero-logo" src="logo.png"/>
-<div class="hero-content">
-<h1>Bal Enzo Club App</h1>
-<p data-i18n="ui.alles.over.competities.live.scores.en.reservaties">Alles over competities, live scores en reservaties</p>
-</div>
-</header>
-<!-- FAVORIETEN -->
-<section class="section-block">
-<div class="section-header">
-<h2 data-i18n="ui.mijn.favorieten">⭐ Mijn Favorieten</h2>
-<button class="link-btn" data-i18n="ui.wijzig" onclick="openFavoritesEditor()">
-          Wijzig
-        </button>
-</div>
-<div class="favorites-row"></div>
-</section>
-<!-- SNELLE ACTIES -->
-<section class="section-block">
-<div class="section-header">
-<h2 data-i18n="ui.snelle.acties">⚡ Snelle Acties</h2>
-</div>
-<div class="quick-grid">
-<button class="quick-action-card" onclick="openLiveScores()" style="border:none; cursor:pointer; padding:0;">
-<img alt="Live Scores" src="livescores.jpg"/>
-<div class="quick-action-content">
-<div class="quick-action-title">Live Scores</div>
-<div class="quick-action-subtitle" data-i18n="ui.volg.wedstrijden.live">
-      Volg wedstrijden live
-    </div>
-<div class="quick-action-external">›</div>
-</div>
-</button>
-<button class="quick-action-card" onclick="openTableReservation()" style="border:none; cursor:pointer; padding:0;">
-<img alt="Tafel reserveren" src="tafelreserveren.jpg"/>
-<div class="quick-action-content">
-<div class="quick-action-title" data-i18n="ui.tafel.reserveren">Tafel reserveren</div>
-<div class="quick-action-subtitle" data-i18n="ui.reserveer.eenvoudig.online">
-      Reserveer eenvoudig online
-    </div>
-<div class="quick-action-external">›</div>
-</div>
-</button>
-<button class="quick-action-card" onclick="openMoneygames()" style="border:none; cursor:pointer; padding:0;">
-<img alt="Moneygames" src="moneygames.png"/>
-<div class="quick-action-content">
-<div class="quick-action-title">Moneygames</div>
-<div class="quick-action-subtitle" data-i18n="ui.speel.een.moneygame">
-      Speel een Moneygame
-    </div>
-<div class="quick-action-external">›</div>
-</div>
-</button>
-<a class="quick-action-card" href="https://cuescore.com/bal-enzobilliardsdarts" rel="noopener noreferrer" target="_blank">
-<img alt="Onze Club" src="clubpagina.jpg"/>
-<div class="quick-action-content">
-<div class="quick-action-title" data-i18n="ui.onze.club">Onze Club</div>
-<div class="quick-action-subtitle" data-i18n="ui.ontdek.meer.over.bal.enzo">
-      Ontdek meer over Bal Enzo
-    </div>
-<div class="quick-action-external">↗</div>
-</div>
-</a>
-</div>
-</section>
-</section>
-<!-- =========================
+    <section class="screen active" id="homeScreen">
+      <!-- HERO -->
+      <header class="hero">
+        <img alt="Bal Enzo" class="hero-logo" src="logo.png" />
+        <div class="hero-content">
+          <h1>Bal Enzo Club App</h1>
+          <p data-i18n="ui.alles.over.competities.live.scores.en.reservaties">
+            Alles over competities, live scores en reservaties
+          </p>
+        </div>
+      </header>
+      <!-- FAVORIETEN -->
+      <section class="section-block">
+        <div class="section-header">
+          <h2 data-i18n="ui.mijn.favorieten">⭐ Mijn Favorieten</h2>
+          <button
+            class="link-btn"
+            data-i18n="ui.wijzig"
+            onclick="openFavoritesEditor()"
+          >
+            Wijzig
+          </button>
+        </div>
+        <div class="favorites-row"></div>
+      </section>
+      <!-- SNELLE ACTIES -->
+      <section class="section-block">
+        <div class="section-header">
+          <h2 data-i18n="ui.snelle.acties">⚡ Snelle Acties</h2>
+        </div>
+        <div class="quick-grid">
+          <button
+            class="quick-action-card"
+            onclick="openLiveScores()"
+            style="border: none; cursor: pointer; padding: 0"
+          >
+            <img alt="Live Scores" src="livescores.jpg" />
+            <div class="quick-action-content">
+              <div class="quick-action-title">Live Scores</div>
+              <div
+                class="quick-action-subtitle"
+                data-i18n="ui.volg.wedstrijden.live"
+              >
+                Volg wedstrijden live
+              </div>
+              <div class="quick-action-external">›</div>
+            </div>
+          </button>
+          <button
+            class="quick-action-card"
+            onclick="openTableReservation()"
+            style="border: none; cursor: pointer; padding: 0"
+          >
+            <img alt="Tafel reserveren" src="tafelreserveren.jpg" />
+            <div class="quick-action-content">
+              <div class="quick-action-title" data-i18n="ui.tafel.reserveren">
+                Tafel reserveren
+              </div>
+              <div
+                class="quick-action-subtitle"
+                data-i18n="ui.reserveer.eenvoudig.online"
+              >
+                Reserveer eenvoudig online
+              </div>
+              <div class="quick-action-external">›</div>
+            </div>
+          </button>
+          <button
+            class="quick-action-card"
+            onclick="openMoneygames()"
+            style="border: none; cursor: pointer; padding: 0"
+          >
+            <img alt="Moneygames" src="moneygames.png" />
+            <div class="quick-action-content">
+              <div class="quick-action-title">Moneygames</div>
+              <div
+                class="quick-action-subtitle"
+                data-i18n="ui.speel.een.moneygame"
+              >
+                Speel een Moneygame
+              </div>
+              <div class="quick-action-external">›</div>
+            </div>
+          </button>
+          <a
+            class="quick-action-card"
+            href="https://cuescore.com/bal-enzobilliardsdarts"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img alt="Onze Club" src="clubpagina.jpg" />
+            <div class="quick-action-content">
+              <div class="quick-action-title" data-i18n="ui.onze.club">
+                Onze Club
+              </div>
+              <div
+                class="quick-action-subtitle"
+                data-i18n="ui.ontdek.meer.over.bal.enzo"
+              >
+                Ontdek meer over Bal Enzo
+              </div>
+              <div class="quick-action-external">↗</div>
+            </div>
+          </a>
+        </div>
+      </section>
+    </section>
+    <!-- =========================
      LIVE SCORES SCREEN
 ========================== -->
-<section class="screen" id="liveScoresScreen">
-<div class="page-header">
-<button onclick="closeLiveScores()" style="
-        background:none;
-        border:none;
-        color:white;
-        font-size:24px;
-        cursor:pointer;
-        margin-right:10px;
-      ">
-      ‹
-    </button>
-<span>
-      Live Scores
-    </span>
-</div>
-<main class="content">
-<div class="balenzo-live-scores" id="balEnzoLiveScores">
-<div class="live-scores-intro">
-<div class="live-scores-title">🎱 Bal Enzo Live Scores</div>
-<div class="live-scores-status" data-i18n="ui.live.verbinding.maken" id="liveScoresStatus">
-      Live verbinding maken...
-    </div>
-</div>
-<div class="live-tables-grid" id="liveTablesGrid"></div>
-</div>
-</main>
-</section>
-<!-- =========================
+    <section class="screen" id="liveScoresScreen">
+      <div class="page-header">
+        <button
+          onclick="closeLiveScores()"
+          style="
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        >
+          ‹
+        </button>
+        <span> Live Scores </span>
+      </div>
+      <main class="content">
+        <div class="balenzo-live-scores" id="balEnzoLiveScores">
+          <div class="live-scores-intro">
+            <div class="live-scores-title">🎱 Bal Enzo Live Scores</div>
+            <div
+              class="live-scores-status"
+              data-i18n="ui.live.verbinding.maken"
+              id="liveScoresStatus"
+            >
+              Live verbinding maken...
+            </div>
+          </div>
+          <div class="live-tables-grid" id="liveTablesGrid"></div>
+        </div>
+      </main>
+    </section>
+    <!-- =========================
      MONEYGAMES SCREEN
 ========================== -->
-<section class="screen" id="moneygamesScreen">
-<div class="page-header">
-<button onclick="closeMoneygames()" style="
-        background:none;
-        border:none;
-        color:white;
-        font-size:24px;
-        cursor:pointer;
-        margin-right:10px;
-      ">
-      ‹
-    </button>
-<span>
-      Moneygames
-    </span>
-</div>
-<main class="content">
-<div id="moneygamesContent">
-<div id="moneygamesAuth">
-<div class="moneygames-auth-card">
-<h2>🎱 Moneygames</h2>
-<p class="moneygames-auth-text" data-i18n="ui.log.in.of.registreer.om.moneygames.te.bekijken.en.te.spelen">
-        Log in of registreer om Moneygames te bekijken en te spelen.
-      </p>
-<div class="moneygames-auth-tabs">
-<button class="moneygames-auth-tab active" data-i18n="ui.inloggen" id="moneygamesLoginTab" onclick="showMoneygamesLogin()" type="button">
-          Inloggen
+    <section class="screen" id="moneygamesScreen">
+      <div class="page-header">
+        <button
+          onclick="closeMoneygames()"
+          style="
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        >
+          ‹
         </button>
-<button class="moneygames-auth-tab" data-i18n="ui.registreren" id="moneygamesRegisterTab" onclick="showMoneygamesRegister()" type="button">
-          Registreren
-        </button>
-</div>
-<div id="moneygamesLoginForm">
-<input data-i18n-placeholder="ui.e.mailadres" id="moneygamesLoginEmail" placeholder="E-mailadres" type="email"/>
-<input data-i18n-placeholder="ui.wachtwoord" id="moneygamesLoginPassword" placeholder="Wachtwoord" type="password"/>
-<button class="moneygames-primary-btn" data-i18n="ui.inloggen" onclick="handleMoneygamesLogin()" type="button">
-          Inloggen
-        </button>
-</div>
-<div id="moneygamesRegisterForm" style="display:none;">
-<input data-i18n-placeholder="ui.voornaam" id="moneygamesRegisterFirstName" placeholder="Voornaam" type="text"/>
-<input data-i18n-placeholder="ui.achternaam" id="moneygamesRegisterLastName" placeholder="Achternaam" type="text"/>
-<input data-i18n-placeholder="ui.e.mailadres" id="moneygamesRegisterEmail" placeholder="E-mailadres" type="email"/>
-<input data-i18n-placeholder="ui.wachtwoord" id="moneygamesRegisterPassword" placeholder="Wachtwoord" type="password"/>
-<button class="moneygames-primary-btn" data-i18n="ui.account.aanmaken" onclick="handleMoneygamesRegister()" type="button">
-          Account aanmaken
-        </button>
-</div>
-<div class="moneygames-auth-message" id="moneygamesAuthMessage"></div>
-</div>
-</div>
-<div id="moneygamesApp" style="display:none;">
-<div class="moneygames-welcome">
-<h2>🎱 Moneygames</h2>
-<p data-i18n="ui.welkom" id="moneygamesWelcomeText">Welkom!</p>
-</div>
-<div class="moneygames-main-tabs">
-<button class="moneygames-main-tab active" data-i18n="ui.open.moneygames" id="moneygamesOpenTab" onclick="showOpenMoneygames()" type="button">
-  Open Moneygames
-</button>
-<button class="moneygames-main-tab" data-i18n="ui.mijn.moneygames" id="moneygamesMyTab" onclick="showMyMoneygames()" type="button">
-  Mijn Moneygames
-</button>
-</div>
-<div id="moneygamesOpenContent">
-<button class="moneygames-new-btn" data-i18n="ui.nieuwe.moneygame" onclick="showNewMoneygameForm()" type="button">
-    + Nieuwe Moneygame
-  </button>
-<div class="moneygames-form-card" id="newMoneygameForm" style="display:none;">
-<div class="moneygames-form-header">
-<h3 data-i18n="ui.nieuwe.moneygame.2">Nieuwe Moneygame</h3>
-<button class="moneygames-close-form" onclick="hideNewMoneygameForm()" type="button">
-        ×
-      </button>
-</div>
-<label data-i18n="ui.type">Type</label>
-<div class="moneygames-choice-grid">
-<button class="moneygames-choice-btn active" id="moneygamesSinglesBtn" onclick="selectMoneygameType('singles')" type="button">
-        Singles
-      </button>
-<button class="moneygames-choice-btn" id="moneygamesDoublesBtn" onclick="selectMoneygameType('doubles')" type="button">
-        Doubles
-      </button>
-</div>
-<input id="moneygamesGameType" type="hidden" value="singles"/>
-<div id="moneygamesPartnerField" style="display:none;">
-<label data-i18n="ui.partner" for="moneygamesPartner">
-        Partner
-      </label>
-<select id="moneygamesPartner">
-<option data-i18n="ui.kies.je.partner" value="">Kies je partner</option>
-</select>
-</div>
-<label data-i18n="ui.discipline" for="moneygamesDiscipline">
-      Discipline
-    </label>
-<select id="moneygamesDiscipline">
-<option value="8-ball">8-ball</option>
-<option value="9-ball">9-ball</option>
-<option value="10-ball">10-ball</option>
-</select>
-<label data-i18n="ui.race.to" for="moneygamesRaceTo">
-      Race To
-    </label>
-<input data-i18n-placeholder="ui.bijvoorbeeld.7" id="moneygamesRaceTo" min="1" placeholder="Bijvoorbeeld 7" step="1" type="number"/>
-<label data-i18n="ui.inzet" for="moneygamesStake">
-      Inzet
-    </label>
-<select id="moneygamesStake" onchange="toggleMoneygamesCustomStake()">
-<option data-i18n="ui.geen.inzet" value="0">Geen inzet</option>
-<option value="5">€5</option>
-<option value="10">€10</option>
-<option value="20">€20</option>
-<option value="50">€50</option>
-<option data-i18n="ui.ander.bedrag" value="custom">Ander bedrag</option>
-</select>
-<div id="moneygamesCustomStakeField" style="display:none;">
-<label data-i18n="ui.ander.bedrag" for="moneygamesCustomStake">
-        Ander bedrag
-      </label>
-<input data-i18n-placeholder="ui.bedrag.in.euro" id="moneygamesCustomStake" min="0" placeholder="Bedrag in euro" step="0.01" type="number"/>
-</div>
-<label data-i18n="ui.datum" for="moneygamesDate">
-      Datum
-</label>
-<div class="moneygames-picker-field" onclick="document.getElementById('moneygamesDate').showPicker?.()">
-  <span id="moneygamesDateDisplay">Kies datum</span>
-  <input id="moneygamesDate" type="date"/>
-</div>
+        <span> Moneygames </span>
+      </div>
+      <main class="content">
+        <div id="moneygamesContent">
+          <div id="moneygamesAuth">
+            <div class="moneygames-auth-card">
+              <h2>🎱 Moneygames</h2>
+              <p
+                class="moneygames-auth-text"
+                data-i18n="ui.log.in.of.registreer.om.moneygames.te.bekijken.en.te.spelen"
+              >
+                Log in of registreer om Moneygames te bekijken en te spelen.
+              </p>
+              <div class="moneygames-auth-tabs">
+                <button
+                  class="moneygames-auth-tab active"
+                  data-i18n="ui.inloggen"
+                  id="moneygamesLoginTab"
+                  onclick="showMoneygamesLogin()"
+                  type="button"
+                >
+                  Inloggen
+                </button>
+                <button
+                  class="moneygames-auth-tab"
+                  data-i18n="ui.registreren"
+                  id="moneygamesRegisterTab"
+                  onclick="showMoneygamesRegister()"
+                  type="button"
+                >
+                  Registreren
+                </button>
+              </div>
+              <div id="moneygamesLoginForm">
+                <input
+                  data-i18n-placeholder="ui.e.mailadres"
+                  id="moneygamesLoginEmail"
+                  placeholder="E-mailadres"
+                  type="email"
+                />
+                <input
+                  data-i18n-placeholder="ui.wachtwoord"
+                  id="moneygamesLoginPassword"
+                  placeholder="Wachtwoord"
+                  type="password"
+                />
+                <button
+                  class="moneygames-primary-btn"
+                  data-i18n="ui.inloggen"
+                  onclick="handleMoneygamesLogin()"
+                  type="button"
+                >
+                  Inloggen
+                </button>
+              </div>
+              <div id="moneygamesRegisterForm" style="display: none">
+                <input
+                  data-i18n-placeholder="ui.voornaam"
+                  id="moneygamesRegisterFirstName"
+                  placeholder="Voornaam"
+                  type="text"
+                />
+                <input
+                  data-i18n-placeholder="ui.achternaam"
+                  id="moneygamesRegisterLastName"
+                  placeholder="Achternaam"
+                  type="text"
+                />
+                <input
+                  data-i18n-placeholder="ui.e.mailadres"
+                  id="moneygamesRegisterEmail"
+                  placeholder="E-mailadres"
+                  type="email"
+                />
+                <input
+                  data-i18n-placeholder="ui.wachtwoord"
+                  id="moneygamesRegisterPassword"
+                  placeholder="Wachtwoord"
+                  type="password"
+                />
+                <button
+                  class="moneygames-primary-btn"
+                  data-i18n="ui.account.aanmaken"
+                  onclick="handleMoneygamesRegister()"
+                  type="button"
+                >
+                  Account aanmaken
+                </button>
+              </div>
+              <div
+                class="moneygames-auth-message"
+                id="moneygamesAuthMessage"
+              ></div>
+            </div>
+          </div>
+          <div id="moneygamesApp" style="display: none">
+            <div class="moneygames-welcome">
+              <h2>🎱 Moneygames</h2>
+              <p data-i18n="ui.welkom" id="moneygamesWelcomeText">Welkom!</p>
+            </div>
+            <div class="moneygames-main-tabs">
+              <button
+                class="moneygames-main-tab active"
+                data-i18n="ui.open.moneygames"
+                id="moneygamesOpenTab"
+                onclick="showOpenMoneygames()"
+                type="button"
+              >
+                Open Moneygames
+              </button>
+              <button
+                class="moneygames-main-tab"
+                data-i18n="ui.mijn.moneygames"
+                id="moneygamesMyTab"
+                onclick="showMyMoneygames()"
+                type="button"
+              >
+                Mijn Moneygames
+              </button>
+            </div>
+            <div id="moneygamesOpenContent">
+              <button
+                class="moneygames-new-btn"
+                data-i18n="ui.nieuwe.moneygame"
+                onclick="showNewMoneygameForm()"
+                type="button"
+              >
+                + Nieuwe Moneygame
+              </button>
+              <div
+                class="moneygames-form-card"
+                id="newMoneygameForm"
+                style="display: none"
+              >
+                <div class="moneygames-form-header">
+                  <h3 data-i18n="ui.nieuwe.moneygame.2">Nieuwe Moneygame</h3>
+                  <button
+                    class="moneygames-close-form"
+                    onclick="hideNewMoneygameForm()"
+                    type="button"
+                  >
+                    ×
+                  </button>
+                </div>
+                <label data-i18n="ui.type">Type</label>
+                <div class="moneygames-choice-grid">
+                  <button
+                    class="moneygames-choice-btn active"
+                    id="moneygamesSinglesBtn"
+                    onclick="selectMoneygameType('singles')"
+                    type="button"
+                  >
+                    Singles
+                  </button>
+                  <button
+                    class="moneygames-choice-btn"
+                    id="moneygamesDoublesBtn"
+                    onclick="selectMoneygameType('doubles')"
+                    type="button"
+                  >
+                    Doubles
+                  </button>
+                </div>
+                <input id="moneygamesGameType" type="hidden" value="singles" />
+                <div id="moneygamesPartnerField" style="display: none">
+                  <label data-i18n="ui.partner" for="moneygamesPartner">
+                    Partner
+                  </label>
+                  <select id="moneygamesPartner">
+                    <option data-i18n="ui.kies.je.partner" value="">
+                      Kies je partner
+                    </option>
+                  </select>
+                </div>
+                <label data-i18n="ui.discipline" for="moneygamesDiscipline">
+                  Discipline
+                </label>
+                <select id="moneygamesDiscipline">
+                  <option value="8-ball">8-ball</option>
+                  <option value="9-ball">9-ball</option>
+                  <option value="10-ball">10-ball</option>
+                </select>
+                <label data-i18n="ui.race.to" for="moneygamesRaceTo">
+                  Race To
+                </label>
+                <input
+                  data-i18n-placeholder="ui.bijvoorbeeld.7"
+                  id="moneygamesRaceTo"
+                  min="1"
+                  placeholder="Bijvoorbeeld 7"
+                  step="1"
+                  type="number"
+                />
+                <label data-i18n="ui.inzet" for="moneygamesStake">
+                  Inzet
+                </label>
+                <select
+                  id="moneygamesStake"
+                  onchange="toggleMoneygamesCustomStake()"
+                >
+                  <option data-i18n="ui.geen.inzet" value="0">
+                    Geen inzet
+                  </option>
+                  <option value="5">€5</option>
+                  <option value="10">€10</option>
+                  <option value="20">€20</option>
+                  <option value="50">€50</option>
+                  <option data-i18n="ui.ander.bedrag" value="custom">
+                    Ander bedrag
+                  </option>
+                </select>
+                <div id="moneygamesCustomStakeField" style="display: none">
+                  <label
+                    data-i18n="ui.ander.bedrag"
+                    for="moneygamesCustomStake"
+                  >
+                    Ander bedrag
+                  </label>
+                  <input
+                    data-i18n-placeholder="ui.bedrag.in.euro"
+                    id="moneygamesCustomStake"
+                    min="0"
+                    placeholder="Bedrag in euro"
+                    step="0.01"
+                    type="number"
+                  />
+                </div>
+                <label data-i18n="ui.datum" for="moneygamesDate"> Datum </label>
+                <div
+                  class="moneygames-picker-field"
+                  onclick="
+                    document.getElementById('moneygamesDate').showPicker?.()
+                  "
+                >
+                  <span id="moneygamesDateDisplay">Kies datum</span>
+                  <input id="moneygamesDate" type="date" />
+                </div>
 
-<label data-i18n="ui.starttijd" for="moneygamesTime">
-      Starttijd
-</label>
-<div class="moneygames-picker-field" onclick="document.getElementById('moneygamesTime').showPicker?.()">
-  <span id="moneygamesTimeDisplay">Kies starttijd</span>
-  <input id="moneygamesTime" type="time"/>
-</div>
-<button class="moneygames-primary-btn" data-i18n="ui.moneygame.plaatsen" onclick="submitNewMoneygame()" type="button">
-      Moneygame plaatsen
-    </button>
-<div class="moneygames-form-message" id="moneygamesFormMessage"></div>
-</div>
-<div class="moneygames-filter-row">
-<button class="moneygames-filter-btn active" data-discipline="all" data-i18n="ui.alles" onclick="filterMoneygames('all', this)" type="button">
-      Alles
-    </button>
-<button class="moneygames-filter-btn" data-discipline="8-ball" onclick="filterMoneygames('8-ball', this)" type="button">
-      8-ball
-    </button>
-<button class="moneygames-filter-btn" data-discipline="9-ball" onclick="filterMoneygames('9-ball', this)" type="button">
-      9-ball
-    </button>
-<button class="moneygames-filter-btn" data-discipline="10-ball" onclick="filterMoneygames('10-ball', this)" type="button">
-      10-ball
-    </button>
-</div>
-<div id="moneygamesOpenList">
-<div class="moneygames-empty-state" data-i18n="ui.nog.geen.open.moneygames">
-      Nog geen open Moneygames.
-    </div>
-</div>
-</div>
-<div id="moneygamesMyContent" style="display:none;">
-<div class="moneygames-my-section">
-<h3 data-i18n="ui.mijn.open.oproepen">Mijn open oproepen</h3>
-<div id="moneygamesMyOpen">
-<div class="moneygames-empty-state" data-i18n="ui.je.hebt.momenteel.geen.open.oproepen">
-        Je hebt momenteel geen open oproepen.
-      </div>
-</div>
-</div>
-<div class="moneygames-my-section">
-<h3 data-i18n="ui.reacties">Reacties</h3>
-<div id="moneygamesMyReactions">
-<div class="moneygames-empty-state" data-i18n="ui.geen.reacties.in.afwachting">
-        Geen reacties in afwachting.
-      </div>
-</div>
-</div>
-<div class="moneygames-my-section">
-<h3 data-i18n="ui.gepland">Gepland</h3>
-<div id="moneygamesMyPlanned">
-<div class="moneygames-empty-state" data-i18n="ui.geen.geplande.moneygames">
-        Geen geplande Moneygames.
-      </div>
-</div>
-</div>
-<div class="moneygames-my-section">
-<h3 data-i18n="ui.statistieken">Statistieken</h3>
-<!-- TOTAAL -->
-<h4 class="moneygames-stats-title" data-i18n="ui.totaal.2">Totaal</h4>
-<div class="moneygames-stats-grid">
-<div class="moneygames-stat-card">
-<span id="moneygamesStatPlayed">0</span>
-<small data-i18n="ui.gespeeld">Gespeeld</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesStatWon">0</span>
-<small data-i18n="ui.gewonnen">Gewonnen</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesStatLost">0</span>
-<small data-i18n="ui.verloren">Verloren</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesStatWinrate">0%</span>
-<small data-i18n="ui.win">Win %</small>
-</div>
-<div class="moneygames-stat-card moneygames-stat-card-wide">
-<span id="moneygamesStatBalance">€0</span>
-<small data-i18n="ui.balans">Balans</small>
-</div>
-</div>
-<!-- SINGLES -->
-<h4 class="moneygames-stats-title">Singles</h4>
-<div class="moneygames-stats-grid">
-<div class="moneygames-stat-card">
-<span id="moneygamesSinglesPlayed">0</span>
-<small data-i18n="ui.gespeeld">Gespeeld</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesSinglesWon">0</span>
-<small data-i18n="ui.gewonnen">Gewonnen</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesSinglesLost">0</span>
-<small data-i18n="ui.verloren">Verloren</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesSinglesWinrate">0%</span>
-<small data-i18n="ui.win">Win %</small>
-</div>
-<div class="moneygames-stat-card moneygames-stat-card-wide">
-<span id="moneygamesSinglesBalance">€0</span>
-<small data-i18n="ui.balans">Balans</small>
-</div>
-</div>
-<!-- DOUBLES -->
-<h4 class="moneygames-stats-title">Doubles</h4>
-<div class="moneygames-stats-grid">
-<div class="moneygames-stat-card">
-<span id="moneygamesDoublesPlayed">0</span>
-<small data-i18n="ui.gespeeld">Gespeeld</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesDoublesWon">0</span>
-<small data-i18n="ui.gewonnen">Gewonnen</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesDoublesLost">0</span>
-<small data-i18n="ui.verloren">Verloren</small>
-</div>
-<div class="moneygames-stat-card">
-<span id="moneygamesDoublesWinrate">0%</span>
-<small data-i18n="ui.win">Win %</small>
-</div>
-<div class="moneygames-stat-card moneygames-stat-card-wide">
-<span id="moneygamesDoublesBalance">€0</span>
-<small data-i18n="ui.balans">Balans</small>
-</div>
-</div>
-</div>
-<div class="moneygames-my-section">
-<h3 data-i18n="ui.historiek">Historiek</h3>
-<div id="moneygamesHistory">
-<div class="moneygames-empty-state" data-i18n="ui.nog.geen.moneygames.gespeeld">
-        Nog geen Moneygames gespeeld.
-      </div>
-</div>
-</div>
-</div>
-<div class="moneygames-account-section">
-<button class="moneygames-account-btn" data-i18n="ui.account" onclick="toggleMoneygamesAccount()" type="button">
-    ⚙️ Account
-  </button>
-<div class="moneygames-account-panel" id="moneygamesAccountPanel" style="display:none;">
-<div class="moneygames-account-row">
-<strong data-i18n="ui.accountgegevens">Accountgegevens</strong>
-</div>
-<div class="moneygames-account-row">
-<span id="moneygamesAccountEmail"></span>
-</div>
-<label data-i18n="ui.voornaam" for="moneygamesAccountFirstName">
-      Voornaam
-    </label>
-<input data-i18n-placeholder="ui.voornaam" id="moneygamesAccountFirstName" placeholder="Voornaam" type="text"/>
-<label data-i18n="ui.achternaam" for="moneygamesAccountLastName">
-      Achternaam
-    </label>
-<input data-i18n-placeholder="ui.achternaam" id="moneygamesAccountLastName" placeholder="Achternaam" type="text"/>
-<label data-i18n="ui.e.mailadres" for="moneygamesAccountNewEmail">
-      E-mailadres
-    </label>
-<input data-i18n-placeholder="ui.e.mailadres" id="moneygamesAccountEmailInput" placeholder="E-mailadres" type="email"/>
-<button class="moneygames-primary-btn" data-i18n="ui.gegevens.opslaan" onclick="saveMoneygamesAccount()" type="button">
-      Gegevens opslaan
-    </button>
-<div class="moneygames-account-divider"></div>
-<div class="moneygames-account-row">
-<strong data-i18n="ui.wachtwoord.wijzigen">Wachtwoord wijzigen</strong>
-</div>
-<input autocomplete="new-password" data-i18n-placeholder="ui.nieuw.wachtwoord" id="moneygamesNewPassword" placeholder="Nieuw wachtwoord" type="password"/>
-<button class="moneygames-primary-btn" data-i18n="ui.wachtwoord.wijzigen" onclick="changeMoneygamesPassword()" type="button">
-      Wachtwoord wijzigen
-    </button>
-<div class="moneygames-account-divider"></div>
-<div class="moneygames-account-row">
-<strong data-i18n="ui.wachtwoord.vergeten">Wachtwoord vergeten?</strong>
-</div>
-<button class="moneygames-secondary-btn" data-i18n="ui.resetlink.aanvragen" onclick="handleMoneygamesForgotPassword()" type="button">
-      Resetlink aanvragen
-    </button>
-<div class="moneygames-password-reset-panel" id="moneygamesPasswordResetPanel" style="display:none;">
-<div class="moneygames-account-row" data-i18n="ui.stel.hier.later.een.nieuw.wachtwoord.in">
-        Stel hier later een nieuw wachtwoord in.
-      </div>
-</div>
-<div class="moneygames-account-divider"></div>
-<button class="moneygames-logout-btn" data-i18n="ui.uitloggen" onclick="handleMoneygamesLogout()" type="button">
-      Uitloggen
-    </button>
-</div>
-</div>
-</div>
-</div>
-</main>
-</section>
-<!-- =========================
+                <label data-i18n="ui.starttijd" for="moneygamesTime">
+                  Starttijd
+                </label>
+                <div
+                  class="moneygames-picker-field"
+                  onclick="
+                    document.getElementById('moneygamesTime').showPicker?.()
+                  "
+                >
+                  <span id="moneygamesTimeDisplay">Kies starttijd</span>
+                  <input id="moneygamesTime" type="time" />
+                </div>
+                <button
+                  class="moneygames-primary-btn moneygames-place-btn"
+                  data-i18n="ui.moneygame.plaatsen"
+                  onclick="submitNewMoneygame()"
+                  type="button"
+                >
+                  Moneygame plaatsen
+                </button>
+                <div
+                  class="moneygames-form-message"
+                  id="moneygamesFormMessage"
+                ></div>
+              </div>
+              <div class="moneygames-filter-row">
+                <button
+                  class="moneygames-filter-btn active"
+                  data-discipline="all"
+                  data-i18n="ui.alles"
+                  onclick="filterMoneygames('all', this)"
+                  type="button"
+                >
+                  Alles
+                </button>
+                <button
+                  class="moneygames-filter-btn"
+                  data-discipline="8-ball"
+                  onclick="filterMoneygames('8-ball', this)"
+                  type="button"
+                >
+                  8-ball
+                </button>
+                <button
+                  class="moneygames-filter-btn"
+                  data-discipline="9-ball"
+                  onclick="filterMoneygames('9-ball', this)"
+                  type="button"
+                >
+                  9-ball
+                </button>
+                <button
+                  class="moneygames-filter-btn"
+                  data-discipline="10-ball"
+                  onclick="filterMoneygames('10-ball', this)"
+                  type="button"
+                >
+                  10-ball
+                </button>
+              </div>
+              <div id="moneygamesOpenList">
+                <div
+                  class="moneygames-empty-state"
+                  data-i18n="ui.nog.geen.open.moneygames"
+                >
+                  Nog geen open Moneygames.
+                </div>
+              </div>
+            </div>
+            <div id="moneygamesMyContent" style="display: none">
+              <div class="moneygames-my-section">
+                <h3 data-i18n="ui.mijn.open.oproepen">Mijn open oproepen</h3>
+                <div id="moneygamesMyOpen">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="ui.je.hebt.momenteel.geen.open.oproepen"
+                  >
+                    Je hebt momenteel geen open oproepen.
+                  </div>
+                </div>
+              </div>
+              <div class="moneygames-my-section">
+                <h3 data-i18n="ui.reacties">Reacties</h3>
+                <div id="moneygamesMyReactions">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="ui.geen.reacties.in.afwachting"
+                  >
+                    Geen reacties in afwachting.
+                  </div>
+                </div>
+              </div>
+              <div class="moneygames-my-section">
+                <h3 data-i18n="ui.gepland">Gepland</h3>
+                <div id="moneygamesMyPlanned">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="ui.geen.geplande.moneygames"
+                  >
+                    Geen geplande Moneygames.
+                  </div>
+                </div>
+              </div>
+              <div class="moneygames-my-section">
+                <h3 data-i18n="ui.statistieken">Statistieken</h3>
+                <!-- TOTAAL -->
+                <h4 class="moneygames-stats-title" data-i18n="ui.totaal.2">
+                  Totaal
+                </h4>
+                <div class="moneygames-stats-grid">
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesStatPlayed">0</span>
+                    <small data-i18n="ui.gespeeld">Gespeeld</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesStatWon">0</span>
+                    <small data-i18n="ui.gewonnen">Gewonnen</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesStatLost">0</span>
+                    <small data-i18n="ui.verloren">Verloren</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesStatWinrate">0%</span>
+                    <small data-i18n="ui.win">Win %</small>
+                  </div>
+                  <div class="moneygames-stat-card moneygames-stat-card-wide">
+                    <span id="moneygamesStatBalance">€0</span>
+                    <small data-i18n="ui.balans">Balans</small>
+                  </div>
+                </div>
+                <!-- SINGLES -->
+                <h4 class="moneygames-stats-title">Singles</h4>
+                <div class="moneygames-stats-grid">
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesSinglesPlayed">0</span>
+                    <small data-i18n="ui.gespeeld">Gespeeld</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesSinglesWon">0</span>
+                    <small data-i18n="ui.gewonnen">Gewonnen</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesSinglesLost">0</span>
+                    <small data-i18n="ui.verloren">Verloren</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesSinglesWinrate">0%</span>
+                    <small data-i18n="ui.win">Win %</small>
+                  </div>
+                  <div class="moneygames-stat-card moneygames-stat-card-wide">
+                    <span id="moneygamesSinglesBalance">€0</span>
+                    <small data-i18n="ui.balans">Balans</small>
+                  </div>
+                </div>
+                <!-- DOUBLES -->
+                <h4 class="moneygames-stats-title">Doubles</h4>
+                <div class="moneygames-stats-grid">
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesDoublesPlayed">0</span>
+                    <small data-i18n="ui.gespeeld">Gespeeld</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesDoublesWon">0</span>
+                    <small data-i18n="ui.gewonnen">Gewonnen</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesDoublesLost">0</span>
+                    <small data-i18n="ui.verloren">Verloren</small>
+                  </div>
+                  <div class="moneygames-stat-card">
+                    <span id="moneygamesDoublesWinrate">0%</span>
+                    <small data-i18n="ui.win">Win %</small>
+                  </div>
+                  <div class="moneygames-stat-card moneygames-stat-card-wide">
+                    <span id="moneygamesDoublesBalance">€0</span>
+                    <small data-i18n="ui.balans">Balans</small>
+                  </div>
+                </div>
+              </div>
+              <div class="moneygames-my-section">
+                <h3 data-i18n="ui.historiek">Historiek</h3>
+                <div id="moneygamesHistory">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="ui.nog.geen.moneygames.gespeeld"
+                  >
+                    Nog geen Moneygames gespeeld.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="moneygames-account-section">
+              <button
+                class="moneygames-account-btn"
+                data-i18n="ui.account"
+                onclick="toggleMoneygamesAccount()"
+                type="button"
+              >
+                ⚙️ Account
+              </button>
+              <div
+                class="moneygames-account-panel"
+                id="moneygamesAccountPanel"
+                style="display: none"
+              >
+                <div class="moneygames-account-row">
+                  <strong data-i18n="ui.accountgegevens"
+                    >Accountgegevens</strong
+                  >
+                </div>
+                <div class="moneygames-account-row">
+                  <span id="moneygamesAccountEmail"></span>
+                </div>
+                <label data-i18n="ui.voornaam" for="moneygamesAccountFirstName">
+                  Voornaam
+                </label>
+                <input
+                  data-i18n-placeholder="ui.voornaam"
+                  id="moneygamesAccountFirstName"
+                  placeholder="Voornaam"
+                  type="text"
+                />
+                <label
+                  data-i18n="ui.achternaam"
+                  for="moneygamesAccountLastName"
+                >
+                  Achternaam
+                </label>
+                <input
+                  data-i18n-placeholder="ui.achternaam"
+                  id="moneygamesAccountLastName"
+                  placeholder="Achternaam"
+                  type="text"
+                />
+                <label
+                  data-i18n="ui.e.mailadres"
+                  for="moneygamesAccountNewEmail"
+                >
+                  E-mailadres
+                </label>
+                <input
+                  data-i18n-placeholder="ui.e.mailadres"
+                  id="moneygamesAccountEmailInput"
+                  placeholder="E-mailadres"
+                  type="email"
+                />
+                <button
+                  class="moneygames-primary-btn"
+                  data-i18n="ui.gegevens.opslaan"
+                  onclick="saveMoneygamesAccount()"
+                  type="button"
+                >
+                  Gegevens opslaan
+                </button>
+                <div class="moneygames-account-divider"></div>
+                <div class="moneygames-account-row">
+                  <strong data-i18n="ui.wachtwoord.wijzigen"
+                    >Wachtwoord wijzigen</strong
+                  >
+                </div>
+                <input
+                  autocomplete="new-password"
+                  data-i18n-placeholder="ui.nieuw.wachtwoord"
+                  id="moneygamesNewPassword"
+                  placeholder="Nieuw wachtwoord"
+                  type="password"
+                />
+                <button
+                  class="moneygames-primary-btn"
+                  data-i18n="ui.wachtwoord.wijzigen"
+                  onclick="changeMoneygamesPassword()"
+                  type="button"
+                >
+                  Wachtwoord wijzigen
+                </button>
+                <div class="moneygames-account-divider"></div>
+                <div class="moneygames-account-row">
+                  <strong data-i18n="ui.wachtwoord.vergeten"
+                    >Wachtwoord vergeten?</strong
+                  >
+                </div>
+                <button
+                  class="moneygames-secondary-btn"
+                  data-i18n="ui.resetlink.aanvragen"
+                  onclick="handleMoneygamesForgotPassword()"
+                  type="button"
+                >
+                  Resetlink aanvragen
+                </button>
+                <div
+                  class="moneygames-password-reset-panel"
+                  id="moneygamesPasswordResetPanel"
+                  style="display: none"
+                >
+                  <div
+                    class="moneygames-account-row"
+                    data-i18n="ui.stel.hier.later.een.nieuw.wachtwoord.in"
+                  >
+                    Stel hier later een nieuw wachtwoord in.
+                  </div>
+                </div>
+                <div class="moneygames-account-divider"></div>
+                <button
+                  class="moneygames-logout-btn"
+                  data-i18n="ui.uitloggen"
+                  onclick="handleMoneygamesLogout()"
+                  type="button"
+                >
+                  Uitloggen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+    <!-- =========================
      TAFEL RESERVEREN SCREEN
 ========================= -->
-<section class="screen" id="tableReservationScreen">
-<div class="page-header">
-<button onclick="closeTableReservation()" style="
-        background:none;
-        border:none;
-        color:white;
-        font-size:24px;
-        cursor:pointer;
-        margin-right:10px;
-      ">
-      ‹
-    </button>
-<span data-i18n="ui.tafel.reserveren">
-      Tafel reserveren
-    </span>
-</div>
-<main class="content">
-<div class="reservation-container">
-<div class="reservation-intro">
-<div class="reservation-title" data-i18n="ui.reserveer.je.tafel">
-          🎱 Reserveer je tafel
+    <section class="screen" id="tableReservationScreen">
+      <div class="page-header">
+        <button
+          onclick="closeTableReservation()"
+          style="
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        >
+          ‹
+        </button>
+        <span data-i18n="ui.tafel.reserveren"> Tafel reserveren </span>
+      </div>
+      <main class="content">
+        <div class="reservation-container">
+          <div class="reservation-intro">
+            <div class="reservation-title" data-i18n="ui.reserveer.je.tafel">
+              🎱 Reserveer je tafel
+            </div>
+            <div
+              class="reservation-subtitle"
+              data-i18n="ui.kies.je.gewenste.moment.en.reserveer.eenvoudig.online"
+            >
+              Kies je gewenste moment en reserveer eenvoudig online.
+            </div>
+          </div>
+          <div class="reservation-frame">
+            <iframe
+              src="https://bal-enzo.sportsclubadmin.eu/reserveren"
+              title="Tafel reserveren"
+            >
+            </iframe>
+          </div>
         </div>
-<div class="reservation-subtitle" data-i18n="ui.kies.je.gewenste.moment.en.reserveer.eenvoudig.online">
-          Kies je gewenste moment en reserveer eenvoudig online.
-        </div>
-</div>
-<div class="reservation-frame">
-
-  <iframe
-    src="https://bal-enzo.sportsclubadmin.eu/reserveren"
-    title="Tafel reserveren">
-  </iframe>
-
-</div>
-</div>
-</main>
-</section>
-<!-- =========================
+      </main>
+    </section>
+    <!-- =========================
        COMPETITIES SCREEN
   ========================== -->
-<section class="screen" id="competitionsScreen">
-<div class="page-header" data-i18n="ui.competities">🏆 Competities</div>
-<div class="tab-bar">
-<button class="tab active" data-i18n="ui.brabant.antwerpen" data-tab="brabant">
-    Brabant / Antwerpen
-  </button>
-<button class="tab" data-tab="breakplay">
-    Break &amp; Play
-  </button>
-<button class="tab" data-i18n="ui.tornooien" data-tab="tournaments">
-    Tornooien
-  </button>
-</div>
-<main class="content">
-<!-- BRABANT / ANTWERPEN -->
-<div class="tab-content active" id="tab-brabant">
-<button class="competition-card" onclick="openCompetitionDetail(74130085)" style="width:100%; border:none; cursor:pointer;">
-<div class="competition-icon">🏆</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.eerste.klasse">Eerste Klasse</div>
-<div class="competition-subtitle" data-i18n="ui.alle.info.en.uitslagen">Alle info en uitslagen</div>
-</div>
-<div class="competition-arrow">›</div>
-</button>
-<div class="competition-card" onclick="openCompetitionDetail(74130109)" style="cursor:pointer;">
-<div class="competition-icon">🏆</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.tweede.klasse">
-            Tweede Klasse
-        </div>
-<div class="competition-subtitle" data-i18n="ui.alle.info.en.uitslagen">
-            Alle info en uitslagen
-        </div>
-</div>
-<div class="competition-arrow">
-        ›
-    </div>
-</div>
-<div class="competition-card" onclick="openCompetitionDetail(74130127)" style="cursor:pointer;">
-<div class="competition-icon">🏆</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.derde.klasse">
-            Derde Klasse
-        </div>
-<div class="competition-subtitle" data-i18n="ui.alle.info.en.uitslagen">
-            Alle info en uitslagen
-        </div>
-</div>
-<div class="competition-arrow">
-        ›
-    </div>
-</div>
-<div class="competition-card" onclick="openCompetitionDetail(74130139)" style="cursor:pointer;">
-<div class="competition-icon">🏆</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.beker">
-            Beker
-        </div>
-<div class="competition-subtitle" data-i18n="ui.schema.en.resultaten">
-            Schema en resultaten
-        </div>
-</div>
-<div class="competition-arrow">
-        ›
-    </div>
-</div>
-<div class="competition-card" onclick="openCompetitionDetail(83574892)" style="cursor:pointer;">
-<div class="competition-icon">🇳🇱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.competitie.nl">
-            Competitie NL
-        </div>
-<div class="competition-subtitle" data-i18n="ui.standen.en.uitslagen">
-            Standen en uitslagen
-        </div>
-</div>
-<div class="competition-arrow">
-        ›
-    </div>
-</div>
-</div>
-<!-- BREAK & PLAY -->
-<div class="tab-content" id="tab-breakplay">
-<h3 class="competition-section-title">Break &amp; Play</h3>
-<!-- REEKS 1 -->
-<div class="competition-card" onclick="openCompetitionDetail(85928236)" style="cursor:pointer;">
-<div class="competition-icon">🎱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.break.play.reeks.1">Break &amp; Play Reeks 1</div>
-</div>
-<div class="competition-arrow">›</div>
-</div>
-<!-- REEKS 2 -->
-<div class="competition-card" onclick="openCompetitionDetail(85928569)" style="cursor:pointer;">
-<div class="competition-icon">🎱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.break.play.reeks.2">Break &amp; Play Reeks 2</div>
-</div>
-<div class="competition-arrow">›</div>
-</div>
-<!-- REEKS 3 -->
-<div class="competition-card" onclick="openCompetitionDetail(85928635)" style="cursor:pointer;">
-<div class="competition-icon">🎱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.break.play.reeks.3">Break &amp; Play Reeks 3</div>
-</div>
-<div class="competition-arrow">›</div>
-</div>
-<!-- REEKS 4 -->
-<div class="competition-card" onclick="openCompetitionDetail(85928797)" style="cursor:pointer;">
-<div class="competition-icon">🎱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.break.play.reeks.4">Break &amp; Play Reeks 4</div>
-</div>
-<div class="competition-arrow">›</div>
-</div>
-<!-- REEKS 5 -->
-<div class="competition-card" onclick="openCompetitionDetail(85929085)" style="cursor:pointer;">
-<div class="competition-icon">🎱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.break.play.reeks.5">Break &amp; Play Reeks 5</div>
-</div>
-<div class="competition-arrow">›</div>
-</div>
-</div>
-<!-- BAL ENZO ZOMERCOMPETITIE DUBBELS -->
-<div class="tab-content" id="tab-summerpool">
-<a class="competition-card" href="https://cuescore.com/tournament/Zomer+competitie+DUBBELS+editie+2026/82193731" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">☀️</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.bal.enzo.zomercompetitie.dubbels">Bal Enzo Zomercompetitie Dubbels</div>
-<div class="competition-subtitle" data-i18n="ui.standen.en.wedstrijden">
-        Standen en wedstrijden
+    <section class="screen" id="competitionsScreen">
+      <div class="page-header" data-i18n="ui.competities">🏆 Competities</div>
+      <div class="tab-bar">
+        <button
+          class="tab active"
+          data-i18n="ui.brabant.antwerpen"
+          data-tab="brabant"
+        >
+          Brabant / Antwerpen
+        </button>
+        <button class="tab" data-tab="breakplay">Break &amp; Play</button>
+        <button class="tab" data-i18n="ui.tornooien" data-tab="tournaments">
+          Tornooien
+        </button>
       </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-</div>
-<!-- TORNOOIEN -->
-<div class="tab-content" id="tab-tournaments">
-<a class="competition-card" href="#" onclick="window.open('https://cuescore.com/tournaments/?date=' + new Date().toISOString().split('T')[0] + '&amp;sort=asc&amp;c=1000237&amp;d=0&amp;q=', '_blank'); return false;">
-<div class="competition-icon">🇧🇪</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.tornooien.belgie">Tornooien België</div>
-<div class="competition-subtitle" data-i18n="ui.vanaf.de.dag.van.raadpleging">
-      Vanaf de dag van raadpleging
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-<a class="competition-card" href="#" onclick="window.open('https://cuescore.com/tournaments/?date=' + new Date().toISOString().split('T')[0] + '&amp;sort=asc&amp;c=1000231&amp;d=0&amp;q=', '_blank'); return false;">
-<div class="competition-icon">🇳🇱</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.tornooien.nederland">Tornooien Nederland</div>
-<div class="competition-subtitle" data-i18n="ui.vanaf.de.dag.van.raadpleging">
-      Vanaf de dag van raadpleging
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-</div>
-</main>
-</section>
-<!-- =========================
+      <main class="content">
+        <!-- BRABANT / ANTWERPEN -->
+        <div class="tab-content active" id="tab-brabant">
+          <button
+            class="competition-card"
+            onclick="openCompetitionDetail(74130085)"
+            style="width: 100%; border: none; cursor: pointer"
+          >
+            <div class="competition-icon">🏆</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.eerste.klasse">
+                Eerste Klasse
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.alle.info.en.uitslagen"
+              >
+                Alle info en uitslagen
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </button>
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(74130109)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🏆</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.tweede.klasse">
+                Tweede Klasse
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.alle.info.en.uitslagen"
+              >
+                Alle info en uitslagen
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(74130127)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🏆</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.derde.klasse">
+                Derde Klasse
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.alle.info.en.uitslagen"
+              >
+                Alle info en uitslagen
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(74130139)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🏆</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.beker">Beker</div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.schema.en.resultaten"
+              >
+                Schema en resultaten
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(83574892)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🇳🇱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.competitie.nl">
+                Competitie NL
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.standen.en.uitslagen"
+              >
+                Standen en uitslagen
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+        </div>
+        <!-- BREAK & PLAY -->
+        <div class="tab-content" id="tab-breakplay">
+          <h3 class="competition-section-title">Break &amp; Play</h3>
+          <!-- REEKS 1 -->
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(85928236)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🎱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.break.play.reeks.1">
+                Break &amp; Play Reeks 1
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <!-- REEKS 2 -->
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(85928569)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🎱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.break.play.reeks.2">
+                Break &amp; Play Reeks 2
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <!-- REEKS 3 -->
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(85928635)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🎱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.break.play.reeks.3">
+                Break &amp; Play Reeks 3
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <!-- REEKS 4 -->
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(85928797)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🎱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.break.play.reeks.4">
+                Break &amp; Play Reeks 4
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+          <!-- REEKS 5 -->
+          <div
+            class="competition-card"
+            onclick="openCompetitionDetail(85929085)"
+            style="cursor: pointer"
+          >
+            <div class="competition-icon">🎱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.break.play.reeks.5">
+                Break &amp; Play Reeks 5
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </div>
+        </div>
+        <!-- BAL ENZO ZOMERCOMPETITIE DUBBELS -->
+        <div class="tab-content" id="tab-summerpool">
+          <a
+            class="competition-card"
+            href="https://cuescore.com/tournament/Zomer+competitie+DUBBELS+editie+2026/82193731"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <div class="competition-icon">☀️</div>
+            <div class="competition-info">
+              <div
+                class="competition-title"
+                data-i18n="ui.bal.enzo.zomercompetitie.dubbels"
+              >
+                Bal Enzo Zomercompetitie Dubbels
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.standen.en.wedstrijden"
+              >
+                Standen en wedstrijden
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </a>
+        </div>
+        <!-- TORNOOIEN -->
+        <div class="tab-content" id="tab-tournaments">
+          <a
+            class="competition-card"
+            href="#"
+            onclick="
+              window.open(
+                'https://cuescore.com/tournaments/?date=' +
+                  new Date().toISOString().split('T')[0] +
+                  '&amp;sort=asc&amp;c=1000237&amp;d=0&amp;q=',
+                '_blank',
+              );
+              return false;
+            "
+          >
+            <div class="competition-icon">🇧🇪</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.tornooien.belgie">
+                Tornooien België
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.vanaf.de.dag.van.raadpleging"
+              >
+                Vanaf de dag van raadpleging
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </a>
+          <a
+            class="competition-card"
+            href="#"
+            onclick="
+              window.open(
+                'https://cuescore.com/tournaments/?date=' +
+                  new Date().toISOString().split('T')[0] +
+                  '&amp;sort=asc&amp;c=1000231&amp;d=0&amp;q=',
+                '_blank',
+              );
+              return false;
+            "
+          >
+            <div class="competition-icon">🇳🇱</div>
+            <div class="competition-info">
+              <div class="competition-title" data-i18n="ui.tornooien.nederland">
+                Tornooien Nederland
+              </div>
+              <div
+                class="competition-subtitle"
+                data-i18n="ui.vanaf.de.dag.van.raadpleging"
+              >
+                Vanaf de dag van raadpleging
+              </div>
+            </div>
+            <div class="competition-arrow">›</div>
+          </a>
+        </div>
+      </main>
+    </section>
+    <!-- =========================
      COMPETITIE DETAIL SCREEN
 ========================== -->
-<section class="screen" id="competitionDetailScreen">
-<div class="page-header">
-<button onclick="closeCompetitionDetail()" style="
-        background:none;
-        border:none;
-        color:white;
-        font-size:24px;
-        cursor:pointer;
-        margin-right:10px;
-      ">
-      ‹
-    </button>
-<span data-i18n="ui.competitie" id="competitionDetailTitle">
-      Competitie
-    </span>
-</div>
-<main class="content">
-<div id="competitionDetailContent">
-<!-- COMPETITIE TABS -->
-<div class="competition-detail-tabs">
-<button class="competition-detail-tab active" data-i18n="ui.overzicht" onclick="showCompetitionTab('overview', this)">
-      Overzicht
-    </button>
-<button class="competition-detail-tab" data-i18n="ui.stand" onclick="showCompetitionTab('standings', this)">
-      Stand
-    </button>
-<button class="competition-detail-tab" id="competitionMvpTab" onclick="showCompetitionTab('mvp', this)">
-  MVP
-</button>
-<button class="competition-detail-tab" data-i18n="ui.wedstrijden" onclick="showCompetitionTab('matches', this)">
-      Wedstrijden
-    </button>
-<button class="competition-detail-tab" data-i18n="ui.teams" onclick="showCompetitionTab('teams', this)">
-      Teams
-    </button>
-</div>
-<!-- OVERZICHT TAB -->
-<div class="competition-tab-panel" id="competitionTabOverview">
-<div class="competition-card">
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.competitie.laden" id="competitionName">
-                Competitie laden...
+    <section class="screen" id="competitionDetailScreen">
+      <div class="page-header">
+        <button
+          onclick="closeCompetitionDetail()"
+          style="
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        >
+          ‹
+        </button>
+        <span data-i18n="ui.competitie" id="competitionDetailTitle">
+          Competitie
+        </span>
+      </div>
+      <main class="content">
+        <div id="competitionDetailContent">
+          <!-- COMPETITIE TABS -->
+          <div class="competition-detail-tabs">
+            <button
+              class="competition-detail-tab active"
+              data-i18n="ui.overzicht"
+              onclick="showCompetitionTab('overview', this)"
+            >
+              Overzicht
+            </button>
+            <button
+              class="competition-detail-tab"
+              data-i18n="ui.stand"
+              onclick="showCompetitionTab('standings', this)"
+            >
+              Stand
+            </button>
+            <button
+              class="competition-detail-tab"
+              id="competitionMvpTab"
+              onclick="showCompetitionTab('mvp', this)"
+            >
+              MVP
+            </button>
+            <button
+              class="competition-detail-tab"
+              data-i18n="ui.wedstrijden"
+              onclick="showCompetitionTab('matches', this)"
+            >
+              Wedstrijden
+            </button>
+            <button
+              class="competition-detail-tab"
+              data-i18n="ui.teams"
+              onclick="showCompetitionTab('teams', this)"
+            >
+              Teams
+            </button>
+          </div>
+          <!-- OVERZICHT TAB -->
+          <div class="competition-tab-panel" id="competitionTabOverview">
+            <div class="competition-card">
+              <div class="competition-info">
+                <div
+                  class="competition-title"
+                  data-i18n="ui.competitie.laden"
+                  id="competitionName"
+                >
+                  Competitie laden...
+                </div>
+                <div class="competition-subtitle" id="competitionStatus"></div>
+                <div class="competition-subtitle" id="competitionDate"></div>
+                <div
+                  class="competition-subtitle"
+                  id="competitionDiscipline"
+                ></div>
+              </div>
             </div>
-<div class="competition-subtitle" id="competitionStatus">
-</div>
-<div class="competition-subtitle" id="competitionDate">
-</div>
-<div class="competition-subtitle" id="competitionDiscipline">
-</div>
-</div>
-</div>
-<a class="competition-cuescore-link" href="#" id="competitionCueScoreLink" rel="noopener noreferrer" target="_blank">
-<span data-i18n="ui.bekijk.op.cuescore">🎱 Bekijk op CueScore</span>
-<span>↗</span>
-</a>
-</div>
-<!-- STAND TAB -->
-<div class="competition-tab-panel" id="competitionTabStandings" style="display:none;">
-<div id="competitionStandings">
-<div class="competition-title" data-i18n="ui.stand">
-        Stand
-      </div>
-<div data-i18n="ui.stand.laden" id="competitionStandingsList">
-        Stand laden...
-      </div>
-</div>
-</div>
-<!-- MVP TAB -->
-<div class="competition-tab-panel" id="competitionTabMvp" style="display:none;">
-<div class="competition-title">
-      MVP
-    </div>
-<label class="mvp-filter">
-<input id="competitionMvpBalEnzoOnly" type="checkbox"/>
-  Alleen spelers van Bal Enzo
-</label>
-<div data-i18n="ui.mvp.laden" id="competitionMvpList">
-      MVP laden...
-    </div>
-</div>
-<!-- WEDSTRIJDEN TAB -->
-<div class="competition-tab-panel" id="competitionTabMatches" style="display:none;">
-<div class="competition-title" data-i18n="ui.wedstrijden">
-      Wedstrijden
-    </div>
-<div class="matches-filters">
-<label class="matches-filter">
-<input id="competitionMatchesUpcomingOnly" type="checkbox"/>
-    <span data-i18n="ui.alleen.nog.te.spelen">Alleen nog te spelen</span>
-  </label>
-<select class="matches-team-filter" id="competitionMatchesTeamFilter">
-<option data-i18n="ui.alle.teams" value="">Alle teams</option>
-</select>
-</div>
-<div data-i18n="ui.wedstrijden.laden" id="competitionMatchesList">
-      Wedstrijden laden...
-    </div>
-</div>
-<!-- TEAMS TAB -->
-<div class="competition-tab-panel" id="competitionTabTeams" style="display:none;">
-<div class="competition-title" data-i18n="ui.teams">
-      Teams
-    </div>
-<div data-i18n="ui.teams.laden" id="competitionTeamsList">
-      Teams laden...
-    </div>
-</div>
-</div>
-</main>
-</section>
-<!-- =========================
+            <a
+              class="competition-cuescore-link"
+              href="#"
+              id="competitionCueScoreLink"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <span data-i18n="ui.bekijk.op.cuescore"
+                >🎱 Bekijk op CueScore</span
+              >
+              <span>↗</span>
+            </a>
+          </div>
+          <!-- STAND TAB -->
+          <div
+            class="competition-tab-panel"
+            id="competitionTabStandings"
+            style="display: none"
+          >
+            <div id="competitionStandings">
+              <div class="competition-title" data-i18n="ui.stand">Stand</div>
+              <div data-i18n="ui.stand.laden" id="competitionStandingsList">
+                Stand laden...
+              </div>
+            </div>
+          </div>
+          <!-- MVP TAB -->
+          <div
+            class="competition-tab-panel"
+            id="competitionTabMvp"
+            style="display: none"
+          >
+            <div class="competition-title">MVP</div>
+            <label class="mvp-filter">
+              <input id="competitionMvpBalEnzoOnly" type="checkbox" />
+              Alleen spelers van Bal Enzo
+            </label>
+            <div data-i18n="ui.mvp.laden" id="competitionMvpList">
+              MVP laden...
+            </div>
+          </div>
+          <!-- WEDSTRIJDEN TAB -->
+          <div
+            class="competition-tab-panel"
+            id="competitionTabMatches"
+            style="display: none"
+          >
+            <div class="competition-title" data-i18n="ui.wedstrijden">
+              Wedstrijden
+            </div>
+            <div class="matches-filters">
+              <label class="matches-filter">
+                <input id="competitionMatchesUpcomingOnly" type="checkbox" />
+                <span data-i18n="ui.alleen.nog.te.spelen"
+                  >Alleen nog te spelen</span
+                >
+              </label>
+              <select
+                class="matches-team-filter"
+                id="competitionMatchesTeamFilter"
+              >
+                <option data-i18n="ui.alle.teams" value="">Alle teams</option>
+              </select>
+            </div>
+            <div data-i18n="ui.wedstrijden.laden" id="competitionMatchesList">
+              Wedstrijden laden...
+            </div>
+          </div>
+          <!-- TEAMS TAB -->
+          <div
+            class="competition-tab-panel"
+            id="competitionTabTeams"
+            style="display: none"
+          >
+            <div class="competition-title" data-i18n="ui.teams">Teams</div>
+            <div data-i18n="ui.teams.laden" id="competitionTeamsList">
+              Teams laden...
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+    <!-- =========================
      WEDSTRIJD DETAIL SCREEN
 ========================== -->
-<section class="screen" id="matchDetailScreen">
-<div class="page-header">
-<button onclick="closeMatchDetail()" style="
-        background:none;
-        border:none;
-        color:white;
-        font-size:24px;
-        cursor:pointer;
-        margin-right:10px;
-      ">
-      ‹
-    </button>
-<span data-i18n="ui.wedstrijd">
-      Wedstrijd
-    </span>
-</div>
-<main class="content">
-<div id="matchDetailContent">
-<div class="competition-card">
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.wedstrijd.laden" id="matchDetailRound">
-            Wedstrijd laden...
+    <section class="screen" id="matchDetailScreen">
+      <div class="page-header">
+        <button
+          onclick="closeMatchDetail()"
+          style="
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 10px;
+          "
+        >
+          ‹
+        </button>
+        <span data-i18n="ui.wedstrijd"> Wedstrijd </span>
+      </div>
+      <main class="content">
+        <div id="matchDetailContent">
+          <div class="competition-card">
+            <div class="competition-info">
+              <div
+                class="competition-title"
+                data-i18n="ui.wedstrijd.laden"
+                id="matchDetailRound"
+              >
+                Wedstrijd laden...
+              </div>
+              <div class="competition-subtitle" id="matchDetailDate"></div>
+              <div class="match-detail-score">
+                <div class="match-detail-team" id="matchDetailTeamA"></div>
+                <div class="match-detail-score-value">
+                  <span class="match-detail-score-box" id="matchDetailScoreA"
+                    >0</span
+                  >
+                  <span class="match-detail-score-dash">-</span>
+                  <span class="match-detail-score-box" id="matchDetailScoreB"
+                    >0</span
+                  >
+                </div>
+                <div
+                  class="match-detail-team match-detail-team-away"
+                  id="matchDetailTeamB"
+                ></div>
+              </div>
+              <div class="match-detail-status" id="matchDetailStatus"></div>
+              <div class="match-detail-venue" id="matchDetailVenue"></div>
+              <div class="match-individual-section">
+                <div
+                  class="competition-title"
+                  data-i18n="ui.individuele.wedstrijden"
+                >
+                  Individuele wedstrijden
+                </div>
+                <div
+                  data-i18n="ui.individuele.wedstrijden.laden"
+                  id="matchIndividualMatches"
+                >
+                  Individuele wedstrijden laden...
+                </div>
+              </div>
+            </div>
           </div>
-<div class="competition-subtitle" id="matchDetailDate">
-</div>
-<div class="match-detail-score">
-<div class="match-detail-team" id="matchDetailTeamA">
-</div>
-<div class="match-detail-score-value">
-<span class="match-detail-score-box" id="matchDetailScoreA">0</span>
-<span class="match-detail-score-dash">-</span>
-<span class="match-detail-score-box" id="matchDetailScoreB">0</span>
-</div>
-<div class="match-detail-team match-detail-team-away" id="matchDetailTeamB">
-</div>
-</div>
-<div class="match-detail-status" id="matchDetailStatus">
-</div>
-<div class="match-detail-venue" id="matchDetailVenue">
-</div>
-<div class="match-individual-section">
-<div class="competition-title" data-i18n="ui.individuele.wedstrijden">
-    Individuele wedstrijden
-  </div>
-<div data-i18n="ui.individuele.wedstrijden.laden" id="matchIndividualMatches">
-    Individuele wedstrijden laden...
-  </div>
-</div>
-</div>
-</div>
-</div>
-</main>
-</section>
-<!-- ===========================
+        </div>
+      </main>
+    </section>
+    <!-- ===========================
      TEAM DETAIL
 =========================== -->
-<section class="screen" id="teamDetailScreen">
-<div class="detail-page">
-<div class="detail-header">
-<button aria-label="Terug" class="detail-back-button" data-i18n-aria-label="ui.terug" onclick="closeTeamDetail()">
-                ‹
-            </button>
-<h1 data-i18n="ui.team" id="teamDetailTitle">
-                Team
-            </h1>
-</div>
-<div class="team-detail-card">
-<h2 data-i18n="ui.team" id="teamDetailName">
-        Team
-    </h2>
-<div id="teamDetailPosition">
-</div>
-<div id="teamDetailVenue">
-</div>
-</div>
-<div class="team-players-section">
-<div class="competition-title" data-i18n="ui.spelers">
-        Spelers
-    </div>
-<div data-i18n="ui.spelers.laden" id="teamDetailPlayers">
-        Spelers laden...
-    </div>
-</div>
-</div>
-</section>
-<!-- ===========================
+    <section class="screen" id="teamDetailScreen">
+      <div class="detail-page">
+        <div class="detail-header">
+          <button
+            aria-label="Terug"
+            class="detail-back-button"
+            data-i18n-aria-label="ui.terug"
+            onclick="closeTeamDetail()"
+          >
+            ‹
+          </button>
+          <h1 data-i18n="ui.team" id="teamDetailTitle">Team</h1>
+        </div>
+        <div class="team-detail-card">
+          <h2 data-i18n="ui.team" id="teamDetailName">Team</h2>
+          <div id="teamDetailPosition"></div>
+          <div id="teamDetailVenue"></div>
+        </div>
+        <div class="team-players-section">
+          <div class="competition-title" data-i18n="ui.spelers">Spelers</div>
+          <div data-i18n="ui.spelers.laden" id="teamDetailPlayers">
+            Spelers laden...
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===========================
      PLAYER DETAIL SCREEN
 =========================== -->
-<section class="screen" id="playerDetailScreen">
-<div class="detail-page">
-<div class="detail-header">
-<button class="detail-back-button" onclick="closePlayerDetail()">
-                ‹
-            </button>
-<h1 data-i18n="ui.speler" id="playerDetailTitle">
-                Speler
-            </h1>
-</div>
-<div class="team-detail-card">
-<h2 data-i18n="ui.speler" id="playerDetailName">
-                Speler
-            </h2>
-<div data-i18n="ui.team" id="playerDetailTeam">
-                Team
-            </div>
-</div>
-<div class="player-stats-section">
-<div class="competition-title" data-i18n="ui.statistieken">
-                Statistieken
-            </div>
-<div data-i18n="ui.statistieken.laden" id="playerDetailStats">
-                Statistieken laden...
-            </div>
-</div>
-</div>
-</section>
-<!-- =========================
+    <section class="screen" id="playerDetailScreen">
+      <div class="detail-page">
+        <div class="detail-header">
+          <button class="detail-back-button" onclick="closePlayerDetail()">
+            ‹
+          </button>
+          <h1 data-i18n="ui.speler" id="playerDetailTitle">Speler</h1>
+        </div>
+        <div class="team-detail-card">
+          <h2 data-i18n="ui.speler" id="playerDetailName">Speler</h2>
+          <div data-i18n="ui.team" id="playerDetailTeam">Team</div>
+        </div>
+        <div class="player-stats-section">
+          <div class="competition-title" data-i18n="ui.statistieken">
+            Statistieken
+          </div>
+          <div data-i18n="ui.statistieken.laden" id="playerDetailStats">
+            Statistieken laden...
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- =========================
        CLUB SCREEN
   ========================== -->
-<section class="screen" id="clubScreen">
-<div class="page-header" data-i18n="ui.club">🎱 Club</div>
-<main class="content">
-<!-- Facebook -->
-<a class="competition-card" href="https://www.facebook.com/billiardsendarts" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">
-<img alt="Facebook" src="facebook.png"/>
-</div>
-<div class="competition-info">
-<div class="competition-title">Facebook</div>
-<div class="competition-subtitle" data-i18n="ui.volg.bal.enzo.op.facebook">
-      Volg Bal Enzo op Facebook
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-<!-- Instagram -->
-<a class="competition-card" href="https://www.instagram.com/balenzo_billiards_darts/" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">
-<img alt="Instagram" src="instagram.png"/>
-</div>
-<div class="competition-info">
-<div class="competition-title">Instagram</div>
-<div class="competition-subtitle" data-i18n="ui.bekijk.onze.foto.s.en.updates">
-      Bekijk onze foto's en updates
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-<!-- YouTube -->
-<a class="competition-card" href="https://www.youtube.com/@bal-enzo_billiards_darts" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">
-<img alt="YouTube" src="youtube.png"/>
-</div>
-<div class="competition-info">
-<div class="competition-title">YouTube</div>
-<div class="competition-subtitle" data-i18n="ui.bekijk.video.s.en.tutorials">
-      Bekijk video's en tutorials
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-<!-- Keu Atelier -->
-<a class="competition-card" href="https://www.bal-enzo.be/afspraak-keu-atelier/" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">
-<img alt="Keu Atelier" src="keuatelier.png"/>
-</div>
-<div class="competition-info">
-<div class="competition-title">Keu Atelier</div>
-<div class="competition-subtitle" data-i18n="ui.herstellingen.onderhoud.en.advies">
-      Herstellingen, onderhoud en advies
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-<!-- Start2Pool -->
-<a class="competition-card" href="https://www.start2pool.com/" rel="noopener noreferrer" target="_blank">
-<div class="competition-icon">
-<img alt="Start2Pool" src="start2pool.png"/>
-</div>
-<div class="competition-info">
-<div class="competition-title">Start2Pool</div>
-<div class="competition-subtitle" data-i18n="ui.leer.poolbiljart.stap.voor.stap">
-      Leer poolbiljart stap voor stap
-    </div>
-</div>
-<div class="competition-arrow">›</div>
-</a>
-</main>
-</section>
-<!-- =========================
+    <section class="screen" id="clubScreen">
+      <div class="page-header" data-i18n="ui.club">🎱 Club</div>
+      <main class="content">
+        <!-- Facebook -->
+        <a
+          class="competition-card"
+          href="https://www.facebook.com/billiardsendarts"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div class="competition-icon">
+            <img alt="Facebook" src="facebook.png" />
+          </div>
+          <div class="competition-info">
+            <div class="competition-title">Facebook</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.volg.bal.enzo.op.facebook"
+            >
+              Volg Bal Enzo op Facebook
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </a>
+        <!-- Instagram -->
+        <a
+          class="competition-card"
+          href="https://www.instagram.com/balenzo_billiards_darts/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div class="competition-icon">
+            <img alt="Instagram" src="instagram.png" />
+          </div>
+          <div class="competition-info">
+            <div class="competition-title">Instagram</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.bekijk.onze.foto.s.en.updates"
+            >
+              Bekijk onze foto's en updates
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </a>
+        <!-- YouTube -->
+        <a
+          class="competition-card"
+          href="https://www.youtube.com/@bal-enzo_billiards_darts"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div class="competition-icon">
+            <img alt="YouTube" src="youtube.png" />
+          </div>
+          <div class="competition-info">
+            <div class="competition-title">YouTube</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.bekijk.video.s.en.tutorials"
+            >
+              Bekijk video's en tutorials
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </a>
+        <!-- Keu Atelier -->
+        <a
+          class="competition-card"
+          href="https://www.bal-enzo.be/afspraak-keu-atelier/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div class="competition-icon">
+            <img alt="Keu Atelier" src="keuatelier.png" />
+          </div>
+          <div class="competition-info">
+            <div class="competition-title">Keu Atelier</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.herstellingen.onderhoud.en.advies"
+            >
+              Herstellingen, onderhoud en advies
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </a>
+        <!-- Start2Pool -->
+        <a
+          class="competition-card"
+          href="https://www.start2pool.com/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <div class="competition-icon">
+            <img alt="Start2Pool" src="start2pool.png" />
+          </div>
+          <div class="competition-info">
+            <div class="competition-title">Start2Pool</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.leer.poolbiljart.stap.voor.stap"
+            >
+              Leer poolbiljart stap voor stap
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </a>
+      </main>
+    </section>
+    <!-- =========================
        PROFIEL SCREEN
   ========================== -->
-<section class="screen" id="profileScreen">
-<div class="page-header" data-i18n="ui.profiel">👤 Profiel</div>
-<main class="content">
-<button class="competition-card" onclick="setProfile()" style="width:100%; border:none; cursor:pointer;">
-<div class="competition-icon">⚙️</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.mijn.profiel.instellen">Mijn profiel instellen</div>
-<div class="competition-subtitle" data-i18n="ui.sla.je.cuescore.profiel.op">Sla je CueScore-profiel op</div>
-</div>
-<div class="competition-arrow">›</div>
-</button>
-<button class="competition-card" onclick="openProfile()" style="width:100%; border:none; cursor:pointer;">
-<div class="competition-icon">👤</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.mijn.profiel.openen">Mijn profiel openen</div>
-<div class="competition-subtitle" data-i18n="ui.bekijk.je.cuescore.profiel">Bekijk je CueScore-profiel</div>
-</div>
-<div class="competition-arrow">›</div>
-</button>
-<div class="competition-card language-card">
-<div class="competition-icon">🌐</div>
-<div class="competition-info">
-<div class="competition-title" data-i18n="ui.taal">Taal</div>
-<div class="competition-subtitle" data-i18n="ui.kies.de.taal.van.de.app">Kies de taal van de app</div>
-</div>
-<select class="language-selector" id="languageSelector" onchange="changeAppLanguage(this.value);">
-<option value="nl">Nederlands</option>
-<option value="en">English</option>
-<option value="fr">Français</option>
-</select>
-</div>
-</main>
-</section>
-<!-- =========================
+    <section class="screen" id="profileScreen">
+      <div class="page-header" data-i18n="ui.profiel">👤 Profiel</div>
+      <main class="content">
+        <button
+          class="competition-card"
+          onclick="setProfile()"
+          style="width: 100%; border: none; cursor: pointer"
+        >
+          <div class="competition-icon">⚙️</div>
+          <div class="competition-info">
+            <div
+              class="competition-title"
+              data-i18n="ui.mijn.profiel.instellen"
+            >
+              Mijn profiel instellen
+            </div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.sla.je.cuescore.profiel.op"
+            >
+              Sla je CueScore-profiel op
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </button>
+        <button
+          class="competition-card"
+          onclick="openProfile()"
+          style="width: 100%; border: none; cursor: pointer"
+        >
+          <div class="competition-icon">👤</div>
+          <div class="competition-info">
+            <div class="competition-title" data-i18n="ui.mijn.profiel.openen">
+              Mijn profiel openen
+            </div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.bekijk.je.cuescore.profiel"
+            >
+              Bekijk je CueScore-profiel
+            </div>
+          </div>
+          <div class="competition-arrow">›</div>
+        </button>
+        <div class="competition-card language-card">
+          <div class="competition-icon">🌐</div>
+          <div class="competition-info">
+            <div class="competition-title" data-i18n="ui.taal">Taal</div>
+            <div
+              class="competition-subtitle"
+              data-i18n="ui.kies.de.taal.van.de.app"
+            >
+              Kies de taal van de app
+            </div>
+          </div>
+          <select
+            class="language-selector"
+            id="languageSelector"
+            onchange="changeAppLanguage(this.value)"
+          >
+            <option value="nl">Nederlands</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+          </select>
+        </div>
+      </main>
+    </section>
+    <!-- =========================
        BOTTOM NAVIGATION
   ========================== -->
-<nav class="bottom-nav">
-<button class="nav-item active" data-target="homeScreen">
-<span>🏠</span>
-<span class="nav-label" data-i18n="ui.home">Home</span>
-</button>
-<button class="nav-item" data-target="competitionsScreen">
-<span>🏆</span>
-<span class="nav-label" data-i18n="ui.competities.2">Competities</span>
-</button>
-<button class="nav-item" data-target="clubScreen">
-<span>🎱</span>
-<span class="nav-label">Club</span>
-</button>
-<button class="nav-item" data-target="profileScreen">
-<span>👤</span>
-<span class="nav-label" data-i18n="ui.profiel.2">Profiel</span>
-</button>
-</nav>
-<!-- FAVORIETEN MODAL -->
-<div class="modal" id="favoritesModal">
-<div class="modal-content">
-<h3 data-i18n="ui.kies.je.favorieten">⭐ Kies je favorieten</h3>
-<div id="favoritesOptions"></div>
-<div class="modal-actions">
-<button class="modal-btn secondary" data-i18n="ui.annuleren" onclick="closeFavoritesEditor()">
-          Annuleren
-        </button>
-<button class="modal-btn primary" data-i18n="ui.opslaan" onclick="saveFavoritesSelection()">
-          Opslaan
-        </button>
-</div>
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script src="translations.js"></script>
-<script src="auth.js"></script>
-<script src="app.js"></script>
-
-</body>
+    <nav class="bottom-nav">
+      <button class="nav-item active" data-target="homeScreen">
+        <span>🏠</span>
+        <span class="nav-label" data-i18n="ui.home">Home</span>
+      </button>
+      <button class="nav-item" data-target="competitionsScreen">
+        <span>🏆</span>
+        <span class="nav-label" data-i18n="ui.competities.2">Competities</span>
+      </button>
+      <button class="nav-item" data-target="clubScreen">
+        <span>🎱</span>
+        <span class="nav-label">Club</span>
+      </button>
+      <button class="nav-item" data-target="profileScreen">
+        <span>👤</span>
+        <span class="nav-label" data-i18n="ui.profiel.2">Profiel</span>
+      </button>
+    </nav>
+    <!-- FAVORIETEN MODAL -->
+    <div class="modal" id="favoritesModal">
+      <div class="modal-content">
+        <h3 data-i18n="ui.kies.je.favorieten">⭐ Kies je favorieten</h3>
+        <div id="favoritesOptions"></div>
+        <div class="modal-actions">
+          <button
+            class="modal-btn secondary"
+            data-i18n="ui.annuleren"
+            onclick="closeFavoritesEditor()"
+          >
+            Annuleren
+          </button>
+          <button
+            class="modal-btn primary"
+            data-i18n="ui.opslaan"
+            onclick="saveFavoritesSelection()"
+          >
+            Opslaan
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="translations.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
