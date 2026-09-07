@@ -101,11 +101,11 @@
               <div class="quick-action-external">›</div>
             </div>
           </button>
-          <a
+          <button
             class="quick-action-card"
-            href="https://cuescore.com/bal-enzobilliardsdarts"
-            rel="noopener noreferrer"
-            target="_blank"
+            onclick="openOurClub()"
+            style="border: none; cursor: pointer; padding: 0"
+            type="button"
           >
             <img alt="Onze Club" src="clubpagina.jpg" />
             <div class="quick-action-content">
@@ -120,7 +120,7 @@
               </div>
               <div class="quick-action-external">↗</div>
             </div>
-          </a>
+          </button>
         </div>
       </section>
     </section>
@@ -776,6 +776,42 @@
         </div>
       </main>
     </section>
+
+    <!-- =========================
+     ONZE CLUB SCREEN
+========================= -->
+<section class="screen" id="ourClubScreen">
+  <div class="page-header">
+    <button
+      onclick="closeOurClub()"
+      style="
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+      "
+    >
+      ‹
+    </button>
+
+    <span data-i18n="ui.onze.club">Onze Club</span>
+  </div>
+
+  <main class="content">
+    <div class="reservation-container">
+      <div class="reservation-frame">
+        <iframe
+          src="https://cuescore.com/bal-enzobilliardsdarts"
+          title="Bal Enzo"
+        >
+        </iframe>
+      </div>
+    </div>
+  </main>
+</section>
+
     <!-- =========================
        COMPETITIES SCREEN
   ========================== -->

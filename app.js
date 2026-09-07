@@ -17,6 +17,21 @@ function appLocale() {
     : "nl-BE";
 }
 
+function getCompetitionMatchVenue(match) {
+  const comment = String(match?.comment || "").trim().toUpperCase();
+
+  const venueMap = {
+    BALENZO: "Bal-enzo Billiards & Darts",
+    SHOOTERS: "Shooters Tremelo",
+    SPACEMONKEYS: "De Kosmonaut",
+    "DOWNTOWN JACK": "DownTown Jack"
+  };
+
+  return venueMap[comment]
+    || match?.playerA?.venue?.name
+    || null;
+}
+
 function translateCompetitionRoundName(roundName, roundNumber = "") {
   const raw = String(roundName || "").trim();
 
@@ -1164,7 +1179,7 @@ matchesContainer.innerHTML =
                         </div>
 
                         <div class="competition-match-venue">
-    📍 ${match.playerA?.venue?.name || "Locatie niet bekend"}
+    📍 ${getCompetitionMatchVenue(match) || "Locatie niet bekend"}
 </div>
 
                     </div>
@@ -1364,18 +1379,15 @@ statusElement.className =
 const venueElement =
     document.getElementById("matchDetailVenue");
 
-if (match.playerA?.venue?.name) {
+const matchVenue = getCompetitionMatchVenue(match);
 
+if (matchVenue) {
     venueElement.textContent =
-        `📍 ${match.playerA.venue.name}`;
-
+        `📍 ${matchVenue}`;
     venueElement.style.display = "block";
-
 } else {
-
     venueElement.textContent = "";
     venueElement.style.display = "none";
-
 }
 
 
@@ -2727,6 +2739,38 @@ function openTableReservation() {
 
 
 function closeTableReservation() {
+
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const home =
+    document.getElementById("homeScreen");
+
+  if (home) {
+    home.classList.add("active");
+  }
+
+}
+
+/* ===========================
+   ONZE CLUB
+=========================== */
+
+function openOurClub() {
+
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const screen =
+    document.getElementById("ourClubScreen");
+
+  if (screen) {
+    screen.classList.add("active");
+  }
+
+}
+
+function closeOurClub() {
 
   document.querySelectorAll(".screen")
     .forEach(screen => screen.classList.remove("active"));
