@@ -270,12 +270,17 @@ function renderFavorites() {
       const profileUrl = localStorage.getItem('myProfileUrl');
 
       if (profileUrl && profileUrl.trim() !== '') {
-        card = document.createElement('a');
+        card = document.createElement('button');
+        card.type = 'button';
         card.className = 'favorite-card';
-        card.href = profileUrl.trim();
-        card.target = '_blank';
-        card.rel = 'noopener noreferrer';
-      } else {
+        card.style.border = 'none';
+        card.style.cursor = 'pointer';
+
+        card.addEventListener('click', function () {
+            openMyProfile();
+        });
+        } 
+        else {
         // Nog geen profiel ingesteld
         card = document.createElement('button');
         card.type = 'button';
@@ -397,12 +402,12 @@ function setProfile() {
 function openProfile() {
   const url = localStorage.getItem('myProfileUrl');
 
-  if (!url) {
+  if (!url || !url.trim()) {
     alert(tr('profile.notSet', 'Je hebt nog geen profiel ingesteld.'));
     return;
   }
 
-  window.open(url, '_blank');
+  openMyProfile();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -2782,6 +2787,40 @@ function closeOurClub() {
     home.classList.add("active");
   }
 
+}
+
+function openMyProfile() {
+  const profileUrl = localStorage.getItem("myProfileUrl");
+  const iframe = document.getElementById("myProfileIframe");
+
+  if (!profileUrl || !profileUrl.trim()) {
+    openProfile();
+    return;
+  }
+
+  if (iframe) {
+    iframe.src = profileUrl.trim();
+  }
+
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const screen = document.getElementById("myProfileScreen");
+
+  if (screen) {
+    screen.classList.add("active");
+  }
+}
+
+function closeMyProfile() {
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const home = document.getElementById("homeScreen");
+
+  if (home) {
+    home.classList.add("active");
+  }
 }
 
 function selectReservationGame(gameType) {
