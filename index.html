@@ -142,7 +142,27 @@
         >
           ‹
         </button>
-        <span> Live Scores </span>
+        <span style="flex: 1;">Live Scores</span>
+
+<button
+  type="button"
+  onclick="refreshLiveScores()"
+  aria-label="Live Scores vernieuwen"
+  title="Live Scores vernieuwen"
+  style="
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  "
+>
+  ↻
+</button>
       </div>
       <main class="content">
         <div class="balenzo-live-scores" id="balEnzoLiveScores">
@@ -160,6 +180,314 @@
         </div>
       </main>
     </section>
+
+<!-- =========================
+     MONEYGAMES HELP SCREEN
+========================== -->
+<section class="screen" id="moneygamesHelpScreen">
+  <div class="page-header">
+    <button
+      type="button"
+      onclick="closeMoneygamesHelp()"
+      style="
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+      "
+    >
+      ‹
+    </button>
+
+    <span data-i18n="moneygames.help.title">Hoe werken Moneygames?</span>
+  </div>
+
+  <main class="content">
+    <div id="moneygamesHelpContent">
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.what.title">🎱 Wat zijn Moneygames?</h2>
+
+        <p data-i18n="moneygames.help.what.text1">
+          Moneygames zijn onderlinge wedstrijden tussen spelers van Bal Enzo.
+          Je bepaalt zelf de discipline, Race To, datum, starttijd en eventuele inzet.
+        </p>
+
+        <p data-i18n="moneygames.help.what.text2">
+          Je hoeft niet voor geld te spelen. Met een inzet van €0 kun je Moneygames
+          ook gebruiken om gewoon een training of oefenwedstrijd af te spreken.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.singles.title">👤 Singles</h2>
+
+        <p data-i18n="moneygames.help.singles.text1">
+          Bij Singles speel je één tegen één.
+        </p>
+
+        <p data-i18n="moneygames.help.singles.text2">
+          Je kunt zelf een oproep plaatsen of reageren op een open oproep
+          van een andere speler.
+        </p>
+
+        <p data-i18n="moneygames.help.singles.text3">
+          Krijg je meerdere reacties op je eigen oproep?
+          Dan kies jij zelf met welke geïnteresseerde speler je de Moneygame speelt.
+        </p>
+
+        <div class="moneygames-help-example">
+          <strong data-i18n="moneygames.help.example">Voorbeeld</strong><br>
+          <span data-i18n="moneygames.help.singles.example1">
+            9-ball · Race To 7 · €10 inzet
+          </span><br><br>
+          <span data-i18n="moneygames.help.singles.example2">
+            Drie spelers reageren op je oproep.
+          </span><br>
+          <span data-i18n="moneygames.help.singles.example3">
+            Jij kiest één van hen als tegenstander.
+          </span>
+        </div>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.doubles.title">👥 Doubles</h2>
+
+        <p data-i18n="moneygames.help.doubles.text1">
+          Bij Doubles speel je samen met een partner tegen een ander duo.
+        </p>
+
+        <p data-i18n="moneygames.help.doubles.text2">
+          Wanneer je zelf een Doubles-Moneygame aanmaakt, kies je eerst je partner.
+          Die partner moet de uitnodiging bevestigen voordat jullie Moneygame
+          openbaar wordt voor andere spelers.
+        </p>
+
+        <p data-i18n="moneygames.help.doubles.text3">
+          Reageert iemand op een open Doubles-Moneygame?
+          Dan kiest die speler eerst zelf een partner.
+          Ook die partner moet bevestigen voordat het duo als geldige kandidaat
+          beschikbaar wordt voor de organisator.
+        </p>
+
+        <p data-i18n="moneygames.help.doubles.text4">
+          De organisator kiest daarna welk bevestigd duo de tegenstanders worden.
+        </p>
+
+        <div class="moneygames-help-example">
+          <strong data-i18n="moneygames.help.example">Voorbeeld</strong><br>
+          <span data-i18n="moneygames.help.doubles.example1">
+            Nicolas kiest Jolien als partner.
+          </span><br>
+          <span data-i18n="moneygames.help.doubles.example2">
+            Jolien bevestigt → het duo is actief.
+          </span><br><br>
+          <span data-i18n="moneygames.help.doubles.example3">
+            Speler A reageert met Speler B als partner.
+          </span><br>
+          <span data-i18n="moneygames.help.doubles.example4">
+            Speler B bevestigt → het kandidaat-duo wordt zichtbaar.
+          </span><br><br>
+          <span data-i18n="moneygames.help.doubles.example5">
+            Daarna kiest Nicolas welk duo de tegenstander wordt.
+          </span>
+        </div>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.stake.title">
+          💶 Spelen met of zonder inzet
+        </h2>
+
+        <p data-i18n="moneygames.help.stake.text1">
+          Bij het plaatsen van een Moneygame bepaal je zelf de inzet.
+        </p>
+
+        <p data-i18n="moneygames.help.stake.text2">
+          Kies €0 wanneer je zonder geld wilt spelen.
+          Zo kun je Moneygames ook gebruiken om trainingen of oefenwedstrijden
+          met andere spelers af te spreken.
+        </p>
+
+        <p data-i18n="moneygames.help.stake.text3">
+          Wanneer je wel met een inzet speelt, wordt je balans bijgehouden
+          bij je Moneygame-statistieken.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.create.title">
+          📢 Een Moneygame plaatsen
+        </h2>
+
+        <p data-i18n="moneygames.help.create.text1">
+          Druk op “+ Nieuwe Moneygame” en kies eerst of je Singles
+          of Doubles wilt spelen.
+        </p>
+
+        <p data-i18n="moneygames.help.create.text2">
+          Daarna kies je de discipline, Race To, eventuele inzet,
+          datum en starttijd.
+        </p>
+
+        <p data-i18n="moneygames.help.create.text3">
+          Een Singles-oproep wordt onmiddellijk bij de open Moneygames geplaatst.
+          Bij Doubles moet je gekozen partner eerst bevestigen voordat
+          de oproep openbaar wordt.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.react.title">
+          ✋ Reageren op een Moneygame
+        </h2>
+
+        <p data-i18n="moneygames.help.react.text1">
+          Bij de open Moneygames kun je reageren op een oproep
+          waarop je graag wilt meespelen.
+        </p>
+
+        <p data-i18n="moneygames.help.react.text2">
+          Bij Singles verstuur je rechtstreeks je kandidatuur.
+          De maker van de oproep ziet de geïnteresseerde spelers en kiest
+          uiteindelijk één tegenstander.
+        </p>
+
+        <p data-i18n="moneygames.help.react.text3">
+          Zolang je nog niet geselecteerd bent, kun je je reactie ook weer intrekken.
+        </p>
+
+        <p data-i18n="moneygames.help.react.text4">
+          Bij Doubles reageer je samen met een partner.
+          Je kandidatuur wordt pas volledig wanneer je partner
+          de uitnodiging heeft bevestigd.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.after.title">🏁 Na de wedstrijd</h2>
+
+        <p data-i18n="moneygames.help.after.text1">
+          Vanaf de geplande starttijd kan de uitslag van de Moneygame
+          worden ingevoerd.
+        </p>
+
+        <p data-i18n="moneygames.help.after.text2">
+          Eén van de spelers voert de eindstand in.
+          De score moet overeenkomen met de afgesproken Race To.
+        </p>
+
+        <p data-i18n="moneygames.help.after.text3">
+          De uitslag is daarna nog niet definitief.
+          De tegenpartij krijgt de mogelijkheid om het resultaat
+          te bevestigen of te weigeren.
+        </p>
+
+        <p data-i18n="moneygames.help.after.text4">
+          Na bevestiging wordt de wedstrijd definitief verwerkt
+          in de historiek en statistieken.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.deadline.title">⏱️ 48-uursregel</h2>
+
+        <p data-i18n="moneygames.help.deadline.text1">
+          Vanaf de geplande starttijd van de Moneygame heb je 48 uur
+          om de uitslag in te voeren.
+        </p>
+
+        <p data-i18n="moneygames.help.deadline.text2">
+          Een resultaat kan dus niet vóór de starttijd worden ingevoerd.
+          Zodra de termijn van 48 uur verstreken is, kan er geen uitslag
+          meer worden toegevoegd en wordt de wedstrijd als
+          “Geen uitslag” weergegeven.
+        </p>
+
+        <p data-i18n="moneygames.help.deadline.text3">
+          Wordt een ingevoerde uitslag door de tegenstander geweigerd?
+          Dan kan er opnieuw een correcte uitslag worden ingevoerd,
+          zolang de oorspronkelijke termijn van 48 uur nog niet verstreken is.
+        </p>
+
+        <div class="moneygames-help-example">
+          <strong data-i18n="moneygames.help.example">Voorbeeld</strong><br>
+          <span data-i18n="moneygames.help.deadline.example1">
+            Een Moneygame start zaterdag om 20:00.
+          </span><br>
+          <span data-i18n="moneygames.help.deadline.example2">
+            De uitslag kan worden ingevoerd vanaf zaterdag 20:00 tot maandag 20:00.
+          </span>
+        </div>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.forfeit.title">🚫 Forfait</h2>
+
+        <p data-i18n="moneygames.help.forfeit.text1">
+          Kan een geplande Moneygame niet normaal worden afgewerkt?
+          Dan kan de wedstrijd als forfait worden geregistreerd.
+        </p>
+
+        <p data-i18n="moneygames.help.forfeit.text2">
+          Bij het invoeren van het resultaat kies je welke kant
+          (A of B) forfait geeft. Bij Singles staat elke kant voor één speler;
+          bij Doubles staat elke kant voor een volledig duo.
+        </p>
+
+        <p data-i18n="moneygames.help.forfeit.text3">
+          Een forfait is niet onmiddellijk definitief.
+          Het wordt, net zoals een gewone uitslag, eerst naar de tegenpartij
+          gestuurd ter bevestiging.
+        </p>
+      </section>
+
+      <section class="moneygames-help-card">
+        <h2 data-i18n="moneygames.help.stats.title">
+          📊 Statistieken en historiek
+        </h2>
+
+        <p data-i18n="moneygames.help.stats.text1">
+          Je Moneygame-resultaten worden automatisch bijgehouden.
+        </p>
+
+        <p data-i18n="moneygames.help.stats.text2">
+          Je ziet hoeveel wedstrijden je hebt gespeeld, gewonnen en verloren,
+          je winstpercentage en je eventuele financiële balans.
+        </p>
+
+        <p data-i18n="moneygames.help.stats.text3">
+          De statistieken worden zowel in totaal als afzonderlijk
+          voor Singles en Doubles bijgehouden.
+        </p>
+
+        <p data-i18n="moneygames.help.stats.text4">
+          Alleen wedstrijden met een bevestigd resultaat tellen mee
+          voor je statistieken. Geannuleerde of verlopen Moneygames
+          en wedstrijden zonder uitslag tellen niet mee.
+        </p>
+
+        <p data-i18n="moneygames.help.stats.text5">
+          In je historiek kun je ook eerdere Moneygames terugvinden,
+          inclusief de datum, discipline, Race To, inzet en uitslag.
+        </p>
+      </section>
+
+      <button
+        type="button"
+        class="moneygames-help-start-button"
+        onclick="closeMoneygamesHelp()"
+        data-i18n="moneygames.help.start"
+      >
+        Start met Moneygames
+      </button>
+
+    </div>
+  </main>
+</section>
+
     <!-- =========================
      MONEYGAMES SCREEN
 ========================== -->
@@ -178,13 +506,26 @@
         >
           ‹
         </button>
-        <span> Moneygames </span>
+        <span>Moneygames</span>
+
       </div>
       <main class="content">
         <div id="moneygamesContent">
           <div id="moneygamesAuth">
             <div class="moneygames-auth-card">
-              <h2>🎱 Moneygames</h2>
+              <div class="moneygames-title-row">
+  <h2>🎱 Moneygames</h2>
+
+  <button
+    type="button"
+    class="moneygames-help-button"
+    onclick="showMoneygamesHelp()"
+    aria-label="Uitleg over Moneygames"
+    data-i18n-aria-label="moneygames.help.button"
+  >
+    ?
+  </button>
+</div>
               <p
                 class="moneygames-auth-text"
                 data-i18n="ui.log.in.of.registreer.om.moneygames.te.bekijken.en.te.spelen"
@@ -275,7 +616,19 @@
           </div>
           <div id="moneygamesApp" style="display: none">
             <div class="moneygames-welcome">
-              <h2>🎱 Moneygames</h2>
+              <div class="moneygames-title-row">
+  <h2>🎱 Moneygames</h2>
+
+  <button
+    type="button"
+    class="moneygames-help-button"
+    onclick="showMoneygamesHelp()"
+    aria-label="Uitleg over Moneygames"
+    data-i18n-aria-label="moneygames.help.button"
+  >
+    ?
+  </button>
+</div>
               <p data-i18n="ui.welkom" id="moneygamesWelcomeText">Welkom!</p>
             </div>
             <div class="moneygames-main-tabs">
@@ -1581,9 +1934,9 @@
             id="languageSelector"
             onchange="changeAppLanguage(this.value)"
           >
-            <option value="nl">Nederlands</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
+            <option value="nl">Ned</option>
+            <option value="en">Eng</option>
+            <option value="fr">Fra</option>
           </select>
         </div>
       </main>

@@ -3115,3 +3115,96 @@
 .moneygames-primary-btn.moneygames-place-btn {
   margin-top: 24px !important;
 }
+
+/* =========================
+   MONEYGAMES HELP
+========================= */
+
+#moneygamesHelpContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+.moneygames-help-card {
+  background: linear-gradient(180deg, #1a1a1a, #111);
+  border: 1px solid #2d2d2d;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.moneygames-help-card h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: #fff;
+}
+
+.moneygames-help-card p {
+  margin: 0 0 10px;
+  color: #cfcfcf;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.moneygames-help-card p:last-child {
+  margin-bottom: 0;
+}
+
+.moneygames-help-example {
+  margin-top: 12px;
+  padding: 12px;
+  background: #0d0d0d;
+  border-left: 3px solid #e00000;
+  border-radius: 8px;
+  color: #ddd;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.moneygames-help-example strong {
+  color: #fff;
+}
+
+.moneygames-help-start-button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 12px;
+  background: #d00000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.moneygames-title-row h2 {
+  margin: 0;
+}
+
+.moneygames-help-button {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid #555;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

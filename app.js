@@ -1,3 +1,5 @@
+const APP_CHANGELOG_VERSION = "1.0";
+
 let currentCompetitionData = null;
 let playerDetailSource = "team";
 let currentMvpPercentage = null;
@@ -410,9 +412,32 @@ function openProfile() {
   openMyProfile();
 }
 
+function showChangelogIfNeeded() {
+  const lastSeenVersion = localStorage.getItem('appChangelogVersion');
+
+  if (lastSeenVersion === APP_CHANGELOG_VERSION) {
+    return;
+  }
+
+  alert(
+    "🎉 Wat is er nieuw?\n\n" +
+    "• Live scores in app zelf\n" +
+    "• Competities + Break & Play rechtstreeks in app te bekijken\n" +
+    "• Tafelreservatie gebeurt in app zelf\n" +
+    "• Moneygames toegevoegd (ook voor trainingen zonder €)\n" +
+    "• Diverse verbeteringen"
+  );
+
+  localStorage.setItem(
+    'appChangelogVersion',
+    APP_CHANGELOG_VERSION
+  );
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // Favorieten tonen
   renderFavorites();
+  showChangelogIfNeeded();  
 
   // Bottom navigation
   const screens = document.querySelectorAll('.screen');
@@ -2724,6 +2749,22 @@ openLiveScores = async function () {
 
 };
 
+async function refreshLiveScores() {
+
+    const status =
+        document.getElementById("liveScoresStatus");
+
+    if (status) {
+        status.textContent =
+            tr("live.loading", "Live gegevens laden...");
+    }
+
+    loadBalEnzoTables();
+    await loadCueScoreActiveMatches();
+    connectCueScoreLive();
+
+}
+
 /* ===========================
    TAFEL RESERVEREN
 =========================== */
@@ -3725,6 +3766,50 @@ function submitReservation() {
     );
 }
 
+function showMoneygamesHelp() {
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const helpScreen =
+    document.getElementById("moneygamesHelpScreen");
+
+  if (helpScreen) {
+    helpScreen.classList.add("active");
+  }
+
+  window.scrollTo(0, 0);
+}
+
+function showMoneygamesHelpIfNeeded() {
+  const hasSeenHelp =
+    localStorage.getItem("moneygamesHelpSeen");
+
+  if (hasSeenHelp === "true") {
+    return;
+  }
+
+  localStorage.setItem(
+    "moneygamesHelpSeen",
+    "true"
+  );
+
+  showMoneygamesHelp();
+}
+
+function closeMoneygamesHelp() {
+  document.querySelectorAll(".screen")
+    .forEach(screen => screen.classList.remove("active"));
+
+  const moneygamesScreen =
+    document.getElementById("moneygamesScreen");
+
+  if (moneygamesScreen) {
+    moneygamesScreen.classList.add("active");
+  }
+
+  window.scrollTo(0, 0);
+}
+
 async function openMoneygames() {
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
@@ -3732,6 +3817,8 @@ async function openMoneygames() {
 
   document.getElementById("moneygamesScreen").classList.add("active");
   window.scrollTo(0, 0);
+
+  showMoneygamesHelpIfNeeded(); 
 
   const user = await getCurrentUser();
 
