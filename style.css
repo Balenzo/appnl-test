@@ -816,6 +816,152 @@ body {
       text-align: center;
   }
 
+  /* =========================
+   COMPETITIE OVERZICHT
+   LIVE / VOLGENDE SPEELDAG
+========================= */
+
+.competition-overview-dynamic {
+    margin-top: 16px;
+}
+
+.competition-overview-section {
+    padding: 14px;
+
+    background: #111;
+    border: 1px solid #242424;
+    border-radius: 12px;
+}
+
+.competition-overview-section-title {
+    margin-bottom: 10px;
+
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.competition-overview-round {
+    margin-bottom: 12px;
+
+    color: #888;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.competition-overview-matches {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+/* VOLGENDE SPEELDAG */
+
+.competition-overview-match {
+    display: grid;
+    grid-template-columns: 1fr 24px 1fr;
+    gap: 8px;
+    align-items: center;
+
+    padding: 10px;
+
+    background: #0c0c0c;
+    border: 1px solid #202020;
+    border-radius: 9px;
+}
+
+.competition-overview-match-team {
+    min-width: 0;
+
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.competition-overview-match-team-away {
+    text-align: right;
+}
+
+.competition-overview-match-versus {
+    color: #666;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.competition-overview-empty {
+    color: #777;
+    font-size: 11px;
+}
+
+
+/* LIVE WEDSTRIJDEN */
+
+.competition-overview-live-match {
+    display: block;
+    width: 100%;
+    padding: 10px;
+
+    appearance: none;
+    background: #0c0c0c;
+    border: 1px solid #2b2b2b;
+    border-radius: 9px;
+
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.competition-overview-live-label {
+    margin-bottom: 8px;
+
+    color: #aaa;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.competition-overview-live-teams {
+    display: grid;
+    grid-template-columns: 1fr 52px 1fr;
+    gap: 8px;
+    align-items: center;
+}
+
+.competition-overview-live-team {
+    min-width: 0;
+
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.competition-overview-live-team-away {
+    text-align: right;
+}
+
+.competition-overview-live-score {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+}
+
+
+/* LIVE / FOCUS IN WEDSTRIJDEN-TAB */
+
+.competition-match-card.match-live {
+    border-color: #555;
+}
+
+.competition-match-focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
   .competition-match-card.balenzo-match {
       background: rgba(229, 9, 20, 0.12);
       border-color: rgba(229, 9, 20, 0.35);

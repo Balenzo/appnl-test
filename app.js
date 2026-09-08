@@ -1,6 +1,8 @@
 const APP_CHANGELOG_VERSION = "1.0";
 
 let currentCompetitionData = null;
+let currentCompetitionTournamentId = null;
+let competitionLiveRefreshTimer = null;
 let playerDetailSource = "team";
 let currentMvpPercentage = null;
 
@@ -128,6 +130,107 @@ function translateCompetitionRoundName(roundName, roundNumber = "") {
   }
 
   return raw;
+}
+
+function getNextCompetitionRound(matches) {
+
+    if (!Array.isArray(matches) || !matches.length) {
+        return null;
+    }
+
+    const now = Date.now();
+
+    const rounds = new Map();
+
+    matches.forEach(match => {
+
+        const roundKey =
+            match.roundName ||
+            `round-${match.round ?? ""}`;
+
+        if (!rounds.has(roundKey)) {
+            rounds.set(roundKey, []);
+        }
+
+        rounds.get(roundKey).push(match);
+    });
+
+    const candidates = [];
+
+    rounds.forEach(roundMatches => {
+
+        const futureUnfinishedMatches =
+            roundMatches.filter(match => {
+
+                if (match.matchstatus === "finished") {
+                    return false;
+                }
+
+                if (!match.starttime) {
+                    return false;
+                }
+
+                const startTime =
+                    new Date(match.starttime).getTime();
+
+                return (
+                    Number.isFinite(startTime) &&
+                    startTime >= now
+                );
+            });
+
+        if (!futureUnfinishedMatches.length) {
+            return;
+        }
+
+        /*
+         * Een losse inhaalwedstrijd mag een gewone
+         * volgende speeldag niet overnemen.
+         *
+         * Daarom moet minstens de helft van de ronde
+         * nog toekomstig/onafgewerkt zijn.
+         */
+        const minimumRemainingMatches =
+            Math.ceil(roundMatches.length / 2);
+
+        if (
+            futureUnfinishedMatches.length <
+            minimumRemainingMatches
+        ) {
+            return;
+        }
+
+        const firstStartTime =
+            Math.min(
+                ...futureUnfinishedMatches.map(match =>
+                    new Date(match.starttime).getTime()
+                )
+            );
+
+        const referenceMatch =
+            futureUnfinishedMatches.find(match =>
+                new Date(match.starttime).getTime() ===
+                firstStartTime
+            ) || futureUnfinishedMatches[0];
+
+        candidates.push({
+            round: referenceMatch.round ?? null,
+            roundName: referenceMatch.roundName || "",
+            starttime: referenceMatch.starttime,
+            sortTime: firstStartTime,
+            matches: roundMatches
+        });
+    });
+
+    if (!candidates.length) {
+        return null;
+    }
+
+    candidates.sort((a, b) =>
+        a.sortTime - b.sortTime
+    );
+
+    return candidates[0];
 }
 
 // ===============================
@@ -444,20 +547,35 @@ document.addEventListener('DOMContentLoaded', function () {
   const navButtons = document.querySelectorAll('.nav-item');
 
   function showScreen(screenId) {
+
+    /*
+     * Stop de automatische competitie-refresh
+     * zodra we het competitie-detailscherm verlaten.
+     */
+    if (
+        screenId !== "competitionDetailScreen" &&
+        competitionLiveRefreshTimer
+    ) {
+        clearInterval(competitionLiveRefreshTimer);
+        competitionLiveRefreshTimer = null;
+        currentCompetitionTournamentId = null;
+    }
+
     screens.forEach(screen => {
-      screen.classList.remove('active');
+        screen.classList.remove("active");
     });
 
     const selected = document.getElementById(screenId);
 
     if (selected) {
-      selected.classList.add('active');
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
+        selected.classList.add("active");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
-  }
+}
 
   navButtons.forEach(button => {
     button.addEventListener('click', function () {
@@ -626,18 +744,28 @@ if (overviewTab) {
 
         currentCompetitionData = data;
 
+        currentCompetitionTournamentId = String(tournamentId);
+
+        startCompetitionLiveRefresh();
+
         const cueScoreLink =
     document.getElementById("competitionCueScoreLink");
 
 if (cueScoreLink) {
 
     const cueScoreUrls = {
-        "74130085": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+EERSTE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130085",
-        "74130109": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+TWEEDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130109",
-        "74130127": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+DERDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130127",
-        "74130139": "https://cuescore.com/tournament/%2A%2A%2ABEKER%252FCOUPE+BPBF+VLAANDEREN+2026%2A%2A%2A/74130139",
-        "83574892": "https://cuescore.com/tournament/Pool+Tweede+Divisie+Zuid+2026%252F2027/83574892"
-    };
+    "74130085": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+EERSTE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130085",
+    "74130109": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+TWEEDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130109",
+    "74130127": "https://cuescore.com/tournament/%2A%2A%2ACOMPETITIE+DERDE+PROVINCIALE+BPBF+VLAANDEREN+SEIZOEN+2026%2A%2A%2A/74130127",
+    "74130139": "https://cuescore.com/tournament/%2A%2A%2ABEKER%252FCOUPE+BPBF+VLAANDEREN+2026%2A%2A%2A/74130139",
+    "83574892": "https://cuescore.com/tournament/Pool+Tweede+Divisie+Zuid+2026%252F2027/83574892",
+
+    "85928236": "https://cuescore.com/tournament/POULE+1+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928236",
+    "85928569": "https://cuescore.com/tournament/POULE+2+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928569",
+    "85928635": "https://cuescore.com/tournament/POULE+3+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928635",
+    "85928797": "https://cuescore.com/tournament/POULE+4+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85928797",
+    "85929085": "https://cuescore.com/tournament/POULE+5+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85929085"
+};
 
     cueScoreLink.href =
         cueScoreUrls[String(tournamentId)] ||
@@ -981,6 +1109,166 @@ const matchesContainer =
 
 const matches = data.matches || [];
 
+const overviewDynamic =
+    document.getElementById("competitionOverviewDynamic");
+
+if (overviewDynamic) {
+
+    const liveMatches = matches.filter(match =>
+        Number(match.matchstatusCode) === 1
+    );
+
+    if (liveMatches.length > 0) {
+
+        overviewDynamic.innerHTML = `
+            <div class="competition-overview-section">
+
+                <div class="competition-overview-section-title">
+                    🔴 ${tr("competition.liveMatches", "Live wedstrijden")}
+                </div>
+
+                <div class="competition-overview-matches">
+
+                    ${liveMatches.map(match => {
+
+                        const tableText =
+                            match.table?.tableId
+                                ? ` · ${tr("common.table", "Tafel")} ${match.table.tableId}`
+                                : "";
+
+                        return `
+                            <button
+                                type="button"
+                                class="competition-overview-live-match"
+                                onclick="focusCompetitionMatch(${match.matchId})"
+                            >
+
+                                <div class="competition-overview-live-label">
+                                    ${tr("common.live", "Live")}${tableText}
+                                </div>
+
+                                <div class="competition-overview-live-teams">
+
+                                    <div class="competition-overview-live-team">
+                                        ${match.playerA?.name || "-"}
+                                    </div>
+
+                                    <div class="competition-overview-live-score">
+                                        ${match.scoreA ?? 0}
+                                        -
+                                        ${match.scoreB ?? 0}
+                                    </div>
+
+                                    <div class="competition-overview-live-team competition-overview-live-team-away">
+                                        ${match.playerB?.name || "-"}
+                                    </div>
+
+                                </div>
+
+                            </button>
+                        `;
+                    }).join("")}
+
+                </div>
+
+            </div>
+        `;
+
+    } else {
+
+        const nextRound =
+            getNextCompetitionRound(matches);
+
+        if (!nextRound || !nextRound.matches.length) {
+
+            overviewDynamic.innerHTML = `
+                <div class="competition-overview-section">
+
+                    <div class="competition-overview-section-title">
+                        📅 ${tr("competition.nextMatchday", "Volgende speeldag")}
+                    </div>
+
+                    <div class="competition-overview-empty">
+                        ${tr(
+                            "competition.noScheduledMatches",
+                            "Geen geplande wedstrijden"
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        } else {
+
+            const roundDate = nextRound.starttime
+                ? new Date(nextRound.starttime).toLocaleDateString(
+                    appLocale(),
+                    {
+                        day: "numeric",
+                        month: "long"
+                    }
+                )
+                : "";
+
+            const roundTitle =
+                translateCompetitionRoundName(
+                    nextRound.roundName,
+                    nextRound.round
+                );
+
+            const sortedRoundMatches =
+                [...nextRound.matches].sort((a, b) => {
+
+                    const timeA = a.starttime
+                        ? new Date(a.starttime).getTime()
+                        : 0;
+
+                    const timeB = b.starttime
+                        ? new Date(b.starttime).getTime()
+                        : 0;
+
+                    return timeA - timeB;
+                });
+
+            overviewDynamic.innerHTML = `
+                <div class="competition-overview-section">
+
+                    <div class="competition-overview-section-title">
+                        📅 ${tr("competition.nextMatchday", "Volgende speeldag")}
+                    </div>
+
+                    <div class="competition-overview-round">
+                        ${roundTitle}
+                    </div>
+
+                    <div class="competition-overview-matches">
+
+                        ${sortedRoundMatches.map(match => `
+                            <div class="competition-overview-match">
+
+                                <div class="competition-overview-match-team">
+                                    ${match.playerA?.name || "-"}
+                                </div>
+
+                                <div class="competition-overview-match-versus">
+                                    –
+                                </div>
+
+                                <div class="competition-overview-match-team competition-overview-match-team-away">
+                                    ${match.playerB?.name || "-"}
+                                </div>
+
+                            </div>
+                        `).join("")}
+
+                    </div>
+
+                </div>
+            `;
+        }
+    }
+}
+
 const upcomingFilter =
     document.getElementById("competitionMatchesUpcomingOnly");
 
@@ -1143,6 +1431,9 @@ matchesContainer.innerHTML =
                 const isFinished =
                     match.matchstatus === "finished";
 
+                const isLive =
+                    Number(match.matchstatusCode) === 1;    
+
                     const isBalEnzoMatch =
     match.playerA?.name?.toLowerCase().includes("bal' enzo") ||
     match.playerB?.name?.toLowerCase().includes("bal' enzo");
@@ -1171,7 +1462,8 @@ matchesContainer.innerHTML =
                 return `
 
                     <div
-    class="competition-match-card ${isBalEnzoMatch ? "balenzo-match" : ""} ${isFinished ? "match-finished" : ""}"
+    class="competition-match-card ${isBalEnzoMatch ? "balenzo-match" : ""} ${isFinished ? "match-finished" : ""} ${isLive ? "match-live" : ""}"
+    data-match-id="${match.matchId}"
     onclick="openMatchDetail(${match.matchId}, ${tournamentId})"
 >
 
@@ -1188,9 +1480,9 @@ matchesContainer.innerHTML =
                             </div>
 
                             <div class="competition-match-score">
-                                ${isFinished
-                                    ? `${match.scoreA ?? 0} - ${match.scoreB ?? 0}`
-                                    : "vs"}
+                                ${isFinished || isLive
+    ? `${match.scoreA ?? 0} - ${match.scoreB ?? 0}`
+    : "vs"}
                             </div>
 
                             <div class="competition-match-team competition-match-team-away">
@@ -1202,9 +1494,11 @@ matchesContainer.innerHTML =
 
                         <div class="competition-match-status">
 
-                            ${isFinished
-                                ? tr("common.played", "Gespeeld")
-                                : "Gepland"}
+                            ${isLive
+    ? `🔴 ${tr("common.live", "Live")}`
+    : isFinished
+        ? tr("common.played", "Gespeeld")
+        : tr("common.planned", "Gepland")}
 
                         </div>
 
@@ -1244,6 +1538,322 @@ if (teamFilter) {
             "Kon competitie niet laden.";
 
     }
+
+}
+
+function startCompetitionLiveRefresh() {
+
+    if (competitionLiveRefreshTimer) {
+        clearInterval(competitionLiveRefreshTimer);
+        competitionLiveRefreshTimer = null;
+    }
+
+    if (!currentCompetitionTournamentId) {
+        return;
+    }
+
+    competitionLiveRefreshTimer = setInterval(async () => {
+
+        const tournamentId =
+            currentCompetitionTournamentId;
+
+        try {
+
+            const response = await fetch(
+                `https://api.cuescore.com/tournament/?id=${tournamentId}`
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+
+            if (
+                currentCompetitionTournamentId !== tournamentId
+            ) {
+                return;
+            }
+
+            if (!Array.isArray(data.matches)) {
+                return;
+            }
+
+            currentCompetitionData = data;
+
+            updateCompetitionLiveData(
+                tournamentId,
+                data.matches
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Competitie live-update mislukt:",
+                error
+            );
+
+        }
+
+    }, 15000);
+}
+
+function updateCompetitionLiveData(tournamentId, matches) {
+
+    if (
+        String(tournamentId) !==
+        String(currentCompetitionTournamentId)
+    ) {
+        return;
+    }
+
+    if (!Array.isArray(matches)) {
+        return;
+    }
+
+    const liveMatches = matches.filter(match =>
+        Number(match.matchstatusCode) === 1
+    );
+
+    /*
+     * Bestaande wedstrijdkaarten bijwerken.
+     * We bouwen de Wedstrijden-tab niet opnieuw op,
+     * zodat filters en scrollpositie behouden blijven.
+     */
+    matches.forEach(match => {
+
+        const matchCard =
+            document.querySelector(
+                `.competition-match-card[data-match-id="${match.matchId}"]`
+            );
+
+        if (!matchCard) {
+            return;
+        }
+
+        const isLive =
+            Number(match.matchstatusCode) === 1;
+
+        const isFinished =
+            match.matchstatus === "finished";
+
+        matchCard.classList.toggle(
+            "match-live",
+            isLive
+        );
+
+        matchCard.classList.toggle(
+            "match-finished",
+            isFinished
+        );
+
+        const scoreElement =
+            matchCard.querySelector(
+                ".competition-match-score"
+            );
+
+        if (scoreElement) {
+
+            scoreElement.textContent =
+                isLive || isFinished
+                    ? `${match.scoreA ?? 0} - ${match.scoreB ?? 0}`
+                    : "vs";
+        }
+
+        const statusElement =
+            matchCard.querySelector(
+                ".competition-match-status"
+            );
+
+        if (statusElement) {
+
+            statusElement.textContent =
+                isLive
+                    ? `🔴 ${tr("common.live", "Live")}`
+                    : isFinished
+                        ? tr("common.played", "Gespeeld")
+                        : tr("common.planned", "Gepland");
+        }
+    });
+
+    /*
+     * Als er momenteel live wedstrijden zijn,
+     * verversen we het liveblok op Overzicht.
+     *
+     * Wanneer de laatste live wedstrijd stopt,
+     * wordt in een volgende stap opnieuw automatisch
+     * de volgende speeldag getoond.
+     */
+    if (liveMatches.length > 0) {
+
+        const overviewDynamic =
+            document.getElementById(
+                "competitionOverviewDynamic"
+            );
+
+        if (!overviewDynamic) {
+            return;
+        }
+
+        overviewDynamic.innerHTML = `
+            <div class="competition-overview-section">
+
+                <div class="competition-overview-section-title">
+                    🔴 ${tr(
+                        "competition.liveMatches",
+                        "Live wedstrijden"
+                    )}
+                </div>
+
+                <div class="competition-overview-matches">
+
+                    ${liveMatches.map(match => {
+
+                        const tableText =
+                            match.table?.tableId
+                                ? ` · ${tr(
+                                    "common.table",
+                                    "Tafel"
+                                )} ${match.table.tableId}`
+                                : "";
+
+                        return `
+                            <button
+                                type="button"
+                                class="competition-overview-live-match"
+                                onclick="focusCompetitionMatch(${match.matchId})"
+                            >
+
+                                <div class="competition-overview-live-label">
+                                    ${tr("common.live", "Live")}${tableText}
+                                </div>
+
+                                <div class="competition-overview-live-teams">
+
+                                    <div class="competition-overview-live-team">
+                                        ${match.playerA?.name || "-"}
+                                    </div>
+
+                                    <div class="competition-overview-live-score">
+                                        ${match.scoreA ?? 0}
+                                        -
+                                        ${match.scoreB ?? 0}
+                                    </div>
+
+                                    <div class="competition-overview-live-team competition-overview-live-team-away">
+                                        ${match.playerB?.name || "-"}
+                                    </div>
+
+                                </div>
+
+                            </button>
+                        `;
+                    }).join("")}
+
+                </div>
+
+            </div>
+        `;
+    }
+
+else {
+
+    const overviewDynamic =
+        document.getElementById(
+            "competitionOverviewDynamic"
+        );
+
+    if (!overviewDynamic) {
+        return;
+    }
+
+    const nextRound =
+        getNextCompetitionRound(matches);
+
+    if (!nextRound || !nextRound.matches.length) {
+
+        overviewDynamic.innerHTML = `
+            <div class="competition-overview-section">
+
+                <div class="competition-overview-section-title">
+                    📅 ${tr(
+                        "competition.nextMatchday",
+                        "Volgende speeldag"
+                    )}
+                </div>
+
+                <div class="competition-overview-empty">
+                    ${tr(
+                        "competition.noScheduledMatches",
+                        "Geen geplande wedstrijden"
+                    )}
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    const roundTitle =
+        translateCompetitionRoundName(
+            nextRound.roundName,
+            nextRound.round
+        );
+
+    const sortedRoundMatches =
+        [...nextRound.matches].sort((a, b) => {
+
+            const timeA = a.starttime
+                ? new Date(a.starttime).getTime()
+                : 0;
+
+            const timeB = b.starttime
+                ? new Date(b.starttime).getTime()
+                : 0;
+
+            return timeA - timeB;
+        });
+
+    overviewDynamic.innerHTML = `
+        <div class="competition-overview-section">
+
+            <div class="competition-overview-section-title">
+                📅 ${tr(
+                    "competition.nextMatchday",
+                    "Volgende speeldag"
+                )}
+            </div>
+
+            <div class="competition-overview-round">
+                ${roundTitle}
+            </div>
+
+            <div class="competition-overview-matches">
+
+                ${sortedRoundMatches.map(match => `
+                    <div class="competition-overview-match">
+
+                        <div class="competition-overview-match-team">
+                            ${match.playerA?.name || "-"}
+                        </div>
+
+                        <div class="competition-overview-match-versus">
+                            –
+                        </div>
+
+                        <div class="competition-overview-match-team competition-overview-match-team-away">
+                            ${match.playerB?.name || "-"}
+                        </div>
+
+                    </div>
+                `).join("")}
+
+            </div>
+
+        </div>
+    `;
+}
 
 }
 
@@ -1290,6 +1900,71 @@ function showCompetitionTab(tabName, button) {
     if (button) {
         button.classList.add("active");
     }
+}
+
+function focusCompetitionMatch(matchId) {
+
+    const matchesTabButton =
+        document.querySelector(
+            '.competition-detail-tab[onclick*="matches"]'
+        );
+
+    showCompetitionTab(
+        "matches",
+        matchesTabButton
+    );
+
+    const upcomingFilter =
+        document.getElementById(
+            "competitionMatchesUpcomingOnly"
+        );
+
+    const teamFilter =
+        document.getElementById(
+            "competitionMatchesTeamFilter"
+        );
+
+    if (upcomingFilter) {
+        upcomingFilter.checked = false;
+        upcomingFilter.dispatchEvent(
+            new Event("change")
+        );
+    }
+
+    if (teamFilter) {
+        teamFilter.value = "";
+        teamFilter.dispatchEvent(
+            new Event("change")
+        );
+    }
+
+    requestAnimationFrame(() => {
+
+        const matchCard =
+            document.querySelector(
+                `.competition-match-card[data-match-id="${matchId}"]`
+            );
+
+        if (!matchCard) {
+            return;
+        }
+
+        matchCard.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        matchCard.classList.add(
+            "competition-match-focus"
+        );
+
+        setTimeout(() => {
+            matchCard.classList.remove(
+                "competition-match-focus"
+            );
+        }, 1800);
+
+    });
 }
 
 /* ===========================
@@ -2414,73 +3089,98 @@ async function loadCueScoreActiveMatches() {
 
         const today = new Date().toISOString().slice(0, 10);
 
-const eventsResponse = await fetch(
-    `https://api.cuescore.com/venue/events/?venueId=1280972&date=${today}`
-);
+        const eventsResponse = await fetch(
+            `https://api.cuescore.com/venue/events/?venueId=1280972&date=${today}`
+        );
 
-const eventsData = await eventsResponse.json();
+        const eventsData = await eventsResponse.json();
 
-const eventIds = eventsData.events || [];
+        const eventIds = eventsData.events || [];
 
-balEnzoCueScoreEvents.splice(
-    0,
-    balEnzoCueScoreEvents.length,
-    ...eventIds
-);
+        balEnzoCueScoreEvents.splice(
+            0,
+            balEnzoCueScoreEvents.length,
+            ...eventIds
+        );
 
-for (const tournamentId of eventIds) {
+        /*
+         * Nieuwe actuele lijst opbouwen.
+         * Zo kunnen beëindigde wedstrijden niet
+         * als oude LIVE-wedstrijd blijven hangen.
+         */
+        const currentLiveScores = {};
 
-    const response = await fetch(
-        `https://api.cuescore.com/tournament/?lang=en&id=${tournamentId}`
-    );
+        for (const tournamentId of eventIds) {
 
-        const data = await response.json();
+            const response = await fetch(
+                `https://api.cuescore.com/tournament/?lang=en&id=${tournamentId}`
+            );
 
-const activeMatches = data.matches.filter(
-    match => match.matchstatusCode === 1
-);
+            const data = await response.json();
 
-activeMatches.forEach(match => {
+            const matches =
+                Array.isArray(data.matches)
+                    ? data.matches
+                    : [];
 
-    const tableId =
-        Number(match.table?.tableId);
+            const activeMatches = matches.filter(
+                match => match.matchstatusCode === 1
+            );
 
-    if (!tableId) return;
+            activeMatches.forEach(match => {
 
-    liveScoresData[tableId] = {
+                const tableId =
+                    Number(match.table?.tableId);
 
-    matchId:
-        match.matchId,
+                if (!tableId) return;
 
-    raceTo:
-    match.raceTo,    
+                currentLiveScores[tableId] = {
 
-    playerA:
-            match.playerA?.name || "",
+                    matchId:
+                        match.matchId,
 
-        playerB:
-            match.playerB?.name || "",
+                    raceTo:
+                        match.raceTo,
 
-        scoreA:
-            match.scoreA ?? 0,
+                    playerA:
+                        match.playerA?.name || "",
 
-        scoreB:
-            match.scoreB ?? 0
+                    playerB:
+                        match.playerB?.name || "",
 
-    };
+                    scoreA:
+                        match.scoreA ?? 0,
 
-});
+                    scoreB:
+                        match.scoreB ?? 0
 
-renderLiveTables();
+                };
 
-}   
+            });
+
+        }
+
+        /*
+         * Pas nadat alle CueScore-events gecontroleerd zijn,
+         * vervangen we de oude lijst.
+         */
+        Object.keys(liveScoresData).forEach(tableId => {
+            delete liveScoresData[tableId];
+        });
+
+        Object.assign(
+            liveScoresData,
+            currentLiveScores
+        );
+
+        renderLiveTables();
 
     } catch (error) {
 
         console.error(
-    "❌ CueScore livegegevens laden mislukt:",
-    error
-);
+            "❌ CueScore livegegevens laden mislukt:",
+            error
+        );
 
     }
 
