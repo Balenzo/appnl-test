@@ -370,6 +370,35 @@ body {
     font-weight: 600;
   }
 
+  .nav-icon-image {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 0.65;
+}
+
+.nav-item.active .nav-icon-image {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(42%) sepia(89%)
+    saturate(1869%) hue-rotate(331deg) brightness(104%) contrast(101%);
+}
+
+.start2pool-intro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 20px;
+}
+
+.start2pool-intro-logo {
+  display: block;
+  width: 85px;
+  max-width: 30%;
+  height: auto;
+  margin: 0 auto 10px;
+}
+
   /* =========================
     MODAL
   ========================= */
@@ -3362,4 +3391,162 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* =========================================================
+   START2POOL
+========================================================= */
+
+#start2PoolScreen .content {
+  padding-bottom: 100px;
+}
+
+/* Intro / logo */
+.start2pool-intro {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.start2pool-intro-logo {
+  display: block;
+  width: 100px;
+  max-width: 55%;
+  height: auto;
+  margin: 0 auto 12px;
+}
+
+.start2pool-month-label {
+  color: #999;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.start2pool-challenge-title {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* Level tabs */
+.start2pool-level-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 4px;
+  background: #111;
+  border: 1px solid #242424;
+  border-radius: 12px;
+}
+
+.start2pool-level-tab {
+  appearance: none;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #888;
+  padding: 10px 4px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.start2pool-level-tab.active {
+  background: #ff4d4d;
+  color: #fff;
+}
+
+/* Level inhoud */
+.start2pool-level-content {
+  display: none;
+}
+
+.start2pool-level-content.active {
+  display: block;
+}
+
+/* Oefening afbeelding */
+.start2pool-drill-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #242424;
+  margin-bottom: 18px;
+}
+
+/* Titel */
+.start2pool-level-content h3 {
+  color: #fff;
+  font-size: 19px;
+  margin: 0 0 10px;
+}
+
+/* Algemene tekst */
+.start2pool-level-content > p {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+
+/* Doel / Focus / Belangrijk */
+.start2pool-info-card {
+  background: #111;
+  border: 1px solid #242424;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.start2pool-info-card strong {
+  display: block;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.start2pool-info-card p {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Waarschuwing */
+.start2pool-info-card.start2pool-warning {
+  border-color: #3a2f20;
+}
+
+/* Kleinere smartphones */
+@media (max-width: 380px) {
+  .start2pool-challenge-title {
+    font-size: 20px;
+  }
+
+  .start2pool-level-tab {
+    font-size: 12px;
+    padding: 9px 3px;
+  }
+
+  .start2pool-info-card {
+    padding: 12px;
+  }
+}
+
+.start2pool-page-header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.start2pool-header-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
 }

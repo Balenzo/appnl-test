@@ -284,15 +284,16 @@ async function registerUser(email, password, firstName, lastName) {
   const cleanLastName = String(lastName || "").trim();
 
   const { data, error } = await supabaseClient.auth.signUp({
-    email: cleanEmail,
-    password,
-    options: {
-      data: {
-        first_name: cleanFirstName,
-        last_name: cleanLastName
-      }
+  email: cleanEmail,
+  password,
+  options: {
+    emailRedirectTo: new URL("confirm/", window.location.href).href,
+    data: {
+      first_name: cleanFirstName,
+      last_name: cleanLastName
     }
-  });
+  }
+});
 
   if (error) {
     console.error("Registratie mislukt:", error);
