@@ -1,4 +1,4 @@
-const APP_CHANGELOG_VERSION = "1.0";
+const APP_CHANGELOG_VERSION = "2.0";
 
 let currentCompetitionData = null;
 let currentCompetitionTournamentId = null;
@@ -524,11 +524,12 @@ function showChangelogIfNeeded() {
 
   alert(
     "🎉 Wat is er nieuw?\n\n" +
-    "• Live scores in app zelf\n" +
-    "• Competities + Break & Play rechtstreeks in app te bekijken\n" +
-    "• Tafelreservatie gebeurt in app zelf\n" +
-    "• Moneygames toegevoegd (ook voor trainingen zonder €)\n" +
-    "• Diverse verbeteringen"
+    "• 🆕 Start2Pool toegevoegd met oefeningen op verschillende niveaus\n" +
+    "• 🎱 Sparring Matches toegevoegd voor oefenwedstrijden\n" +
+    "• 🔴 Meldingen toegevoegd voor nieuwe activiteit bij Sparring Matches\n" +
+    "• 📺 Live Scores verder verbeterd\n" +
+    "• 🌍 Ondersteuning voor Nederlands, Frans en Engels\n" +
+    "• ⚡ Diverse verbeteringen en optimalisaties"
   );
 
   localStorage.setItem(
