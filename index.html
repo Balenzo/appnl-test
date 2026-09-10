@@ -89,14 +89,24 @@
             onclick="openMoneygames()"
             style="border: none; cursor: pointer; padding: 0"
           >
-            <img alt="Moneygames" src="moneygames.png" />
+            <div class="moneygames-home-image">
+  <img alt="Sparring Match" src="moneygames.png" />
+
+  <span
+    class="moneygames-notification-badge"
+    id="moneygamesNotificationBadge"
+    style="display: none"
+  >
+    0
+  </span>
+</div>
             <div class="quick-action-content">
-              <div class="quick-action-title">Moneygames</div>
+              <div class="quick-action-title">Sparring Match</div>
               <div
                 class="quick-action-subtitle"
                 data-i18n="ui.speel.een.moneygame"
               >
-                Speel een Moneygame
+                Speel een Sparring Match
               </div>
               <div class="quick-action-external">›</div>
             </div>
@@ -182,7 +192,7 @@
     </section>
 
 <!-- =========================
-     MONEYGAMES HELP SCREEN
+     Sparring Matches HELP SCREEN
 ========================== -->
 <section class="screen" id="moneygamesHelpScreen">
   <div class="page-header">
@@ -201,23 +211,22 @@
       ‹
     </button>
 
-    <span data-i18n="moneygames.help.title">Hoe werken Moneygames?</span>
+    <span data-i18n="moneygames.help.title">Hoe werken Sparring Matches?</span>
   </div>
 
   <main class="content">
     <div id="moneygamesHelpContent">
 
       <section class="moneygames-help-card">
-        <h2 data-i18n="moneygames.help.what.title">🎱 Wat zijn Moneygames?</h2>
+        <h2 data-i18n="moneygames.help.what.title">🎱 Wat zijn Sparring Matches?</h2>
 
         <p data-i18n="moneygames.help.what.text1">
-          Moneygames zijn onderlinge wedstrijden tussen spelers van Bal Enzo.
-          Je bepaalt zelf de discipline, Race To, datum, starttijd en eventuele inzet.
+          Sparring Matches zijn onderlinge oefenwedstrijden tussen spelers van Bal Enzo.
+          Je bepaalt zelf de discipline, Race To, datum en starttijd.
         </p>
 
         <p data-i18n="moneygames.help.what.text2">
-          Je hoeft niet voor geld te spelen. Met een inzet van €0 kun je Moneygames
-          ook gebruiken om gewoon een training of oefenwedstrijd af te spreken.
+          Zo kun je eenvoudig een tegenstander vinden en samen een trainingswedstrijd afspreken.
         </p>
       </section>
 
@@ -235,13 +244,13 @@
 
         <p data-i18n="moneygames.help.singles.text3">
           Krijg je meerdere reacties op je eigen oproep?
-          Dan kies jij zelf met welke geïnteresseerde speler je de Moneygame speelt.
+          Dan kies jij zelf met welke geïnteresseerde speler je de Sparring Match speelt.
         </p>
 
         <div class="moneygames-help-example">
           <strong data-i18n="moneygames.help.example">Voorbeeld</strong><br>
           <span data-i18n="moneygames.help.singles.example1">
-            9-ball · Race To 7 · €10 inzet
+            9-ball · Race To 7
           </span><br><br>
           <span data-i18n="moneygames.help.singles.example2">
             Drie spelers reageren op je oproep.
@@ -260,13 +269,13 @@
         </p>
 
         <p data-i18n="moneygames.help.doubles.text2">
-          Wanneer je zelf een Doubles-Moneygame aanmaakt, kies je eerst je partner.
-          Die partner moet de uitnodiging bevestigen voordat jullie Moneygame
+          Wanneer je zelf een Doubles Sparring Match aanmaakt, kies je eerst je partner.
+          Die partner moet de uitnodiging bevestigen voordat jullie Sparring Match
           openbaar wordt voor andere spelers.
         </p>
 
         <p data-i18n="moneygames.help.doubles.text3">
-          Reageert iemand op een open Doubles-Moneygame?
+          Reageert iemand op een open Doubles Sparring Match?
           Dan kiest die speler eerst zelf een partner.
           Ook die partner moet bevestigen voordat het duo als geldige kandidaat
           beschikbaar wordt voor de organisator.
@@ -297,43 +306,21 @@
       </section>
 
       <section class="moneygames-help-card">
-        <h2 data-i18n="moneygames.help.stake.title">
-          💶 Spelen met of zonder inzet
-        </h2>
-
-        <p data-i18n="moneygames.help.stake.text1">
-          Bij het plaatsen van een Moneygame bepaal je zelf de inzet.
-        </p>
-
-        <p data-i18n="moneygames.help.stake.text2">
-          Kies €0 wanneer je zonder geld wilt spelen.
-          Zo kun je Moneygames ook gebruiken om trainingen of oefenwedstrijden
-          met andere spelers af te spreken.
-        </p>
-
-        <p data-i18n="moneygames.help.stake.text3">
-          Wanneer je wel met een inzet speelt, wordt je balans bijgehouden
-          bij je Moneygame-statistieken.
-        </p>
-      </section>
-
-      <section class="moneygames-help-card">
         <h2 data-i18n="moneygames.help.create.title">
-          📢 Een Moneygame plaatsen
+          📢 Een Sparring Match plaatsen
         </h2>
 
         <p data-i18n="moneygames.help.create.text1">
-          Druk op “+ Nieuwe Moneygame” en kies eerst of je Singles
+          Druk op “+ Nieuwe Sparring Match” en kies eerst of je Singles
           of Doubles wilt spelen.
         </p>
 
         <p data-i18n="moneygames.help.create.text2">
-          Daarna kies je de discipline, Race To, eventuele inzet,
-          datum en starttijd.
+          Daarna kies je de discipline, Race To, datum en starttijd.
         </p>
 
         <p data-i18n="moneygames.help.create.text3">
-          Een Singles-oproep wordt onmiddellijk bij de open Moneygames geplaatst.
+          Een Singles-oproep wordt onmiddellijk bij de open Sparring Matches geplaatst.
           Bij Doubles moet je gekozen partner eerst bevestigen voordat
           de oproep openbaar wordt.
         </p>
@@ -341,11 +328,11 @@
 
       <section class="moneygames-help-card">
         <h2 data-i18n="moneygames.help.react.title">
-          ✋ Reageren op een Moneygame
+          ✋ Reageren op een Sparring Match
         </h2>
 
         <p data-i18n="moneygames.help.react.text1">
-          Bij de open Moneygames kun je reageren op een oproep
+          Bij de open Sparring Matches kun je reageren op een oproep
           waarop je graag wilt meespelen.
         </p>
 
@@ -370,7 +357,7 @@
         <h2 data-i18n="moneygames.help.after.title">🏁 Na de wedstrijd</h2>
 
         <p data-i18n="moneygames.help.after.text1">
-          Vanaf de geplande starttijd kan de uitslag van de Moneygame
+          Vanaf de geplande starttijd kan de uitslag van de Sparring Match
           worden ingevoerd.
         </p>
 
@@ -395,7 +382,7 @@
         <h2 data-i18n="moneygames.help.deadline.title">⏱️ 48-uursregel</h2>
 
         <p data-i18n="moneygames.help.deadline.text1">
-          Vanaf de geplande starttijd van de Moneygame heb je 48 uur
+          Vanaf de geplande starttijd van de Sparring Match heb je 48 uur
           om de uitslag in te voeren.
         </p>
 
@@ -415,7 +402,7 @@
         <div class="moneygames-help-example">
           <strong data-i18n="moneygames.help.example">Voorbeeld</strong><br>
           <span data-i18n="moneygames.help.deadline.example1">
-            Een Moneygame start zaterdag om 20:00.
+            Een Sparring Match start zaterdag om 20:00.
           </span><br>
           <span data-i18n="moneygames.help.deadline.example2">
             De uitslag kan worden ingevoerd vanaf zaterdag 20:00 tot maandag 20:00.
@@ -427,7 +414,7 @@
         <h2 data-i18n="moneygames.help.forfeit.title">🚫 Forfait</h2>
 
         <p data-i18n="moneygames.help.forfeit.text1">
-          Kan een geplande Moneygame niet normaal worden afgewerkt?
+          Kan een geplande Sparring Match niet normaal worden afgewerkt?
           Dan kan de wedstrijd als forfait worden geregistreerd.
         </p>
 
@@ -450,12 +437,12 @@
         </h2>
 
         <p data-i18n="moneygames.help.stats.text1">
-          Je Moneygame-resultaten worden automatisch bijgehouden.
+          Je Sparring Match-resultaten worden automatisch bijgehouden.
         </p>
 
         <p data-i18n="moneygames.help.stats.text2">
-          Je ziet hoeveel wedstrijden je hebt gespeeld, gewonnen en verloren,
-          je winstpercentage en je eventuele financiële balans.
+          Je ziet hoeveel wedstrijden je hebt gespeeld, gewonnen en verloren
+          en je winstpercentage.
         </p>
 
         <p data-i18n="moneygames.help.stats.text3">
@@ -465,13 +452,13 @@
 
         <p data-i18n="moneygames.help.stats.text4">
           Alleen wedstrijden met een bevestigd resultaat tellen mee
-          voor je statistieken. Geannuleerde of verlopen Moneygames
+          voor je statistieken. Geannuleerde of verlopen Sparring Matches
           en wedstrijden zonder uitslag tellen niet mee.
         </p>
 
         <p data-i18n="moneygames.help.stats.text5">
-          In je historiek kun je ook eerdere Moneygames terugvinden,
-          inclusief de datum, discipline, Race To, inzet en uitslag.
+          In je historiek kun je ook eerdere Sparring Matches terugvinden,
+          inclusief de datum, discipline, Race To en uitslag.
         </p>
       </section>
 
@@ -481,7 +468,7 @@
         onclick="closeMoneygamesHelp()"
         data-i18n="moneygames.help.start"
       >
-        Start met Moneygames
+        Start met Sparring Matches
       </button>
 
     </div>
@@ -489,7 +476,7 @@
 </section>
 
     <!-- =========================
-     MONEYGAMES SCREEN
+     Sparring Matches SCREEN
 ========================== -->
     <section class="screen" id="moneygamesScreen">
       <div class="page-header">
@@ -506,7 +493,7 @@
         >
           ‹
         </button>
-        <span>Moneygames</span>
+        <span>Sparring Matches</span>
 
       </div>
       <main class="content">
@@ -514,13 +501,13 @@
           <div id="moneygamesAuth">
             <div class="moneygames-auth-card">
               <div class="moneygames-title-row">
-  <h2>🎱 Moneygames</h2>
+  <h2>🎱 Sparring Matches</h2>
 
   <button
     type="button"
     class="moneygames-help-button"
     onclick="showMoneygamesHelp()"
-    aria-label="Uitleg over Moneygames"
+    aria-label="Uitleg over Sparring Matches"
     data-i18n-aria-label="moneygames.help.button"
   >
     ?
@@ -530,7 +517,7 @@
                 class="moneygames-auth-text"
                 data-i18n="ui.log.in.of.registreer.om.moneygames.te.bekijken.en.te.spelen"
               >
-                Log in of registreer om Moneygames te bekijken en te spelen.
+                Log in of registreer om Sparring Matches te bekijken en te spelen.
               </p>
               <div class="moneygames-auth-tabs">
                 <button
@@ -617,13 +604,13 @@
           <div id="moneygamesApp" style="display: none">
             <div class="moneygames-welcome">
               <div class="moneygames-title-row">
-  <h2>🎱 Moneygames</h2>
+  <h2>🎱 Sparring Matches</h2>
 
   <button
     type="button"
     class="moneygames-help-button"
     onclick="showMoneygamesHelp()"
-    aria-label="Uitleg over Moneygames"
+    aria-label="Uitleg over Sparring Matches"
     data-i18n-aria-label="moneygames.help.button"
   >
     ?
@@ -639,7 +626,7 @@
                 onclick="showOpenMoneygames()"
                 type="button"
               >
-                Open Moneygames
+                Open Matches
               </button>
               <button
                 class="moneygames-main-tab"
@@ -648,7 +635,7 @@
                 onclick="showMyMoneygames()"
                 type="button"
               >
-                Mijn Moneygames
+                Mijn Matches  
               </button>
             </div>
             <div id="moneygamesOpenContent">
@@ -658,7 +645,7 @@
                 onclick="showNewMoneygameForm()"
                 type="button"
               >
-                + Nieuwe Moneygame
+                + Nieuwe Sparring Match
               </button>
               <div
                 class="moneygames-form-card"
@@ -666,7 +653,7 @@
                 style="display: none"
               >
                 <div class="moneygames-form-header">
-                  <h3 data-i18n="ui.nieuwe.moneygame.2">Nieuwe Moneygame</h3>
+                  <h3 data-i18n="ui.nieuwe.moneygame.2">Nieuwe Sparring Match</h3>
                   <button
                     class="moneygames-close-form"
                     onclick="hideNewMoneygameForm()"
@@ -724,40 +711,7 @@
                   step="1"
                   type="number"
                 />
-                <label data-i18n="ui.inzet" for="moneygamesStake">
-                  Inzet
-                </label>
-                <select
-                  id="moneygamesStake"
-                  onchange="toggleMoneygamesCustomStake()"
-                >
-                  <option data-i18n="ui.geen.inzet" value="0">
-                    Geen inzet
-                  </option>
-                  <option value="5">€5</option>
-                  <option value="10">€10</option>
-                  <option value="20">€20</option>
-                  <option value="50">€50</option>
-                  <option data-i18n="ui.ander.bedrag" value="custom">
-                    Ander bedrag
-                  </option>
-                </select>
-                <div id="moneygamesCustomStakeField" style="display: none">
-                  <label
-                    data-i18n="ui.ander.bedrag"
-                    for="moneygamesCustomStake"
-                  >
-                    Ander bedrag
-                  </label>
-                  <input
-                    data-i18n-placeholder="ui.bedrag.in.euro"
-                    id="moneygamesCustomStake"
-                    min="0"
-                    placeholder="Bedrag in euro"
-                    step="0.01"
-                    type="number"
-                  />
-                </div>
+
                 <label data-i18n="ui.datum" for="moneygamesDate"> Datum </label>
                 <div
                   class="moneygames-picker-field"
@@ -787,7 +741,7 @@
                   onclick="submitNewMoneygame()"
                   type="button"
                 >
-                  Moneygame plaatsen
+                  Sparring Match plaatsen
                 </button>
                 <div
                   class="moneygames-form-message"
@@ -834,7 +788,7 @@
                   class="moneygames-empty-state"
                   data-i18n="ui.nog.geen.open.moneygames"
                 >
-                  Nog geen open Moneygames.
+                  Nog geen open Sparring Matches.
                 </div>
               </div>
             </div>
@@ -868,7 +822,7 @@
                     class="moneygames-empty-state"
                     data-i18n="ui.geen.geplande.moneygames"
                   >
-                    Geen geplande Moneygames.
+                    Geen geplande Sparring Matches.
                   </div>
                 </div>
               </div>
@@ -895,10 +849,6 @@
                     <span id="moneygamesStatWinrate">0%</span>
                     <small data-i18n="ui.win">Win %</small>
                   </div>
-                  <div class="moneygames-stat-card moneygames-stat-card-wide">
-                    <span id="moneygamesStatBalance">€0</span>
-                    <small data-i18n="ui.balans">Balans</small>
-                  </div>
                 </div>
                 <!-- SINGLES -->
                 <h4 class="moneygames-stats-title">Singles</h4>
@@ -918,10 +868,6 @@
                   <div class="moneygames-stat-card">
                     <span id="moneygamesSinglesWinrate">0%</span>
                     <small data-i18n="ui.win">Win %</small>
-                  </div>
-                  <div class="moneygames-stat-card moneygames-stat-card-wide">
-                    <span id="moneygamesSinglesBalance">€0</span>
-                    <small data-i18n="ui.balans">Balans</small>
                   </div>
                 </div>
                 <!-- DOUBLES -->
@@ -943,10 +889,6 @@
                     <span id="moneygamesDoublesWinrate">0%</span>
                     <small data-i18n="ui.win">Win %</small>
                   </div>
-                  <div class="moneygames-stat-card moneygames-stat-card-wide">
-                    <span id="moneygamesDoublesBalance">€0</span>
-                    <small data-i18n="ui.balans">Balans</small>
-                  </div>
                 </div>
               </div>
               <div class="moneygames-my-section">
@@ -956,7 +898,7 @@
                     class="moneygames-empty-state"
                     data-i18n="ui.nog.geen.moneygames.gespeeld"
                   >
-                    Nog geen Moneygames gespeeld.
+                    Nog geen Sparring Matches gespeeld.
                   </div>
                 </div>
               </div>
@@ -1879,37 +1821,190 @@
     </section>
 
 <!-- =========================
-     START2POOL SCREEN
+     START2POOL OVERVIEW SCREEN
 ========================== -->
 <section class="screen" id="start2PoolScreen">
+
   <div class="page-header start2pool-page-header">
-  <img
-    src="start2pool.png"
-    alt=""
-    class="start2pool-header-logo"
-  />
-  <span>Start2Pool</span>
-</div>
+    <img
+      src="start2pool.png"
+      alt=""
+      class="start2pool-header-logo"
+    />
+    <span>Start2Pool</span>
+  </div>
+
+  <main class="content">
+
+    <!-- START2POOL INTRO -->
+    <div class="start2pool-overview-intro">
+
+      <img
+        src="start2pool.png"
+        alt="Start2Pool"
+        class="start2pool-overview-logo"
+      />
+
+      <div class="start2pool-overview-label">
+        <span data-i18n="start2pool.slogan.practice">OEFEN.</span><br>
+        <span data-i18n="start2pool.slogan.improve">VERBETER.</span><br>
+        <span data-i18n="start2pool.slogan.grow">GROEI.</span>
+      </div>
+
+    </div>
+
+    <!-- OEFENINGEN -->
+    <section class="start2pool-overview-section">
+
+      <h2
+        class="start2pool-overview-title"
+        data-i18n="start2pool.exercises"
+      >
+        Oefeningen
+      </h2>
+
+      <button
+        type="button"
+        class="start2pool-exercise-card"
+        onclick="openStart2PoolExercise()"
+      >
+
+        <img
+          src="start2pool/oefening 1c.jpg"
+          alt="Enkele en Dubbele T"
+          class="start2pool-exercise-thumbnail"
+        />
+
+        <div class="start2pool-exercise-info">
+
+          <div
+            class="start2pool-exercise-number"
+            data-i18n="start2pool.exercise1.number"
+          >
+            Oefening 1
+          </div>
+
+          <div
+            class="start2pool-exercise-title"
+            data-i18n="start2pool.exercise1.title"
+          >
+            Enkele &amp; Dubbele T
+          </div>
+
+          <div
+            class="start2pool-exercise-description"
+            data-i18n="start2pool.exercise1.description"
+          >
+            Controle van de witte bal, positionering en vooruitdenken.
+          </div>
+
+          <div
+            class="start2pool-exercise-levels"
+            data-i18n="start2pool.exercise1.levels"
+          >
+            Level C · Level B · Level A
+          </div>
+
+        </div>
+
+        <div class="start2pool-exercise-arrow">
+          ›
+        </div>
+
+      </button>
+
+    </section>
+
+
+    <!-- OVER START2POOL -->
+    <section class="start2pool-about">
+
+      <h2 data-i18n="start2pool.about.title">
+        Wat is Start2Pool?
+      </h2>
+
+      <p data-i18n="start2pool.about.text1">
+        Start2Pool helpt spelers stap voor stap beter te worden in poolbiljart.
+        In deze app vind je regelmatig nieuwe oefeningen waarmee je verschillende
+        onderdelen van je spel kunt trainen.
+      </p>
+
+      <p data-i18n="start2pool.about.text2">
+        De oefeningen zijn opgebouwd volgens verschillende niveaus.
+        Zo kun je starten op een toegankelijk niveau en daarna doorgroeien
+        naar moeilijkere varianten.
+      </p>
+
+      <h3 data-i18n="start2pool.about.what.title">
+        Wat vind je hier?
+      </h3>
+
+      <p data-i18n="start2pool.about.what.text1">
+        Elke oefening bevat een afbeelding van de opstelling, een duidelijke
+        uitleg, het doel van de oefening en de belangrijkste aandachtspunten.
+      </p>
+
+      <p data-i18n="start2pool.about.what.text2">
+        De oefeningen kunnen verdeeld zijn in Level C, Level B en Level A,
+        zodat je de moeilijkheid kunt aanpassen aan je eigen niveau.
+      </p>
+
+    </section>
+
+  </main>
+
+</section>
+
+
+<!-- =========================
+     START2POOL EXERCISE SCREEN
+========================== -->
+<section class="screen" id="start2PoolExerciseScreen">
+
+  <div class="page-header">
+
+    <button
+      type="button"
+      onclick="closeStart2PoolExercise()"
+      class="start2pool-back-button"
+    >
+      ‹
+    </button>
+
+    <span data-i18n="start2pool.exercise1.title">
+      Enkele &amp; Dubbele T
+    </span>
+
+  </div>
+
 
   <main class="content">
 
     <!-- INTRO -->
     <div class="start2pool-intro">
+
       <img
         alt="Start2Pool"
         class="start2pool-intro-logo"
         src="start2pool.png"
       />
 
-      <div class="start2pool-month-label">
-  Uitdaging<br>
-  van de maand
-</div>
+      <div
+        class="start2pool-month-label"
+        data-i18n="start2pool.challenge.month"
+      >
+        Uitdaging van de maand
+      </div>
 
-      <h2 class="start2pool-challenge-title">
+      <h2
+        class="start2pool-challenge-title"
+        data-i18n="start2pool.exercise1.title"
+      >
         Enkele &amp; Dubbele T
       </h2>
+
     </div>
+
 
     <!-- LEVEL TABS -->
     <div class="start2pool-level-tabs">
@@ -1918,6 +2013,7 @@
         type="button"
         class="start2pool-level-tab active"
         data-level="c"
+        data-i18n="start2pool.level.c"
       >
         Level C
       </button>
@@ -1926,6 +2022,7 @@
         type="button"
         class="start2pool-level-tab"
         data-level="b"
+        data-i18n="start2pool.level.b"
       >
         Level B
       </button>
@@ -1934,11 +2031,13 @@
         type="button"
         class="start2pool-level-tab"
         data-level="a"
+        data-i18n="start2pool.level.a"
       >
         Level A
       </button>
 
     </div>
+
 
     <!-- =========================
          LEVEL C
@@ -1954,41 +2053,45 @@
         alt="Start2Pool Level C - Enkele T"
       />
 
-      <h3>Uitdaging Enkele T</h3>
+      <h3 data-i18n="start2pool.exercise1.c.title">
+        Uitdaging Enkele T
+      </h3>
 
-      <p>
-        Plaats de ballen zoals aangegeven op de afbeelding.
-        Speel vervolgens alle ballen weg in één van de vier hoekpockets.
-        Je bepaalt zelf in welke volgorde je de ballen speelt en naar
-        welke hoekpocket.
+      <p data-i18n="start2pool.exercise1.c.instructions">
+        Plaats de ballen zoals aangegeven op de afbeelding. Speel vervolgens
+        alle ballen weg in één van de vier hoekpockets. Je bepaalt zelf in
+        welke volgorde je de ballen speelt en naar welke hoekpocket.
       </p>
 
       <div class="start2pool-info-card">
-        <strong>🎯 Doel</strong>
-        <p>
+        <strong data-i18n="start2pool.goal">🎯 Doel</strong>
+
+        <p data-i18n="start2pool.exercise1.c.goal">
           Speel alle ballen weg zonder een andere objectbal te raken.
         </p>
       </div>
 
       <div class="start2pool-info-card">
-        <strong>💡 Focus</strong>
-        <p>
+        <strong data-i18n="start2pool.focus">💡 Focus</strong>
+
+        <p data-i18n="start2pool.exercise1.c.focus">
           Controle over de witte bal, positie kiezen en vooruitdenken.
-          Probeer na iedere bal een goede positie over te houden voor
-          je volgende shot.
+          Probeer na iedere bal een goede positie over te houden voor je volgende shot.
         </p>
       </div>
 
       <div class="start2pool-info-card start2pool-warning">
-        <strong>⚠️ Belangrijk</strong>
-        <p>
-          De witte bal mag tijdens het shot geen andere objectbal raken
-          dan de bal die je probeert te potten. Raak je toch een andere
-          bal, dan is je poging afgelopen.
+        <strong data-i18n="start2pool.important">⚠️ Belangrijk</strong>
+
+        <p data-i18n="start2pool.exercise1.c.important">
+          De witte bal mag tijdens het shot geen andere objectbal raken dan
+          de bal die je probeert te potten. Raak je toch een andere bal,
+          dan is je poging afgelopen.
         </p>
       </div>
 
     </div>
+
 
     <!-- =========================
          LEVEL B
@@ -2004,40 +2107,46 @@
         alt="Start2Pool Level B - Dubbele T"
       />
 
-      <h3>Uitdaging Dubbele T</h3>
+      <h3 data-i18n="start2pool.exercise1.b.title">
+        Uitdaging Dubbele T
+      </h3>
 
-      <p>
+      <p data-i18n="start2pool.exercise1.b.instructions">
         Plaats alle ballen volgens de Dubbele T-opstelling op de afbeelding.
         Speel daarna alle ballen weg in één van de vier hoekpockets.
         De volgorde van de ballen en de keuze van de pocket zijn volledig vrij.
       </p>
 
       <div class="start2pool-info-card">
-        <strong>🎯 Doel</strong>
-        <p>
+        <strong data-i18n="start2pool.goal">🎯 Doel</strong>
+
+        <p data-i18n="start2pool.exercise1.b.goal">
           Maak de volledige Dubbele T leeg zonder een andere objectbal te raken.
         </p>
       </div>
 
       <div class="start2pool-info-card">
-        <strong>💡 Focus</strong>
-        <p>
-          Denk telkens één of meerdere ballen vooruit. Kies niet alleen
-          de gemakkelijkste bal, maar probeer de witte bal zo te plaatsen
-          dat je volgende shot ook goed speelbaar blijft.
+        <strong data-i18n="start2pool.focus">💡 Focus</strong>
+
+        <p data-i18n="start2pool.exercise1.b.focus">
+          Denk telkens één of meerdere ballen vooruit. Kies niet alleen de
+          gemakkelijkste bal, maar probeer de witte bal zo te plaatsen dat
+          je volgende shot ook goed speelbaar blijft.
         </p>
       </div>
 
       <div class="start2pool-info-card start2pool-warning">
-        <strong>⚠️ Belangrijk</strong>
-        <p>
-          De witte bal mag tijdens het shot geen andere objectbal raken
-          dan de bal die je probeert te potten. Eén verkeerde aanraking
-          betekent dat je poging voorbij is.
+        <strong data-i18n="start2pool.important">⚠️ Belangrijk</strong>
+
+        <p data-i18n="start2pool.exercise1.b.important">
+          De witte bal mag tijdens het shot geen andere objectbal raken dan
+          de bal die je probeert te potten. Eén verkeerde aanraking betekent
+          dat je poging voorbij is.
         </p>
       </div>
 
     </div>
+
 
     <!-- =========================
          LEVEL A
@@ -2053,47 +2162,53 @@
         alt="Start2Pool Level A - Dubbele T"
       />
 
-      <h3>Uitdaging Dubbele T</h3>
+      <h3 data-i18n="start2pool.exercise1.a.title">
+        Uitdaging Dubbele T
+      </h3>
 
-      <p>
-        Gebruik dezelfde Dubbele T-opstelling, maar speel de ballen nu
-        in numerieke volgorde: 1, 2, 3, 4 enzovoort.
-        De nummer 15 wordt altijd als laatste gespeeld.
+      <p data-i18n="start2pool.exercise1.a.instructions1">
+        Gebruik dezelfde Dubbele T-opstelling, maar speel de ballen nu in
+        numerieke volgorde: 1, 2, 3, 4 enzovoort. De nummer 15 wordt altijd
+        als laatste gespeeld.
       </p>
 
-      <p>
+      <p data-i18n="start2pool.exercise1.a.instructions2">
         Iedere bal moet in één van de vier hoekpockets worden gepot.
         Je kiest zelf welke hoekpocket je gebruikt.
       </p>
 
       <div class="start2pool-info-card">
-        <strong>🎯 Doel</strong>
-        <p>
+        <strong data-i18n="start2pool.goal">🎯 Doel</strong>
+
+        <p data-i18n="start2pool.exercise1.a.goal">
           Speel de volledige reeks correct uit, in volgorde van nummer,
           met de 15 als laatste en zonder een andere objectbal te raken.
         </p>
       </div>
 
       <div class="start2pool-info-card">
-        <strong>💡 Focus</strong>
-        <p>
-          Omdat de volgende bal vooraf vastligt, wordt positioneel spelen
-          veel belangrijker. Denk voor ieder shot na waar de witte bal
-          moet eindigen om de volgende genummerde bal goed te kunnen spelen.
+        <strong data-i18n="start2pool.focus">💡 Focus</strong>
+
+        <p data-i18n="start2pool.exercise1.a.focus">
+          Omdat de volgende bal vooraf vastligt, wordt positioneel spelen veel
+          belangrijker. Denk voor ieder shot na waar de witte bal moet eindigen
+          om de volgende genummerde bal goed te kunnen spelen.
         </p>
       </div>
 
       <div class="start2pool-info-card start2pool-warning">
-        <strong>⚠️ Belangrijk</strong>
-        <p>
-          De witte bal mag tijdens het shot geen enkele andere objectbal
-          raken dan de bal die je op dat moment moet spelen.
+        <strong data-i18n="start2pool.important">⚠️ Belangrijk</strong>
+
+        <p data-i18n="start2pool.exercise1.a.important">
+          De witte bal mag tijdens het shot geen enkele andere objectbal raken
+          dan de bal die je op dat moment moet spelen.
         </p>
       </div>
 
     </div>
 
   </main>
+
 </section>
 
     <!-- =========================

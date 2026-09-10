@@ -1,7 +1,7 @@
 // =========================================================
-// BAL ENZO - AUTHENTICATIE & MONEYGAMES
+// BAL ENZO - AUTHENTICATIE & SPARRING MATCHES
 // =========================================================
-// Complete Moneygames v1 frontend controller.
+// Complete Sparring Matches frontend controller.
 //
 // BELANGRIJK
 // - Deze file gebruikt uitsluitend de normale Supabase client.
@@ -96,6 +96,289 @@ const MONEYGAME_RESULT_WINDOW_HOURS = 48;
 
 let currentMoneygamesFilter = "all";
 
+function setMoneygamesNotificationBadge(count) {
+  const badge =
+    document.getElementById("moneygamesNotificationBadge");
+
+  if (!badge) return;
+
+  const notificationCount = Number(count) || 0;
+
+  if (notificationCount <= 0) {
+    badge.textContent = "";
+    badge.style.display = "none";
+    return;
+  }
+
+  badge.textContent =
+    notificationCount > 99 ? "99+" : String(notificationCount);
+
+  badge.style.display = "flex";
+}
+
+async function markSelectedMoneygameReactionsAsSeen(user) {
+  if (!user) return;
+
+  const { data: selectedReactions, error } =
+    await supabaseClient
+      .from("moneygame_reactions")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq(
+        "status",
+        MONEYGAME_REACTION_STATUSES.SELECTED
+      );
+
+  if (error) {
+    console.error(
+      "Geselecteerde Moneygame-reacties markeren fout:",
+      error
+    );
+    return;
+  }
+
+  const selectedIds =
+    (selectedReactions || []).map(
+      reaction => reaction.id
+    );
+
+  localStorage.setItem(
+    `moneygamesSeenSelected_${user.id}`,
+    JSON.stringify(selectedIds)
+  );
+}
+
+async function updateMoneygamesNotificationBadge() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    setMoneygamesNotificationBadge(0);
+    return;
+  }
+
+  const storageKey =
+    `moneygamesLastSeenOpen_${user.id}`;
+
+  let lastSeen =
+  localStorage.getItem(storageKey);
+
+/*
+ * Eerste keer dat deze gebruiker het meldingssysteem gebruikt:
+ * bestaande openbare Moneygames tellen niet als "nieuw".
+ * Persoonlijke meldingen worden wel gewoon gecontroleerd.
+ */
+if (!lastSeen) {
+  lastSeen = new Date().toISOString();
+
+  localStorage.setItem(
+    storageKey,
+    lastSeen
+  );
+}
+
+  const { count, error } = await supabaseClient
+    .from("moneygames")
+    .select("id", {
+      count: "exact",
+      head: true
+    })
+    .eq("status", MONEYGAME_STATUSES.OPEN)
+    .neq("created_by", user.id)
+    .gt("created_at", lastSeen);
+
+  if (error) {
+    console.error(
+      "Moneygames meldingen laden fout:",
+      error
+    );
+
+    setMoneygamesNotificationBadge(0);
+    return;
+  }
+
+  const { count: invitationCount, error: invitationError } =
+  await supabaseClient
+    .from("moneygame_reactions")
+    .select("id", {
+      count: "exact",
+      head: true
+    })
+    .eq("partner_id", user.id)
+    .eq("partner_status", MONEYGAME_PARTNER_STATUSES.PENDING)
+    .eq("status", MONEYGAME_REACTION_STATUSES.ACTIVE);
+
+if (invitationError) {
+  console.error(
+    "Moneygames partneruitnodigingen tellen fout:",
+    invitationError
+  );
+}
+
+const { data: myOpenGames, error: myOpenGamesError } =
+  await supabaseClient
+    .from("moneygames")
+    .select("id, game_type")
+    .eq("created_by", user.id)
+    .eq("status", MONEYGAME_STATUSES.OPEN);
+
+if (myOpenGamesError) {
+  console.error(
+    "Eigen open Moneygames voor meldingen laden fout:",
+    myOpenGamesError
+  );
+}
+
+let reactionCount = 0;
+
+if (!myOpenGamesError && myOpenGames?.length > 0) {
+  const myOpenGameIds =
+    myOpenGames.map(game => game.id);
+
+  const {
+  data: activeReactions,
+  error: reactionCountError
+} = await supabaseClient
+  .from("moneygame_reactions")
+  .select(`
+    id,
+    moneygame_id,
+    partner_status
+  `)
+  .in("moneygame_id", myOpenGameIds)
+  .eq(
+    "status",
+    MONEYGAME_REACTION_STATUSES.ACTIVE
+  );
+
+  if (reactionCountError) {
+    console.error(
+      "Reacties op eigen Moneygames tellen fout:",
+      reactionCountError
+    );
+  } else {
+  const gameTypeById =
+    new Map(
+      myOpenGames.map(game => [
+        game.id,
+        game.game_type
+      ])
+    );
+
+  reactionCount =
+    (activeReactions || []).filter(reaction => {
+      const gameType =
+        gameTypeById.get(reaction.moneygame_id);
+
+      if (gameType === "doubles") {
+        return (
+          reaction.partner_status ===
+          MONEYGAME_PARTNER_STATUSES.ACCEPTED
+        );
+      }
+
+      return true;
+    }).length;
+}
+}
+
+const { data: myParticipations, error: participationsError } =
+  await supabaseClient
+    .from("moneygame_participants")
+    .select("moneygame_id")
+    .eq("user_id", user.id);
+
+if (participationsError) {
+  console.error(
+    "Moneygames deelnames voor meldingen laden fout:",
+    participationsError
+  );
+}
+
+let pendingResultCount = 0;
+
+if (!participationsError && myParticipations?.length > 0) {
+  const myGameIds = [
+    ...new Set(
+      myParticipations.map(
+        participation => participation.moneygame_id
+      )
+    )
+  ];
+
+  const {
+    count: resultCount,
+    error: resultCountError
+  } = await supabaseClient
+    .from("moneygame_results")
+    .select("id", {
+      count: "exact",
+      head: true
+    })
+    .in("moneygame_id", myGameIds)
+    .eq(
+      "status",
+      MONEYGAME_RESULT_STATUSES.PENDING
+    )
+    .neq("submitted_by", user.id);
+
+  if (resultCountError) {
+    console.error(
+      "Te bevestigen Moneygame-resultaten tellen fout:",
+      resultCountError
+    );
+  } else {
+    pendingResultCount = resultCount || 0;
+  }
+}
+
+let selectedReactionCount = 0;
+
+const { data: selectedReactions, error: selectedReactionsError } =
+  await supabaseClient
+    .from("moneygame_reactions")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq(
+      "status",
+      MONEYGAME_REACTION_STATUSES.SELECTED
+    );
+
+if (selectedReactionsError) {
+  console.error(
+    "Geselecteerde Moneygame-reacties voor meldingen laden fout:",
+    selectedReactionsError
+  );
+} else {
+  let seenSelectedIds = [];
+
+  try {
+    seenSelectedIds =
+      JSON.parse(
+        localStorage.getItem(
+          `moneygamesSeenSelected_${user.id}`
+        ) || "[]"
+      );
+  } catch (error) {
+    seenSelectedIds = [];
+  }
+
+  selectedReactionCount =
+    (selectedReactions || []).filter(
+      reaction =>
+        !seenSelectedIds.includes(reaction.id)
+    ).length;
+}
+
+const totalNotifications =
+  (count || 0) +
+  (invitationError ? 0 : invitationCount || 0) +
+  reactionCount +
+  pendingResultCount +
+  selectedReactionCount;
+
+setMoneygamesNotificationBadge(totalNotifications);
+}
+
 
 // =========================================================
 // ALGEMENE HULPFUNCTIES
@@ -166,16 +449,6 @@ function formatMoneygameDateTime(value) {
     time: formattedTime,
     full: `${formattedDate} · ${formattedTime}`
   };
-}
-
-function formatMoneygameStake(amount) {
-  const value = Number(amount || 0);
-
-  if (value === 0) {
-    return moneygameTr("moneygames.noStake", "Geen inzet");
-  }
-
-  return `€${value.toFixed(2).replace(".00", "")}`;
 }
 
 function getMoneygameDeadline(scheduledAt) {
@@ -387,7 +660,7 @@ async function getCurrentSession() {
 
 
 // =========================================================
-// MONEYGAMES AUTH UI
+// SPARRING MATCHES AUTH UI
 // =========================================================
 
 function showMoneygamesLogin() {
@@ -528,6 +801,8 @@ async function updateMoneygamesAuthUI() {
     authBox.style.display = "none";
     appBox.style.display = "block";
 
+    await updateMoneygamesNotificationBadge();
+
     if (accountEmail) {
       accountEmail.textContent = user.email || "";
     }
@@ -554,6 +829,8 @@ async function updateMoneygamesAuthUI() {
     authBox.style.display = "block";
     appBox.style.display = "none";
 
+    setMoneygamesNotificationBadge(0);
+
     clearMoneygamesPrivateViews();
   }
 }
@@ -573,7 +850,7 @@ function clearMoneygamesPrivateViews() {
     if (el) {
       el.innerHTML = `
         <div class="moneygames-empty-state">
-          Log in om Moneygames te bekijken.
+          Log in om Sparring Matches te bekijken.
         </div>
       `;
     }
@@ -749,18 +1026,6 @@ function selectMoneygameType(type) {
   }
 }
 
-
-function toggleMoneygamesCustomStake() {
-  const stake = moneygameEl("moneygamesStake")?.value;
-  const customField = moneygameEl("moneygamesCustomStakeField");
-
-  if (!customField) return;
-
-  customField.style.display =
-    stake === "custom" ? "block" : "none";
-}
-
-
 function filterMoneygames(discipline, button) {
   currentMoneygamesFilter = MONEYGAME_DISCIPLINES.includes(discipline)
     ? discipline
@@ -777,7 +1042,7 @@ function filterMoneygames(discipline, button) {
 
 
 // =========================================================
-// NIEUWE MONEYGAME PLAATSEN
+// NIEUWE SPARRING MATCH PLAATSEN
 // =========================================================
 
 async function submitNewMoneygame() {
@@ -787,12 +1052,6 @@ async function submitNewMoneygame() {
 
   const raceTo =
     Number(moneygameEl("moneygamesRaceTo")?.value || 0);
-
-  const stakeChoice =
-    moneygameEl("moneygamesStake")?.value || "0";
-
-  const customStake =
-    moneygameEl("moneygamesCustomStake")?.value || "";
 
   const date =
     moneygameEl("moneygamesDate")?.value || "";
@@ -830,31 +1089,7 @@ async function submitNewMoneygame() {
     return;
   }
 
-  let stakeAmount = 0;
-
-  if (stakeChoice === "custom") {
-    stakeAmount = Number(customStake);
-
-    if (!Number.isFinite(stakeAmount) || stakeAmount < 0) {
-      setMoneygameMessage(
-        "moneygamesFormMessage",
-        moneygameTr("moneygames.enterValidStake", "Vul een geldig inzetbedrag in."),
-        "error"
-      );
-      return;
-    }
-  } else {
-    stakeAmount = Number(stakeChoice);
-
-    if (!Number.isFinite(stakeAmount) || stakeAmount < 0) {
-      setMoneygameMessage(
-        "moneygamesFormMessage",
-        moneygameTr("moneygames.invalidStake", "Ongeldige inzet."),
-        "error"
-      );
-      return;
-    }
-  }
+  const stakeAmount = 0;
 
   const scheduledAt = new Date(
   `${date}T${time}:00`
@@ -891,7 +1126,7 @@ async function submitNewMoneygame() {
 
   setMoneygameMessage(
     "moneygamesFormMessage",
-    "Moneygame plaatsen..."
+    "Sparring Match plaatsen..."
   );
 
   const rpc = await callMoneygameRpc("create_moneygame", {
@@ -908,7 +1143,7 @@ async function submitNewMoneygame() {
       "moneygamesFormMessage",
       moneygameResultErrorMessage(
         rpc.error,
-        "Moneygame plaatsen is niet gelukt."
+        "Sparring Match plaatsen is niet gelukt."
       ),
       "error"
     );
@@ -923,13 +1158,13 @@ async function submitNewMoneygame() {
   if (gameType === "doubles") {
     setMoneygameMessage(
       "moneygamesFormMessage",
-      moneygameTr("moneygames.createdPartnerMustConfirm", "Moneygame aangemaakt. Je partner moet eerst bevestigen."),
+      moneygameTr("moneygames.createdPartnerMustConfirm", "Sparring Match aangemaakt. Je partner moet eerst bevestigen."),
       "success"
     );
   } else {
     setMoneygameMessage(
       "moneygamesFormMessage",
-      "Moneygame geplaatst.",
+      "Sparring Match geplaatst.",
       "success"
     );
   }
@@ -946,7 +1181,7 @@ async function submitNewMoneygame() {
 
 
 // =========================================================
-// OPEN MONEYGAMES LADEN
+// OPEN SPARRING MATCHES LADEN
 // =========================================================
 
 async function loadOpenMoneygames() {
@@ -959,7 +1194,7 @@ async function loadOpenMoneygames() {
   if (!user) {
     list.innerHTML = `
       <div class="moneygames-empty-state">
-        ${moneygameTr("moneygames.loginToViewOpen", "Log in om open Moneygames te bekijken.")}
+        ${moneygameTr("moneygames.loginToViewOpen", "Log in om open Sparring Matches te bekijken.")}
       </div>
     `;
     return;
@@ -967,7 +1202,7 @@ async function loadOpenMoneygames() {
 
   list.innerHTML = `
     <div class="moneygames-empty-state">
-      Moneygames laden...
+      Sparring Matches laden...
     </div>
   `;
 
@@ -981,7 +1216,6 @@ async function loadOpenMoneygames() {
       game_type,
       discipline,
       race_to,
-      stake_amount,
       scheduled_at,
       status,
       created_at
@@ -994,7 +1228,7 @@ async function loadOpenMoneygames() {
 
     list.innerHTML = `
       <div class="moneygames-empty-state">
-        ${moneygameTr("moneygames.loadFailed", "Moneygames konden niet geladen worden.")}
+        ${moneygameTr("moneygames.loadFailed", "Sparring Matches konden niet geladen worden.")}
       </div>
     `;
 
@@ -1011,8 +1245,8 @@ async function loadOpenMoneygames() {
       <div class="moneygames-empty-state">
         ${
           currentMoneygamesFilter === "all"
-            ? moneygameTr("moneygames.noOpenYet", "Nog geen open Moneygames.")
-            : moneygameTr("moneygames.noOpenForDiscipline", "Geen open Moneygames voor deze discipline.")
+            ? moneygameTr("moneygames.noOpenYet", "Nog geen open Sparring Matches.")
+            : moneygameTr("moneygames.noOpenForDiscipline", "Geen open Sparring Matches voor deze discipline.")
         }
       </div>
     `;
@@ -1074,8 +1308,6 @@ async function loadOpenMoneygames() {
     const profile = profileMap[game.created_by];
     const playerName = formatMoneygameName(profile);
     const dateTime = formatMoneygameDateTime(game.scheduled_at);
-    const stake = formatMoneygameStake(game.stake_amount);
-
     const isOwnGame = game.created_by === user.id;
     const hasReacted = reactedGameIds.has(game.id);
 
@@ -1165,9 +1397,6 @@ async function loadOpenMoneygames() {
             📅 ${escapeMoneygameHtml(dateTime.full)}
           </span>
 
-          <span>
-            💶 ${escapeMoneygameHtml(stake)}
-          </span>
         </div>
 
         ${actionHtml}
@@ -1232,7 +1461,7 @@ async function reactToMoneygame(moneygameId, button) {
 
 async function withdrawMoneygameReaction(moneygameId) {
   const confirmed = confirm(
-    "Wil je je reactie op deze Moneygame intrekken?"
+    "Wil je je reactie op deze Sparring Match intrekken?"
   );
 
   if (!confirmed) return;
@@ -1265,7 +1494,7 @@ async function withdrawMoneygameReaction(moneygameId) {
 
 
 // =========================================================
-// EIGEN MONEYGAMES
+// EIGEN SPARRING MATCHES
 // =========================================================
 
 async function loadMyMoneygames() {
@@ -1306,7 +1535,6 @@ async function loadMyOpenMoneygames(user) {
       game_type,
       discipline,
       race_to,
-      stake_amount,
       scheduled_at,
       status,
       created_at
@@ -1389,8 +1617,6 @@ async function loadMyOpenMoneygames(user) {
 
   container.innerHTML = games.map(game => {
     const dateTime = formatMoneygameDateTime(game.scheduled_at);
-    const stake = formatMoneygameStake(game.stake_amount);
-
     const gameReactions =
       (reactions || []).filter(
         reaction => reaction.moneygame_id === game.id
@@ -1490,9 +1716,6 @@ async function loadMyOpenMoneygames(user) {
             📅 ${escapeMoneygameHtml(dateTime.full)}
           </span>
 
-          <span>
-            💶 ${escapeMoneygameHtml(stake)}
-          </span>
         </div>
 
         ${reactionsHtml}
@@ -1571,7 +1794,7 @@ async function chooseMoneygameOpponent(
 
 async function cancelOpenMoneygame(moneygameId) {
   const confirmed = confirm(
-    moneygameTr("moneygames.confirmCancelOpen", "Wil je deze open Moneygame annuleren?")
+    moneygameTr("moneygames.confirmCancelOpen", "Wil je deze open Sparring Match annuleren?")
   );
 
   if (!confirmed) return;
@@ -1610,7 +1833,7 @@ async function cancelOpenMoneygame(moneygameId) {
 
 async function cancelMoneygameMatch(moneygameId) {
   const confirmed = confirm(
-    moneygameTr("moneygames.confirmCancelPlanned", "Wil je deze geplande Moneygame annuleren?")
+    moneygameTr("moneygames.confirmCancelPlanned", "Wil je deze geplande Sparring Match annuleren?")
   );
 
   if (!confirmed) return;
@@ -1632,7 +1855,7 @@ async function cancelMoneygameMatch(moneygameId) {
   if (!rpc.success) {
     alert(
       rpc.error?.message ||
-      moneygameTr("moneygames.cancelPlannedFailed", "De geplande Moneygame kon niet worden geannuleerd.")
+      moneygameTr("moneygames.cancelPlannedFailed", "De geplande Sparring Match kon niet worden geannuleerd.")
     );
     return;
   }
@@ -1713,8 +1936,7 @@ async function loadMyReactions(user) {
         game_type,
         discipline,
         race_to,
-        stake_amount,
-        scheduled_at,
+          scheduled_at,
         status
       `)
       .in("id", gameIds);
@@ -1783,11 +2005,6 @@ async function loadMyReactions(user) {
               📅 ${escapeMoneygameHtml(dateTime.full)}
             </span>
 
-            <span>
-              💶 ${escapeMoneygameHtml(
-                formatMoneygameStake(game.stake_amount)
-              )}
-            </span>
           </div>
 
           <div class="moneygames-pending-label">
@@ -1876,8 +2093,7 @@ async function loadMyDoublesInvitations(user) {
         game_type,
         discipline,
         race_to,
-        stake_amount,
-        scheduled_at,
+          scheduled_at,
         status
       `)
       .in("id", gameIds)
@@ -1950,11 +2166,6 @@ async function loadMyDoublesInvitations(user) {
           game.scheduled_at
         );
 
-      const stake =
-        formatMoneygameStake(
-          game.stake_amount
-        );
-
       return `
         <div class="moneygames-open-card">
 
@@ -1995,11 +2206,6 @@ async function loadMyDoublesInvitations(user) {
               ${escapeMoneygameHtml(
                 dateTime.full
               )}
-            </span>
-
-            <span>
-              💶
-              ${escapeMoneygameHtml(stake)}
             </span>
 
           </div>
@@ -2070,7 +2276,7 @@ async function loadMyPlannedMoneygames(user) {
 
   container.innerHTML = `
     <div class="moneygames-empty-state">
-      ${moneygameTr("moneygames.loadingPlanned", "Geplande Moneygames laden...")}
+      ${moneygameTr("moneygames.loadingPlanned", "Geplande Sparring Matches laden...")}
     </div>
   `;
 
@@ -2088,7 +2294,7 @@ async function loadMyPlannedMoneygames(user) {
 
     container.innerHTML = `
       <div class="moneygames-empty-state">
-        Geplande ${moneygameTr("moneygames.loadFailed", "Moneygames konden niet geladen worden.")}
+        Geplande ${moneygameTr("moneygames.loadFailed", "Sparring Matches konden niet geladen worden.")}
       </div>
     `;
 
@@ -2106,7 +2312,7 @@ async function loadMyPlannedMoneygames(user) {
   if (participantGameIds.length === 0) {
     container.innerHTML = `
       <div class="moneygames-empty-state">
-        ${moneygameTr("moneygames.noPlanned", "Geen geplande Moneygames.")}
+        ${moneygameTr("moneygames.noPlanned", "Geen geplande Sparring Matches.")}
       </div>
     `;
     return;
@@ -2121,8 +2327,7 @@ async function loadMyPlannedMoneygames(user) {
         game_type,
         discipline,
         race_to,
-        stake_amount,
-        scheduled_at,
+          scheduled_at,
         status
       `)
       .in("id", participantGameIds)
@@ -2143,7 +2348,7 @@ async function loadMyPlannedMoneygames(user) {
 
     container.innerHTML = `
       <div class="moneygames-empty-state">
-        Geplande ${moneygameTr("moneygames.loadFailed", "Moneygames konden niet geladen worden.")}
+        Geplande ${moneygameTr("moneygames.loadFailed", "Sparring Matches konden niet geladen worden.")}
       </div>
     `;
 
@@ -2153,7 +2358,7 @@ async function loadMyPlannedMoneygames(user) {
   if (!plannedGames || plannedGames.length === 0) {
     container.innerHTML = `
       <div class="moneygames-empty-state">
-        ${moneygameTr("moneygames.noPlanned", "Geen geplande Moneygames.")}
+        ${moneygameTr("moneygames.noPlanned", "Geen geplande Sparring Matches.")}
       </div>
     `;
     return;
@@ -2182,9 +2387,6 @@ async function loadMyPlannedMoneygames(user) {
   const cards = plannedGames.map(game => {
     const dateTime =
       formatMoneygameDateTime(game.scheduled_at);
-
-    const stake =
-      formatMoneygameStake(game.stake_amount);
 
     const gameParticipants =
       plannedParticipants.filter(
@@ -2278,10 +2480,6 @@ async function loadMyPlannedMoneygames(user) {
 
           <span>
             📅 ${escapeMoneygameHtml(dateTime.full)}
-          </span>
-
-          <span>
-            💶 ${escapeMoneygameHtml(stake)}
           </span>
 
         </div>
@@ -2723,7 +2921,7 @@ async function submitMoneygameResult(
 
 async function submitMoneygameForfeit(moneygameId) {
   const confirmed = confirm(
-    "Weet je zeker dat je deze Moneygame als forfait wilt registreren?"
+    "Weet je zeker dat je deze Sparring Match als forfait wilt registreren?"
   );
 
   if (!confirmed) return;
@@ -3089,7 +3287,7 @@ async function chooseDoublesOpponent(
     return;
   }
 
-  alert("Duo gekozen. De Moneygame is gepland.");
+  alert("Duo gekozen. De Sparring Match is gepland.");
 
   await loadMyMoneygames();
   await loadOpenMoneygames();
@@ -3367,9 +3565,9 @@ async function handleMoneygamesLogout() {
 //
 // Verwacht resultaat:
 // {
-//   total:   { played, won, lost, winrate, balance },
-//   singles: { played, won, lost, winrate, balance },
-//   doubles: { played, won, lost, winrate, balance }
+//   total:   { played, won, lost, winrate },
+//   singles: { played, won, lost, winrate },
+//   doubles: { played, won, lost, winrate }
 // }
 
 async function loadMoneygameStatistics(user) {
@@ -3379,7 +3577,7 @@ async function loadMoneygameStatistics(user) {
 
   if (!rpc.success) {
     console.error(
-      "Moneygame-statistieken laden fout:",
+      "Sparring Match-statistieken laden fout:",
       rpc.error
     );
     return;
@@ -3410,11 +3608,6 @@ async function loadMoneygameStatistics(user) {
   );
 
   setMoneygameStat(
-    "moneygamesStatBalance",
-    formatMoneygameBalance(stats.total?.balance)
-  );
-
-  setMoneygameStat(
     "moneygamesSinglesPlayed",
     stats.singles?.played ?? 0
   );
@@ -3432,11 +3625,6 @@ async function loadMoneygameStatistics(user) {
   setMoneygameStat(
     "moneygamesSinglesWinrate",
     formatWinrate(stats.singles?.winrate)
-  );
-
-  setMoneygameStat(
-    "moneygamesSinglesBalance",
-    formatMoneygameBalance(stats.singles?.balance)
   );
 
   setMoneygameStat(
@@ -3459,10 +3647,6 @@ async function loadMoneygameStatistics(user) {
     formatWinrate(stats.doubles?.winrate)
   );
 
-  setMoneygameStat(
-    "moneygamesDoublesBalance",
-    formatMoneygameBalance(stats.doubles?.balance)
-  );
 }
 
 
@@ -3485,20 +3669,6 @@ function formatWinrate(value) {
   return `${number.toFixed(1).replace(".0", "")}%`;
 }
 
-
-function formatMoneygameBalance(value) {
-  const number = Number(value || 0);
-
-  if (!Number.isFinite(number)) {
-    return "€0";
-  }
-
-  const prefix = number > 0 ? "+" : "";
-
-  return `${prefix}€${number
-    .toFixed(2)
-    .replace(".00", "")}`;
-}
 
 
 // =========================================================
@@ -3529,7 +3699,7 @@ async function loadMoneygameHistory(user) {
 
   if (!rpc.success) {
     console.error(
-      "Moneygame-historiek laden fout:",
+      "Sparring Match-historiek laden fout:",
       rpc.error
     );
 
@@ -3547,7 +3717,7 @@ async function loadMoneygameHistory(user) {
   if (history.length === 0) {
     container.innerHTML = `
       <div class="moneygames-empty-state">
-        ${moneygameTr("moneygames.noHistoryYet", "Nog geen Moneygames in je historiek.")}
+        ${moneygameTr("moneygames.noHistoryYet", "Nog geen Sparring Matches in je historiek.")}
       </div>
     `;
     return;
@@ -3605,11 +3775,6 @@ function buildMoneygameHistoryCard(item) {
           Race To ${escapeMoneygameHtml(item.race_to)}
         </span>
 
-        <span>
-          💶 ${escapeMoneygameHtml(
-            formatMoneygameStake(item.stake_amount)
-          )}
-        </span>
 
         <strong>
           ${escapeMoneygameHtml(result)}

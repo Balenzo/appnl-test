@@ -3550,3 +3550,204 @@ body {
   object-fit: contain;
   flex-shrink: 0;
 }
+
+/* =========================================================
+   START2POOL OVERZICHT
+========================================================= */
+
+.start2pool-overview-section {
+  margin-bottom: 28px;
+}
+
+.start2pool-overview-title {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+/* OEFENING KAART */
+.start2pool-exercise-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #111;
+  border: 1px solid #242424;
+  border-radius: 12px;
+
+  padding: 8px;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.start2pool-exercise-thumbnail {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.start2pool-exercise-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.start2pool-exercise-number {
+  color: #ff4d4d;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 2px;
+}
+
+.start2pool-exercise-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.start2pool-exercise-description {
+  color: #aaa;
+  font-size: 10px;
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+
+.start2pool-exercise-levels {
+  color: #777;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.start2pool-exercise-arrow {
+  color: #777;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+
+/* OVER START2POOL */
+.start2pool-about {
+  background: #111;
+  border: 1px solid #242424;
+  border-radius: 14px;
+
+  padding: 16px;
+}
+
+.start2pool-about h2 {
+  margin: 0 0 10px;
+
+  color: #fff;
+  font-size: 18px;
+}
+
+.start2pool-about h3 {
+  margin: 20px 0 8px;
+
+  color: #fff;
+  font-size: 15px;
+}
+
+.start2pool-about p {
+  margin: 0 0 12px;
+
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.start2pool-about p:last-child {
+  margin-bottom: 0;
+}
+
+.start2pool-about strong {
+  color: #fff;
+}
+
+
+/* TERUGKNOP OEFENING */
+.start2pool-back-button {
+  background: none;
+  border: none;
+
+  color: #fff;
+  font-size: 24px;
+
+  cursor: pointer;
+
+  margin-right: 10px;
+  padding: 0;
+}
+
+/* START2POOL OVERVIEW INTRO */
+
+.start2pool-overview-intro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  margin: 8px 0 22px;
+}
+
+.start2pool-overview-logo {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.start2pool-overview-label {
+  color: #cfcfcf;
+  font-size: 11px;
+  line-height: 1.45;
+  letter-spacing: 1.2px;
+  font-weight: 500;
+}
+
+.start2pool-overview-intro-title {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.moneygames-home-image {
+  position: relative;
+}
+
+.moneygames-home-image img {
+  display: block;
+  width: 100%;
+}
+
+.moneygames-notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e53935;
+  color: #fff;
+
+  border-radius: 999px;
+  border: 2px solid #111;
+
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}

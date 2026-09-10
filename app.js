@@ -4677,12 +4677,35 @@ async function openMoneygames() {
   document.getElementById("moneygamesScreen").classList.add("active");
   window.scrollTo(0, 0);
 
-  showMoneygamesHelpIfNeeded(); 
+  showMoneygamesHelpIfNeeded();
 
   const user = await getCurrentUser();
 
   if (user) {
-    showOpenMoneygames();
+    const now =
+  new Date().toISOString();
+
+const storageKey =
+  `moneygamesLastSeenOpen_${user.id}`;
+
+const personalStorageKey =
+  `moneygamesLastSeenPersonal_${user.id}`;
+
+localStorage.setItem(
+  storageKey,
+  now
+);
+
+localStorage.setItem(
+  personalStorageKey,
+  now
+);
+
+    await markSelectedMoneygameReactionsAsSeen(user);
+
+await updateMoneygamesNotificationBadge();
+
+showOpenMoneygames();
   }
 }
 
@@ -4728,3 +4751,34 @@ document.querySelectorAll(".start2pool-level-tab").forEach(button => {
         }
     });
 });
+
+/* =========================================================
+   START2POOL EXERCISE NAVIGATION
+========================================================= */
+
+function openStart2PoolExercise() {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => screen.classList.remove("active"));
+
+    document
+        .getElementById("start2PoolExerciseScreen")
+        .classList.add("active");
+
+    window.scrollTo(0, 0);
+}
+
+
+function closeStart2PoolExercise() {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(screen => screen.classList.remove("active"));
+
+    document
+        .getElementById("start2PoolScreen")
+        .classList.add("active");
+
+    window.scrollTo(0, 0);
+}
