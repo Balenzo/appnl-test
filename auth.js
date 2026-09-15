@@ -476,6 +476,81 @@ async function sendMoneygamesTestPush() {
 
 let currentMoneygamesFilter = "all";
 
+let moneygamesActionPopupShown = false;
+
+async function updateMoneygamesActionPopup(user) {
+  if (!user || moneygamesActionPopupShown) {
+    return;
+  }
+
+  const {
+    count,
+    error
+  } = await supabaseClient
+    .from("moneygame_notifications")
+    .select("id", {
+      count: "exact",
+      head: true
+    })
+    .eq("action_required", true)
+    .is("resolved_at", null);
+
+  if (error) {
+    console.error(
+      "Openstaande Sparring Match-acties laden fout:",
+      error
+    );
+    return;
+  }
+
+  const actionCount = Number(count) || 0;
+
+  if (actionCount <= 0) {
+    return;
+  }
+
+  const popup =
+    moneygameEl("moneygamesActionPopup");
+
+  const popupText =
+    moneygameEl("moneygamesActionPopupText");
+
+  if (!popup || !popupText) {
+    return;
+  }
+
+  popupText.textContent =
+    actionCount === 1
+      ? moneygameTr(
+          "moneygames.actionPopup.one",
+          "Je hebt 1 openstaande actie bij Sparring Matches."
+        )
+      : moneygameTr(
+          "moneygames.actionPopup.multiple",
+          "Je hebt {{count}} openstaande acties bij Sparring Matches.",
+          { count: actionCount }
+        );
+
+  popup.hidden = false;
+  moneygamesActionPopupShown = true;
+}
+
+function closeMoneygamesActionPopup() {
+  const popup =
+    moneygameEl("moneygamesActionPopup");
+
+  if (popup) {
+    popup.hidden = true;
+  }
+}
+
+async function openMoneygamesActionPopupMatches() {
+  closeMoneygamesActionPopup();
+
+  await openMoneygames();
+  showMyMoneygames();
+}
+
 function setMoneygamesNotificationBadge(count) {
   const badge =
     document.getElementById("moneygamesNotificationBadge");
@@ -1182,6 +1257,7 @@ async function updateMoneygamesAuthUI() {
     appBox.style.display = "block";
 
     await updateMoneygamesNotificationBadge();
+    await updateMoneygamesActionPopup(user);
 
     if (accountEmail) {
       accountEmail.textContent = user.email || "";
@@ -1209,7 +1285,10 @@ async function updateMoneygamesAuthUI() {
     authBox.style.display = "block";
     appBox.style.display = "none";
 
-    setMoneygamesNotificationBadge(0);
+        setMoneygamesNotificationBadge(0);
+
+    closeMoneygamesActionPopup();
+    moneygamesActionPopupShown = false;
 
     clearMoneygamesPrivateViews();
   }
@@ -1266,33 +1345,251 @@ async function getOwnMoneygameProfile() {
 // MONEYGAME TABS / FORMULIER
 // =========================================================
 
+function activateMoneygamesMainTab(activeTab) {
+  const tabs = {
+    open: {
+      button: "moneygamesOpenTab",
+      content: "moneygamesOpenContent"
+    },
+    my: {
+      button: "moneygamesMyTab",
+      content: "moneygamesMyContent"
+    },
+    planned: {
+      button: "moneygamesPlannedTab",
+      content: "moneygamesPlannedContent"
+    },
+    played: {
+      button: "moneygamesPlayedTab",
+      content: "moneygamesPlayedContent"
+    }
+  };
+
+  Object.entries(tabs).forEach(
+    ([tabName, tab]) => {
+      const button = moneygameEl(tab.button);
+      const content = moneygameEl(tab.content);
+      const isActive = tabName === activeTab;
+
+      if (button) {
+        button.classList.toggle(
+          "active",
+          isActive
+        );
+      }
+
+      if (content) {
+        content.style.display =
+          isActive ? "block" : "none";
+      }
+    }
+  );
+}
+
 function showOpenMoneygames() {
-  const openContent = moneygameEl("moneygamesOpenContent");
-  const myContent = moneygameEl("moneygamesMyContent");
-
-  if (openContent) openContent.style.display = "block";
-  if (myContent) myContent.style.display = "none";
-
-  moneygameEl("moneygamesOpenTab")?.classList.add("active");
-  moneygameEl("moneygamesMyTab")?.classList.remove("active");
-
+  activateMoneygamesMainTab("open");
   loadOpenMoneygames();
 }
 
-
 function showMyMoneygames() {
-  const openContent = moneygameEl("moneygamesOpenContent");
-  const myContent = moneygameEl("moneygamesMyContent");
-
-  if (openContent) openContent.style.display = "none";
-  if (myContent) myContent.style.display = "block";
-
-  moneygameEl("moneygamesMyTab")?.classList.add("active");
-  moneygameEl("moneygamesOpenTab")?.classList.remove("active");
-
+  activateMoneygamesMainTab("my");
   loadMyMoneygames();
 }
 
+function showPlannedClubMoneygames() {
+  activateMoneygamesMainTab("planned");
+  loadMoneygameClubMatches("planned");
+}
+
+function showPlayedClubMoneygames() {
+  activateMoneygamesMainTab("played");
+  loadMoneygameClubMatches("played");
+}
+
+// =========================================================
+// ALGEMENE GEPLANDE EN GESPEELDE MATCHES
+// =========================================================
+
+async function loadMoneygameClubMatches(view) {
+  const isPlayed = view === "played";
+
+  const container = moneygameEl(
+    isPlayed
+      ? "moneygamesPlayedClubList"
+      : "moneygamesPlannedClubList"
+  );
+
+  if (!container) return;
+
+  container.innerHTML = `
+    <div class="moneygames-empty-state">
+      ${moneygameTr(
+        "moneygames.loadingClubMatches",
+        "Wedstrijden laden..."
+      )}
+    </div>
+  `;
+
+  const rpc = await callMoneygameRpc(
+    "get_moneygame_club_matches",
+    {
+      p_view: view
+    }
+  );
+
+  if (!rpc.success) {
+    console.error(
+      "Algemeen Sparring Match-overzicht laden fout:",
+      rpc.error
+    );
+
+    container.innerHTML = `
+      <div class="moneygames-empty-state">
+        ${moneygameTr(
+          "moneygames.clubMatchesLoadFailed",
+          "Wedstrijden konden niet geladen worden."
+        )}
+      </div>
+    `;
+
+    return;
+  }
+
+  const matches = Array.isArray(rpc.data)
+    ? rpc.data
+    : [];
+
+  if (matches.length === 0) {
+    container.innerHTML = `
+      <div class="moneygames-empty-state">
+        ${
+          isPlayed
+            ? moneygameTr(
+                "moneygames.noPlayedClubMatches",
+                "Nog geen gespeelde wedstrijden."
+              )
+            : moneygameTr(
+                "moneygames.noPlannedClubMatches",
+                "Geen geplande wedstrijden."
+              )
+        }
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = matches
+    .map(match =>
+      buildMoneygameClubMatchCard(
+        match,
+        isPlayed
+      )
+    )
+    .join("");
+}
+
+function buildMoneygameClubMatchCard(
+  match,
+  isPlayed
+) {
+  const dateTime =
+    formatMoneygameDateTime(
+      match.scheduled_at
+    );
+
+  const sideA =
+    match.side_a_names ||
+    moneygameTr(
+      "moneygames.unknownPlayer",
+      "Onbekende speler"
+    );
+
+  const sideB =
+    match.side_b_names ||
+    moneygameTr(
+      "moneygames.unknownPlayer",
+      "Onbekende speler"
+    );
+
+  const discipline =
+    match.discipline === "any"
+      ? moneygameTr(
+          "moneygames.anyDiscipline",
+          "Eender"
+        )
+      : match.discipline || "";
+
+  let resultHtml = "";
+
+  if (isPlayed) {
+    const resultText =
+      match.result_type === "forfeit"
+        ? moneygameTr(
+            "moneygames.forfeit",
+            "FORFAIT"
+          )
+        : match.score_a !== null &&
+          match.score_b !== null
+          ? `${match.score_a} - ${match.score_b}`
+          : "";
+
+    resultHtml = `
+      <div class="moneygames-club-result">
+        ${escapeMoneygameHtml(resultText)}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="moneygames-open-card moneygames-club-match-card">
+
+      <div class="moneygames-open-card-top">
+        <span class="moneygames-game-type">
+          ${
+            match.game_type === "doubles"
+              ? "DOUBLES"
+              : "SINGLES"
+          }
+        </span>
+
+        <span class="moneygames-discipline">
+          ${escapeMoneygameHtml(discipline)}
+        </span>
+      </div>
+
+      <div class="moneygames-club-players">
+        <strong>
+          ${escapeMoneygameHtml(sideA)}
+        </strong>
+
+        <span>
+          ${moneygameTr(
+            "moneygames.versus",
+            "tegen"
+          )}
+        </span>
+
+        <strong>
+          ${escapeMoneygameHtml(sideB)}
+        </strong>
+      </div>
+
+      <div class="moneygames-open-info">
+        <span>
+          📅 ${escapeMoneygameHtml(dateTime.full)}
+        </span>
+
+        <span>
+          Race To ${escapeMoneygameHtml(match.race_to)}
+        </span>
+      </div>
+
+      ${resultHtml}
+
+    </div>
+  `;
+}
 
 function updateMoneygameDateTimeDisplays() {
   const dateInput = moneygameEl("moneygamesDate");
@@ -2329,7 +2626,13 @@ async function loadMyReactions(user) {
           scheduled_at,
         status
       `)
-      .in("id", gameIds);
+            .in("id", gameIds)
+      .in("status", [
+        MONEYGAME_STATUSES.OPEN,
+        MONEYGAME_STATUSES.PENDING_PARTNER,
+        MONEYGAME_STATUSES.MATCHED,
+        MONEYGAME_STATUSES.RESULT_PENDING
+      ]);
 
   if (gamesError) {
     console.error(
@@ -4106,7 +4409,13 @@ async function loadMoneygameHistory(user) {
     return;
   }
 
-  const history = rpc.data || [];
+      const history = (rpc.data || []).filter(
+    item =>
+      [
+        MONEYGAME_STATUSES.PLAYED,
+        MONEYGAME_STATUSES.FINISHED
+      ].includes(item.status)
+  );
 
   if (history.length === 0) {
     container.innerHTML = `
@@ -4197,7 +4506,8 @@ function buildMoneygameHistoryCard(item) {
 
 function formatMoneygameHistoryStatus(status) {
   switch (status) {
-    case MONEYGAME_STATUSES.PLAYED:
+        case MONEYGAME_STATUSES.PLAYED:
+    case MONEYGAME_STATUSES.FINISHED:
       return "Gespeeld";
 
     case MONEYGAME_STATUSES.CANCELLED:

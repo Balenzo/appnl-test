@@ -3861,3 +3861,142 @@ body.start2pool-viewer-open {
   font-weight: 800;
   line-height: 1;
 }
+
+/* =========================================================
+   SPARRING MATCHES ACTIEPOP-UP
+========================================================= */
+
+.moneygames-action-popup[hidden] {
+  display: none !important;
+}
+
+.moneygames-action-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(20px, env(safe-area-inset-top))
+    20px
+    max(20px, env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.moneygames-action-popup-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 26px 20px 20px;
+  text-align: center;
+  color: #ffffff;
+  background: #151515;
+  border: 1px solid #303030;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.moneygames-action-popup-icon {
+  margin-bottom: 10px;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.moneygames-action-popup-card h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+
+.moneygames-action-popup-card p {
+  margin: 0 0 22px;
+  color: #bdbdbd;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.moneygames-action-popup-primary,
+.moneygames-action-popup-secondary {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.moneygames-action-popup-primary {
+  color: #ffffff;
+  background: #f20a18;
+  border: none;
+}
+
+.moneygames-action-popup-secondary {
+  margin-top: 10px;
+  color: #bdbdbd;
+  background: transparent;
+  border: 1px solid #353535;
+}
+
+/* =========================================================
+   ALGEMENE SPARRING MATCH-OVERZICHTEN
+========================================================= */
+
+.moneygames-club-match-card {
+  margin-bottom: 12px;
+}
+
+.moneygames-club-players {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  text-align: center;
+}
+
+.moneygames-club-players strong {
+  min-width: 0;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.moneygames-club-players span {
+  color: #777777;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.moneygames-club-result {
+  margin-top: 16px;
+  padding-top: 14px;
+  color: #ffffff;
+  border-top: 1px solid #2b2b2b;
+  font-size: 26px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* =========================================================
+   NIEUWE TAFELRESERVATIE
+========================================================= */
+
+.reservation-restart-button {
+  width: 100%;
+  min-height: 46px;
+  margin: 0 0 12px;
+  padding: 11px 16px;
+  color: #ffffff;
+  background: #171717;
+  border: 1px solid #343434;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reservation-restart-button:active {
+  background: #252525;
+}

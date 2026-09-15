@@ -619,25 +619,46 @@
               <p data-i18n="ui.welkom" id="moneygamesWelcomeText">Welkom!</p>
             </div>
             <div class="moneygames-main-tabs">
-              <button
-                class="moneygames-main-tab active"
-                data-i18n="ui.open.moneygames"
-                id="moneygamesOpenTab"
-                onclick="showOpenMoneygames()"
-                type="button"
-              >
-                Open Matches
-              </button>
-              <button
-                class="moneygames-main-tab"
-                data-i18n="ui.mijn.moneygames"
-                id="moneygamesMyTab"
-                onclick="showMyMoneygames()"
-                type="button"
-              >
-                Mijn Matches  
-              </button>
-            </div>
+  <button
+    class="moneygames-main-tab active"
+    data-i18n="ui.open.moneygames"
+    id="moneygamesOpenTab"
+    onclick="showOpenMoneygames()"
+    type="button"
+  >
+    Open Matches
+  </button>
+
+  <button
+    class="moneygames-main-tab"
+    data-i18n="ui.mijn.moneygames"
+    id="moneygamesMyTab"
+    onclick="showMyMoneygames()"
+    type="button"
+  >
+    Mijn Matches
+  </button>
+
+  <button
+    class="moneygames-main-tab"
+    data-i18n="moneygames.plannedMatches"
+    id="moneygamesPlannedTab"
+    onclick="showPlannedClubMoneygames()"
+    type="button"
+  >
+    Geplande Matches
+  </button>
+
+  <button
+    class="moneygames-main-tab"
+    data-i18n="moneygames.playedMatches"
+    id="moneygamesPlayedTab"
+    onclick="showPlayedClubMoneygames()"
+    type="button"
+  >
+    Gespeelde Matches
+  </button>
+</div>
             <div id="moneygamesOpenContent">
               <button
                 class="moneygames-new-btn"
@@ -797,7 +818,48 @@
                   Nog geen open Sparring Matches.
                 </div>
               </div>
+                        </div>
+
+            <div
+              id="moneygamesPlannedContent"
+              style="display: none"
+            >
+              <div class="moneygames-my-section">
+                <h3 data-i18n="moneygames.plannedMatches">
+                  Geplande Matches
+                </h3>
+
+                <div id="moneygamesPlannedClubList">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="moneygames.noPlannedClubMatches"
+                  >
+                    Geen geplande wedstrijden.
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div
+              id="moneygamesPlayedContent"
+              style="display: none"
+            >
+              <div class="moneygames-my-section">
+                <h3 data-i18n="moneygames.playedMatches">
+                  Gespeelde Matches
+                </h3>
+
+                <div id="moneygamesPlayedClubList">
+                  <div
+                    class="moneygames-empty-state"
+                    data-i18n="moneygames.noPlayedClubMatches"
+                  >
+                    Nog geen gespeelde wedstrijden.
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div id="moneygamesMyContent" style="display: none">
               <div class="moneygames-my-section">
                 <h3 data-i18n="ui.mijn.open.oproepen">Mijn open oproepen</h3>
@@ -1103,13 +1165,23 @@
               Kies je gewenste moment en reserveer eenvoudig online.
             </div>
           </div>
-          <div class="reservation-frame">
-            <iframe
-              src="https://bal-enzo.sportsclubadmin.eu/reserveren"
-              title="Tafel reserveren"
-            >
-            </iframe>
-          </div>
+          <button
+  type="button"
+  class="reservation-restart-button"
+  onclick="restartTableReservation()"
+  data-i18n="reservation.newReservation"
+>
+  ↻ Nieuwe reservatie
+</button>
+
+<div class="reservation-frame">
+  <iframe
+    id="tableReservationIframe"
+    src="https://bal-enzo.sportsclubadmin.eu/reserveren"
+    title="Tafel reserveren"
+  >
+  </iframe>
+</div>
         </div>
       </main>
     </section>
@@ -2418,5 +2490,55 @@
     <script src="translations.js"></script>
     <script src="auth.js"></script>
     <script src="app.js"></script>
+
+<!-- =========================
+     SPARRING MATCHES ACTIEPOP-UP
+========================== -->
+<div
+  id="moneygamesActionPopup"
+  class="moneygames-action-popup"
+  hidden
+>
+  <div
+    class="moneygames-action-popup-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="moneygamesActionPopupTitle"
+  >
+    <div class="moneygames-action-popup-icon">
+      🔔
+    </div>
+
+    <h2
+      id="moneygamesActionPopupTitle"
+      data-i18n="moneygames.actionPopup.title"
+    >
+      Actie nodig
+    </h2>
+
+    <p id="moneygamesActionPopupText">
+      Je hebt een openstaande actie bij Sparring Matches.
+    </p>
+
+    <button
+      type="button"
+      class="moneygames-action-popup-primary"
+      onclick="openMoneygamesActionPopupMatches()"
+      data-i18n="moneygames.actionPopup.view"
+    >
+      Bekijk Mijn Matches
+    </button>
+
+    <button
+      type="button"
+      class="moneygames-action-popup-secondary"
+      onclick="closeMoneygamesActionPopup()"
+      data-i18n="common.later"
+    >
+      Later
+    </button>
+  </div>
+</div>
+
   </body>
 </html>
