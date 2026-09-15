@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bal-enzo-v44';
+const CACHE_NAME = 'bal-enzo-v45';
 
 const FILES_TO_CACHE = [
   './',
@@ -107,7 +107,7 @@ self.addEventListener('push', event => {
   );
 });
 
-// App openen wanneer op een pushmelding wordt gedrukt
+// Sparring Matches openen wanneer op een pushmelding wordt gedrukt
 self.addEventListener('notificationclick', event => {
   event.notification.close();
 
@@ -119,12 +119,31 @@ self.addEventListener('notificationclick', event => {
       self.registration.scope
     );
 
-    targetUrl =
-      requestedUrl.origin === self.location.origin
-        ? requestedUrl.href
-        : self.registration.scope;
+    /*
+     * Pushmeldingen worden uitsluitend binnen de eigen PWA geopend.
+     * De parameter vertelt app.js dat Sparring Matches moet openen.
+     */
+    if (
+      requestedUrl.origin === self.location.origin &&
+      requestedUrl.href.startsWith(
+        self.registration.scope
+      )
+    ) {
+      requestedUrl.searchParams.set(
+        'open',
+        'moneygames'
+      );
+
+      targetUrl = requestedUrl.href;
+    } else {
+      targetUrl =
+        self.registration.scope +
+        '?open=moneygames';
+    }
   } catch (error) {
-    targetUrl = self.registration.scope;
+    targetUrl =
+      self.registration.scope +
+      '?open=moneygames';
   }
 
   event.waitUntil(

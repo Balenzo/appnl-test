@@ -4721,6 +4721,36 @@ function closeMoneygames() {
   window.scrollTo(0, 0);
 }
 
+/*
+ * Sparring Matches rechtstreeks openen vanuit een pushmelding.
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  const currentUrl = new URL(window.location.href);
+
+  if (
+    currentUrl.searchParams.get("open") !==
+    "moneygames"
+  ) {
+    return;
+  }
+
+  /*
+   * Parameter verwijderen zodat Sparring Matches niet opnieuw
+   * opent wanneer de gebruiker de app later vernieuwt.
+   */
+  currentUrl.searchParams.delete("open");
+
+  window.history.replaceState(
+    {},
+    document.title,
+    currentUrl.pathname +
+      currentUrl.search +
+      currentUrl.hash
+  );
+
+  openMoneygames();
+});
+
 /* =========================================================
    START2POOL LEVEL TABS
 ========================================================= */
