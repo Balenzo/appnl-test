@@ -286,12 +286,14 @@ const favoriteOptions = {
     action: () => openCompetitionDetail("74130139")
 },
 
+// START COMPETITIE NL FAVORIET - VERWIJDEREN IN APP
 'competition-nl': {
     icon: '🇳🇱',
     title: tr('competition.netherlands', 'Competitie NL'),
     url: null,
     action: () => openCompetitionDetail("83574892")
 },
+// EINDE COMPETITIE NL FAVORIET - VERWIJDEREN IN APP
 
 'breakplay-1': {
     icon: '🎱',
@@ -4783,3 +4785,288 @@ function closeStart2PoolExercise() {
 
     window.scrollTo(0, 0);
 }
+
+/* =========================================================
+   START2POOL FOTO VIEWER
+========================================================= */
+
+const start2PoolImageViewer =
+  document.getElementById("start2PoolImageViewer");
+
+const start2PoolImageViewerImage =
+  document.getElementById("start2PoolImageViewerImage");
+
+let start2PoolImageScale = 1;
+let start2PoolImageTranslateX = 0;
+let start2PoolImageTranslateY = 0;
+
+let start2PoolImagePointers = new Map();
+
+let start2PoolImageStartDistance = 0;
+let start2PoolImageStartScale = 1;
+
+let start2PoolImagePanStartX = 0;
+let start2PoolImagePanStartY = 0;
+let start2PoolImagePanTranslateX = 0;
+let start2PoolImagePanTranslateY = 0;
+
+let start2PoolImageMoved = false;
+
+function applyStart2PoolImageTransform() {
+  if (!start2PoolImageViewerImage) return;
+
+  if (start2PoolImageScale <= 1) {
+    start2PoolImageScale = 1;
+    start2PoolImageTranslateX = 0;
+    start2PoolImageTranslateY = 0;
+
+    start2PoolImageViewerImage.classList.remove("zoomed");
+  } else {
+    start2PoolImageViewerImage.classList.add("zoomed");
+  }
+
+  start2PoolImageViewerImage.style.transform =
+    `translate3d(
+      ${start2PoolImageTranslateX}px,
+      ${start2PoolImageTranslateY}px,
+      0
+    ) scale(${start2PoolImageScale})`;
+}
+
+function resetStart2PoolImageZoom() {
+  start2PoolImageScale = 1;
+  start2PoolImageTranslateX = 0;
+  start2PoolImageTranslateY = 0;
+
+  start2PoolImagePointers.clear();
+
+  applyStart2PoolImageTransform();
+}
+
+function openStart2PoolImage(image) {
+  if (
+    !start2PoolImageViewer ||
+    !start2PoolImageViewerImage ||
+    !image
+  ) {
+    return;
+  }
+
+  start2PoolImageViewerImage.src =
+    image.currentSrc || image.src;
+
+  start2PoolImageViewerImage.alt =
+    image.alt || "Start2Pool oefening";
+
+  resetStart2PoolImageZoom();
+
+  start2PoolImageViewer.classList.add("open");
+  start2PoolImageViewer.setAttribute("aria-hidden", "false");
+
+  document.body.classList.add("start2pool-viewer-open");
+}
+
+function closeStart2PoolImage() {
+  if (
+    !start2PoolImageViewer ||
+    !start2PoolImageViewerImage
+  ) {
+    return;
+  }
+
+  start2PoolImageViewer.classList.remove("open");
+  start2PoolImageViewer.setAttribute("aria-hidden", "true");
+
+  document.body.classList.remove("start2pool-viewer-open");
+
+  resetStart2PoolImageZoom();
+
+  start2PoolImageViewerImage.src = "";
+  start2PoolImageViewerImage.alt = "";
+}
+
+function getStart2PoolPointerDistance() {
+  const points = Array.from(
+    start2PoolImagePointers.values()
+  );
+
+  if (points.length < 2) return 0;
+
+  return Math.hypot(
+    points[1].x - points[0].x,
+    points[1].y - points[0].y
+  );
+}
+
+if (start2PoolImageViewerImage) {
+  start2PoolImageViewerImage.addEventListener(
+    "pointerdown",
+    event => {
+      event.preventDefault();
+
+      start2PoolImageViewerImage.setPointerCapture(
+        event.pointerId
+      );
+
+      start2PoolImagePointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY
+      });
+
+      start2PoolImageMoved = false;
+
+      if (start2PoolImagePointers.size === 1) {
+        start2PoolImagePanStartX = event.clientX;
+        start2PoolImagePanStartY = event.clientY;
+
+        start2PoolImagePanTranslateX =
+          start2PoolImageTranslateX;
+
+        start2PoolImagePanTranslateY =
+          start2PoolImageTranslateY;
+
+        start2PoolImageViewerImage.classList.add(
+          "dragging"
+        );
+      }
+
+      if (start2PoolImagePointers.size === 2) {
+        start2PoolImageStartDistance =
+          getStart2PoolPointerDistance();
+
+        start2PoolImageStartScale =
+          start2PoolImageScale;
+      }
+    }
+  );
+
+  start2PoolImageViewerImage.addEventListener(
+    "pointermove",
+    event => {
+      if (
+        !start2PoolImagePointers.has(event.pointerId)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      start2PoolImagePointers.set(event.pointerId, {
+        x: event.clientX,
+        y: event.clientY
+      });
+
+      if (start2PoolImagePointers.size === 2) {
+        const currentDistance =
+          getStart2PoolPointerDistance();
+
+        if (start2PoolImageStartDistance > 0) {
+          start2PoolImageScale =
+            start2PoolImageStartScale *
+            (
+              currentDistance /
+              start2PoolImageStartDistance
+            );
+
+          start2PoolImageScale = Math.min(
+            5,
+            Math.max(1, start2PoolImageScale)
+          );
+
+          start2PoolImageMoved = true;
+
+          applyStart2PoolImageTransform();
+        }
+
+        return;
+      }
+
+      if (
+        start2PoolImagePointers.size === 1 &&
+        start2PoolImageScale > 1
+      ) {
+        const differenceX =
+          event.clientX - start2PoolImagePanStartX;
+
+        const differenceY =
+          event.clientY - start2PoolImagePanStartY;
+
+        if (
+          Math.abs(differenceX) > 3 ||
+          Math.abs(differenceY) > 3
+        ) {
+          start2PoolImageMoved = true;
+        }
+
+        start2PoolImageTranslateX =
+          start2PoolImagePanTranslateX + differenceX;
+
+        start2PoolImageTranslateY =
+          start2PoolImagePanTranslateY + differenceY;
+
+        applyStart2PoolImageTransform();
+      }
+    }
+  );
+
+  function finishStart2PoolImagePointer(event) {
+    const wasSingleTap =
+      start2PoolImagePointers.size === 1 &&
+      !start2PoolImageMoved;
+
+    start2PoolImagePointers.delete(event.pointerId);
+
+    start2PoolImageViewerImage.classList.remove(
+      "dragging"
+    );
+
+    if (wasSingleTap) {
+      if (start2PoolImageScale > 1) {
+        resetStart2PoolImageZoom();
+      } else {
+        start2PoolImageScale = 2.5;
+        applyStart2PoolImageTransform();
+      }
+    }
+  }
+
+  start2PoolImageViewerImage.addEventListener(
+    "pointerup",
+    finishStart2PoolImagePointer
+  );
+
+  start2PoolImageViewerImage.addEventListener(
+    "pointercancel",
+    finishStart2PoolImagePointer
+  );
+}
+
+document
+  .querySelectorAll(".start2pool-drill-image")
+  .forEach(image => {
+    image.setAttribute("role", "button");
+    image.setAttribute("tabindex", "0");
+
+    image.addEventListener("click", () => {
+      openStart2PoolImage(image);
+    });
+
+    image.addEventListener("keydown", event => {
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+        event.preventDefault();
+        openStart2PoolImage(image);
+      }
+    });
+  });
+
+document.addEventListener("keydown", event => {
+  if (
+    event.key === "Escape" &&
+    start2PoolImageViewer?.classList.contains("open")
+  ) {
+    closeStart2PoolImage();
+  }
+});

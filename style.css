@@ -3729,6 +3729,115 @@ body {
   width: 100%;
 }
 
+/* =========================================================
+   START2POOL FOTO VIEWER
+========================================================= */
+
+.start2pool-drill-image {
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.start2pool-image-viewer {
+  display: none;
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+
+  background: rgba(0, 0, 0, 0.97);
+
+  z-index: 200000;
+
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  overflow: hidden;
+  touch-action: none;
+}
+
+.start2pool-image-viewer.open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start2pool-image-viewer-stage {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  touch-action: none;
+}
+
+.start2pool-image-viewer-image {
+  display: block;
+
+  max-width: 100%;
+  max-height: 100%;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+
+  touch-action: none;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center center;
+
+  will-change: transform;
+  cursor: zoom-in;
+}
+
+.start2pool-image-viewer-image.zoomed {
+  cursor: grab;
+}
+
+.start2pool-image-viewer-image.dragging {
+  cursor: grabbing;
+}
+
+.start2pool-image-viewer-close {
+  position: absolute;
+
+  top: calc(12px + env(safe-area-inset-top));
+  right: 16px;
+
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  border: 1px solid #444;
+  border-radius: 50%;
+
+  background: rgba(20, 20, 20, 0.9);
+  color: #fff;
+
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1;
+
+  cursor: pointer;
+  z-index: 2;
+}
+
+body.start2pool-viewer-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
 .moneygames-notification-badge {
   position: absolute;
   top: 7px;

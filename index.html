@@ -696,10 +696,16 @@
                   Discipline
                 </label>
                 <select id="moneygamesDiscipline">
-                  <option value="8-ball">8-ball</option>
-                  <option value="9-ball">9-ball</option>
-                  <option value="10-ball">10-ball</option>
-                </select>
+                <option value="8-ball">8-ball</option>
+                <option value="9-ball">9-ball</option>
+                <option value="10-ball">10-ball</option>
+                <option
+                  value="any"
+                  data-i18n="moneygames.anyDiscipline"
+                >
+                  Eender
+                </option>
+              </select>
                 <label data-i18n="ui.race.to" for="moneygamesRaceTo">
                   Race To
                 </label>
@@ -1014,14 +1020,50 @@
                   </div>
                 </div>
                 <div class="moneygames-account-divider"></div>
-                <button
-                  class="moneygames-logout-btn"
-                  data-i18n="ui.uitloggen"
-                  onclick="handleMoneygamesLogout()"
-                  type="button"
-                >
-                  Uitloggen
-                </button>
+
+<div class="moneygames-account-row">
+  <strong>Pushmeldingen</strong>
+</div>
+
+<div class="moneygames-account-row">
+  Ontvang meldingen over je Sparring Matches.
+</div>
+
+<button
+  class="moneygames-primary-btn"
+  id="moneygamesPushButton"
+  onclick="handleEnableMoneygamesPushNotifications()"
+  type="button"
+>
+  🔔 Pushmeldingen inschakelen
+</button>
+
+<button
+  class="moneygames-secondary-btn"
+  id="moneygamesTestPushButton"
+  onclick="sendMoneygamesTestPush()"
+  style="display: none"
+  type="button"
+>
+  Testmelding versturen
+</button>
+
+<div
+  class="moneygames-auth-message"
+  id="moneygamesPushMessage"
+  aria-live="polite"
+></div>
+
+<div class="moneygames-account-divider"></div>
+
+<button
+  class="moneygames-logout-btn"
+  data-i18n="ui.uitloggen"
+  onclick="handleMoneygamesLogout()"
+  type="button"
+>
+  Uitloggen
+</button>
               </div>
             </div>
           </div>
@@ -1235,6 +1277,8 @@
             </div>
             <div class="competition-arrow">›</div>
           </div>
+          
+<!-- START COMPETITIE NL - DIT VOLLEDIGE BLOK VERWIJDEREN IN APP -->
           <div
             class="competition-card"
             onclick="openCompetitionDetail(83574892)"
@@ -1254,6 +1298,7 @@
             </div>
             <div class="competition-arrow">›</div>
           </div>
+<!-- EINDE COMPETITIE NL - DIT VOLLEDIGE BLOK VERWIJDEREN IN APP -->
         </div>
         <!-- BREAK & PLAY -->
         <div class="tab-content" id="tab-breakplay">
@@ -2210,6 +2255,36 @@
   </main>
 
 </section>
+
+<!-- =========================
+     START2POOL FOTO VIEWER
+========================== -->
+<div
+  class="start2pool-image-viewer"
+  id="start2PoolImageViewer"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+>
+  <button
+    type="button"
+    class="start2pool-image-viewer-close"
+    onclick="closeStart2PoolImage()"
+    aria-label="Afbeelding sluiten"
+  >
+    ×
+  </button>
+
+  <div class="start2pool-image-viewer-stage">
+    <img
+      id="start2PoolImageViewerImage"
+      class="start2pool-image-viewer-image"
+      src=""
+      alt=""
+      draggable="false"
+    />
+  </div>
+</div>
 
     <!-- =========================
        PROFIEL SCREEN

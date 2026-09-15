@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bal-enzo-v43';
+const CACHE_NAME = 'bal-enzo-v44';
 
 const FILES_TO_CACHE = [
   './',
@@ -61,4 +61,93 @@ self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
+});
+
+// Pushmelding ontvangen
+self.addEventListener('push', event => {
+  let notificationData = {};
+
+  if (event.data) {
+    const messageText = event.data.text();
+
+    try {
+      notificationData = JSON.parse(messageText);
+    } catch (error) {
+      notificationData = {
+        body: messageText
+      };
+    }
+  }
+
+  const title =
+    notificationData.title ||
+    'Bal Enzo Club App';
+
+  const options = {
+    body:
+      notificationData.body ||
+      'Je hebt een nieuwe melding.',
+    icon: './icon.png',
+    badge: './icon.png',
+    data: {
+      url: notificationData.url || './'
+    }
+  };
+
+  if (notificationData.tag) {
+    options.tag = notificationData.tag;
+    options.renotify = true;
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(
+      title,
+      options
+    )
+  );
+});
+
+// App openen wanneer op een pushmelding wordt gedrukt
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  let targetUrl;
+
+  try {
+    const requestedUrl = new URL(
+      event.notification.data?.url || './',
+      self.registration.scope
+    );
+
+    targetUrl =
+      requestedUrl.origin === self.location.origin
+        ? requestedUrl.href
+        : self.registration.scope;
+  } catch (error) {
+    targetUrl = self.registration.scope;
+  }
+
+  event.waitUntil(
+    self.clients
+      .matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      })
+      .then(windowClients => {
+        const existingClient =
+          windowClients.find(client =>
+            client.url.startsWith(
+              self.registration.scope
+            )
+          );
+
+        if (existingClient) {
+          return existingClient
+            .navigate(targetUrl)
+            .then(client => client.focus());
+        }
+
+        return self.clients.openWindow(targetUrl);
+      })
+  );
 });

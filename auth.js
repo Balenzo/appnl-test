@@ -53,11 +53,27 @@ function moneygameLocale() {
     : "nl-BE";
 }
 
+function formatMoneygameDiscipline(discipline) {
+  if (discipline === "any") {
+    return moneygameTr(
+      "moneygames.anyDiscipline",
+      "Eender"
+    );
+  }
+
+  return discipline || "";
+}
+
 // =========================================================
 // CONFIGURATIE
 // =========================================================
 
-const MONEYGAME_DISCIPLINES = ["8-ball", "9-ball", "10-ball"];
+const MONEYGAME_DISCIPLINES = [
+  "8-ball",
+  "9-ball",
+  "10-ball",
+  "any"
+];
 
 const MONEYGAME_STATUSES = {
   OPEN: "open",
@@ -93,6 +109,370 @@ const MONEYGAME_PARTNER_STATUSES = {
 };
 
 const MONEYGAME_RESULT_WINDOW_HOURS = 48;
+
+// =========================================================
+// PUSHMELDINGEN
+// =========================================================
+
+function convertVapidKeyToUint8Array(base64String) {
+  const padding =
+    "=".repeat((4 - base64String.length % 4) % 4);
+
+  const base64 =
+    (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+
+  return Uint8Array.from(
+    [...rawData].map(character =>
+      character.charCodeAt(0)
+    )
+  );
+}
+
+async function enableMoneygamesPushNotifications() {
+  if (
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window) ||
+    !("Notification" in window)
+  ) {
+    throw new Error(
+      moneygameTr(
+        "moneygames.pushNotSupported",
+        "Pushmeldingen worden niet ondersteund op dit toestel."
+      )
+    );
+  }
+
+  /*
+   * De toestemming wordt rechtstreeks vanuit de klik
+   * van de gebruiker gevraagd. Dit is vereist op iPhone.
+   */
+  const permission =
+    Notification.permission === "granted"
+      ? "granted"
+      : await Notification.requestPermission();
+
+  if (permission !== "granted") {
+    throw new Error(
+      moneygameTr(
+        "moneygames.pushPermissionDenied",
+        "Je hebt geen toestemming gegeven voor pushmeldingen."
+      )
+    );
+  }
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error(
+      moneygameTr(
+        "moneygames.notLoggedIn",
+        "Je bent niet ingelogd."
+      )
+    );
+  }
+
+  const registration =
+    await navigator.serviceWorker.ready;
+
+  let subscription =
+    await registration.pushManager.getSubscription();
+
+  if (!subscription) {
+    subscription =
+      await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey:
+          convertVapidKeyToUint8Array(
+            VAPID_PUBLIC_KEY
+          )
+      });
+  }
+
+  const subscriptionData =
+    subscription.toJSON();
+
+  if (
+    !subscriptionData.endpoint ||
+    !subscriptionData.keys?.p256dh ||
+    !subscriptionData.keys?.auth
+  ) {
+    throw new Error(
+      moneygameTr(
+        "moneygames.pushRegistrationFailed",
+        "Het toestel kon niet voor pushmeldingen geregistreerd worden."
+      )
+    );
+  }
+
+  const { error } = await supabaseClient
+    .from("push_subscriptions")
+    .upsert(
+      {
+        user_id: user.id,
+        endpoint: subscriptionData.endpoint,
+        p256dh: subscriptionData.keys.p256dh,
+        auth_key: subscriptionData.keys.auth,
+locale: (
+  ["nl", "en", "fr"].includes(
+    moneygameLocale()
+      .split("-")[0]
+      .toLowerCase()
+  )
+    ? moneygameLocale()
+        .split("-")[0]
+        .toLowerCase()
+    : "nl"
+),
+updated_at: new Date().toISOString()
+      },
+      {
+        onConflict: "endpoint"
+      }
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  return subscription;
+}
+
+async function disableMoneygamesPushNotifications() {
+  if (
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window)
+  ) {
+    return;
+  }
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error(
+      moneygameTr(
+        "moneygames.notLoggedIn",
+        "Je bent niet ingelogd."
+      )
+    );
+  }
+
+  const registration =
+    await navigator.serviceWorker.ready;
+
+  const subscription =
+    await registration.pushManager.getSubscription();
+
+  if (!subscription) {
+    return;
+  }
+
+  const endpoint = subscription.endpoint;
+
+  const unsubscribed =
+    await subscription.unsubscribe();
+
+  if (!unsubscribed) {
+    throw new Error(
+      "Pushmeldingen konden niet uitgeschakeld worden."
+    );
+  }
+
+  const { error } = await supabaseClient
+    .from("push_subscriptions")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("endpoint", endpoint);
+
+  if (error) {
+    throw error;
+  }
+}
+
+async function updateMoneygamesPushButton() {
+  const button =
+    moneygameEl("moneygamesPushButton");
+
+  const testButton =
+    moneygameEl("moneygamesTestPushButton");
+
+  if (!button) return;
+
+  if (
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window) ||
+    !("Notification" in window)
+  ) {
+    button.textContent =
+      "Pushmeldingen niet ondersteund";
+    button.disabled = true;
+    button.dataset.pushEnabled = "false";
+
+    if (testButton) {
+      testButton.style.display = "none";
+    }
+
+    return;
+  }
+
+  if (Notification.permission === "denied") {
+    button.textContent =
+      "Pushmeldingen geblokkeerd";
+    button.disabled = true;
+    button.dataset.pushEnabled = "false";
+
+    if (testButton) {
+      testButton.style.display = "none";
+    }
+
+    return;
+  }
+
+  const registration =
+    await navigator.serviceWorker.ready;
+
+  const subscription =
+    await registration.pushManager.getSubscription();
+
+  if (subscription) {
+    button.textContent =
+      "🔕 Pushmeldingen uitschakelen";
+    button.disabled = false;
+    button.dataset.pushEnabled = "true";
+
+    if (testButton) {
+      testButton.style.display = "block";
+    }
+  } else {
+    button.textContent =
+      "🔔 Pushmeldingen inschakelen";
+    button.disabled = false;
+    button.dataset.pushEnabled = "false";
+
+    if (testButton) {
+      testButton.style.display = "none";
+    }
+  }
+}
+
+async function handleEnableMoneygamesPushNotifications() {
+  const button =
+    moneygameEl("moneygamesPushButton");
+
+  if (!button) return;
+
+  const shouldDisable =
+    button.dataset.pushEnabled === "true";
+
+  button.disabled = true;
+  button.textContent = "Even wachten...";
+
+  setMoneygameMessage(
+    "moneygamesPushMessage",
+    ""
+  );
+
+  try {
+    if (shouldDisable) {
+      await disableMoneygamesPushNotifications();
+
+      setMoneygameMessage(
+        "moneygamesPushMessage",
+        "Pushmeldingen zijn op dit toestel uitgeschakeld.",
+        "success"
+      );
+    } else {
+      await enableMoneygamesPushNotifications();
+
+      setMoneygameMessage(
+        "moneygamesPushMessage",
+        "Dit toestel ontvangt voortaan pushmeldingen.",
+        "success"
+      );
+    }
+
+    await updateMoneygamesPushButton();
+  } catch (error) {
+    setMoneygameMessage(
+      "moneygamesPushMessage",
+      error?.message ||
+        "De instelling voor pushmeldingen kon niet gewijzigd worden.",
+      "error"
+    );
+
+    await updateMoneygamesPushButton();
+  }
+}
+
+async function sendMoneygamesTestPush() {
+  const button =
+    moneygameEl("moneygamesTestPushButton");
+
+  if (!button) return;
+
+  button.disabled = true;
+  button.textContent = "Testmelding versturen...";
+
+  setMoneygameMessage(
+    "moneygamesPushMessage",
+    ""
+  );
+
+  try {
+    const { data, error } =
+      await supabaseClient.functions.invoke(
+        "send-test-push",
+        {
+          body: {}
+        }
+      );
+
+    if (error) {
+      let errorMessage = error.message;
+
+      if (error.context instanceof Response) {
+        try {
+          const errorData =
+            await error.context.json();
+
+          errorMessage =
+            errorData?.error || errorMessage;
+        } catch (readError) {
+          // De standaard foutmelding blijft behouden.
+        }
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    if (!data?.success) {
+      throw new Error(
+        data?.error ||
+        "De testmelding kon niet worden verstuurd."
+      );
+    }
+
+    setMoneygameMessage(
+      "moneygamesPushMessage",
+      "Testmelding verstuurd.",
+      "success"
+    );
+  } catch (error) {
+    setMoneygameMessage(
+      "moneygamesPushMessage",
+      error?.message ||
+        "De testmelding kon niet worden verstuurd.",
+      "error"
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent =
+      "Testmelding versturen";
+  }
+}
 
 let currentMoneygamesFilter = "all";
 
@@ -1235,10 +1615,16 @@ async function loadOpenMoneygames() {
     return;
   }
 
-  const filteredGames = (games || []).filter(game => {
-    if (currentMoneygamesFilter === "all") return true;
-    return game.discipline === currentMoneygamesFilter;
-  });
+const filteredGames = (games || []).filter(game => {
+  if (currentMoneygamesFilter === "all") {
+    return true;
+  }
+
+  return (
+    game.discipline === currentMoneygamesFilter ||
+    game.discipline === "any"
+  );
+});
 
   if (filteredGames.length === 0) {
     list.innerHTML = `
@@ -1380,7 +1766,9 @@ async function loadOpenMoneygames() {
           </span>
 
           <span class="moneygames-discipline">
-            ${escapeMoneygameHtml(game.discipline)}
+            ${escapeMoneygameHtml(
+  formatMoneygameDiscipline(game.discipline)
+)}
           </span>
         </div>
 
@@ -1703,7 +2091,9 @@ async function loadMyOpenMoneygames(user) {
           </span>
 
           <span class="moneygames-discipline">
-            ${escapeMoneygameHtml(game.discipline)}
+            ${escapeMoneygameHtml(
+  formatMoneygameDiscipline(game.discipline)
+)}
           </span>
         </div>
 
@@ -1992,7 +2382,9 @@ async function loadMyReactions(user) {
             </span>
 
             <span class="moneygames-discipline">
-              ${escapeMoneygameHtml(game.discipline)}
+              ${escapeMoneygameHtml(
+  formatMoneygameDiscipline(game.discipline)
+)}
             </span>
           </div>
 
@@ -2448,7 +2840,9 @@ async function loadMyPlannedMoneygames(user) {
           </span>
 
           <span class="moneygames-discipline">
-            ${escapeMoneygameHtml(game.discipline)}
+            ${escapeMoneygameHtml(
+  formatMoneygameDiscipline(game.discipline)
+)}
           </span>
         </div>
 
@@ -3757,7 +4151,9 @@ function buildMoneygameHistoryCard(item) {
         </span>
 
         <span class="moneygames-discipline">
-          ${escapeMoneygameHtml(item.discipline || "")}
+          ${escapeMoneygameHtml(
+  formatMoneygameDiscipline(item.discipline)
+)}
         </span>
       </div>
 
