@@ -4000,3 +4000,496 @@ body.start2pool-viewer-open {
 .reservation-restart-button:active {
   background: #252525;
 }
+
+/* ===========================
+   MIJN PROFIEL
+=========================== */
+
+.my-profile-content {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+#myProfileLoading,
+#myProfileError {
+  padding: 24px 16px;
+  text-align: center;
+}
+
+#myProfileError {
+  color: #d32f2f;
+}
+
+/* Profielheader */
+
+.my-profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 20px;
+  text-align: center;
+}
+
+.my-profile-image {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 14px;
+}
+
+.my-profile-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.my-profile-name {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.my-profile-verified {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.my-profile-location {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+/* Tabs */
+
+.my-profile-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+
+  width: 100%;
+  padding: 0 16px 14px;
+
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+.my-profile-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.my-profile-tab {
+  width: 100%;
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  border: 1px solid #e30613;
+  border-radius: 10px;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.my-profile-tab.active {
+  background: #e30613;
+  color: #fff;
+  border-color: #e30613;
+}
+
+/* Tabinhoud */
+
+.my-profile-tab-panel {
+  padding: 4px 16px 24px;
+}
+
+/* Overzicht */
+
+.my-profile-overview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: white;
+}
+
+.my-profile-country-flag {
+  width: 42px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.my-profile-overview-label {
+  font-size: 12px;
+  opacity: 0.65;
+  margin-bottom: 2px;
+}
+
+.my-profile-overview-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===========================
+   MIJN PROFIEL - WEDSTRIJDEN
+=========================== */
+
+.my-profile-matches-section {
+  margin-top: 18px;
+}
+
+.my-profile-matches-section h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.my-profile-match-card {
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid #2b2b2b;
+  border-radius: 12px;
+  background: #151515;
+}
+
+.my-profile-match-date {
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.my-profile-match-opponent {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.my-profile-match-info {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.my-profile-match-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+
+.my-profile-match-tab {
+  padding: 8px 14px;
+  border: 1px solid #e30613;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.my-profile-match-tab.active {
+  background: #e30613;
+  color: #fff;
+  border-color: #e30613;
+}
+
+/* Meer wedstrijden laden */
+
+.my-profile-load-more {
+  display: block;
+  width: 100%;
+  margin: 16px 0 8px;
+  padding: 12px 16px;
+
+  border: 1px solid #e30613;
+  border-radius: 10px;
+
+  background: #111;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+
+  cursor: pointer;
+}
+
+.my-profile-load-more:active {
+  background: #e30613;
+}
+
+.my-profile-load-more:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Vlag naast spelersnaam */
+
+.my-profile-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.my-profile-name-flag {
+  width: 24px;
+  height: 16px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ===========================
+   MIJN PROFIEL - RATINGS
+=========================== */
+
+.my-profile-ratings {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  padding: 6px 16px 20px;
+  text-align: center;
+}
+
+.my-profile-rating {
+  min-width: 110px;
+}
+
+.my-profile-rating-value {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.my-profile-rating-name {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+.my-profile-tournament-card {
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border: 1px solid #2b2b2b;
+  border-radius: 12px;
+  background: #151515;
+}
+
+.my-profile-tournament-date {
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.my-profile-tournament-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.my-profile-tournament-organizer {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.my-profile-tournament-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #ddd;
+}
+
+/* ===========================
+   PROFIEL TORNOOI - STAND
+=========================== */
+
+.profile-tournament-standings {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.profile-tournament-standing-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 8px;
+
+  padding: 11px 4px;
+
+  border-bottom: 1px solid #2b2b2b;
+}
+
+.profile-tournament-standing-position {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  color: #aaa;
+}
+
+.profile-tournament-standing-player {
+  min-width: 0;
+}
+
+.profile-tournament-standing-name {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.profile-tournament-standing-stats {
+  margin-top: 4px;
+
+  font-size: 12px;
+  line-height: 1.35;
+
+  color: #aaa;
+}
+
+.profile-tournament-standing-stats strong {
+  color: #ddd;
+  font-weight: 600;
+}
+
+.profile-tournament-standing-percentage {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+  color: #fff;
+}
+
+/* ===========================
+   PROFIEL TORNOOI - RANKING KNOP
+=========================== */
+
+#competitionRankingLinkContainer {
+  margin-top: 12px;
+  margin-bottom: 14px;
+}
+
+.profile-tournament-ranking-button {
+  width: 100%;
+  padding: 0;
+  border: 1px solid #2b2b2b;
+  border-radius: 12px;
+  background: #151515;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.profile-tournament-ranking-button-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 10px 16px;
+  box-sizing: border-box;
+}
+
+.profile-tournament-ranking-button-icon {
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.profile-tournament-ranking-button-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-tournament-ranking-button-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.profile-tournament-ranking-button-name {
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #aaa;
+}
+
+.profile-tournament-ranking-button-arrow {
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* ===========================
+   TORNOOI RANKING
+=========================== */
+
+#tournamentRankingContent {
+  padding-bottom: 90px;
+}
+
+.profile-tournament-ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-tournament-ranking-row {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 70px;
+  align-items: center;
+  min-height: 52px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+
+  background: #151515;
+  border: 1px solid #2b2b2b;
+  border-radius: 10px;
+}
+
+.profile-tournament-ranking-position {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.profile-tournament-ranking-player {
+  min-width: 0;
+  padding-right: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-tournament-ranking-points {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+#tournamentRankingScreen .page-header {
+  margin-bottom: 16px;
+}

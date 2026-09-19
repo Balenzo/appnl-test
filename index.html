@@ -1241,16 +1241,131 @@
   </div>
 
   <main class="content">
-    <div class="reservation-container">
-      <div class="reservation-frame">
-        <iframe
-          id="myProfileIframe"
-          src="about:blank"
-          title="Mijn profiel"
-        >
-        </iframe>
-      </div>
+
+    <div id="myProfileLoading">
+      Profiel laden...
     </div>
+
+    <div
+      id="myProfileError"
+      style="display: none;"
+    ></div>
+
+    <div
+      id="myProfileContent"
+      class="my-profile-content"
+      style="display: none;"
+    >
+
+      <!-- PROFIELHEADER -->
+      <div class="my-profile-header">
+
+        <img
+          id="myProfileImage"
+          class="my-profile-image"
+          src=""
+          alt=""
+        >
+
+        <div class="my-profile-name-row">
+          <span
+            id="myProfileVerified"
+            class="my-profile-verified"
+            style="display: none;"
+          >
+            ✓
+          </span>
+
+          <div
+            id="myProfileName"
+            class="my-profile-name"
+          ></div>
+        </div>
+
+        <div
+          id="myProfileLocation"
+          class="my-profile-location"
+        ></div>
+
+      </div>
+
+<!-- RATINGS -->
+<div
+  id="myProfileRatings"
+  class="my-profile-ratings"
+></div>
+
+      <!-- PROFIELTABS -->
+      <div class="my-profile-tabs">
+
+        <button
+          type="button"
+          class="my-profile-tab active"
+          data-profile-tab="matches"
+        >
+          Wedstrijden
+        </button>
+
+        <button
+          type="button"
+          class="my-profile-tab"
+          data-profile-tab="tournaments"
+        >
+          Tornooien
+        </button>
+
+        <button
+          type="button"
+          class="my-profile-tab"
+          data-profile-tab="results"
+        >
+          Resultaten
+        </button>
+
+        <button
+          type="button"
+          class="my-profile-tab"
+          data-profile-tab="teams"
+        >
+          Teams
+        </button>
+
+      </div>
+
+      <!-- WEDSTRIJDEN -->
+      <div
+        id="myProfileTabMatches"
+        class="my-profile-tab-panel"
+        style="display: none;"
+      >
+      </div>
+
+      <!-- TORNOOIEN -->
+      <div
+        id="myProfileTabTournaments"
+        class="my-profile-tab-panel"
+        style="display: none;"
+      >
+      </div>
+
+      <!-- RESULTATEN -->
+      <div
+        id="myProfileTabResults"
+        class="my-profile-tab-panel"
+        style="display: none;"
+      >
+      </div>
+
+      <!-- TEAMS -->
+      <div
+        id="myProfileTabTeams"
+        class="my-profile-tab-panel"
+        style="display: none;"
+      >
+      </div>
+
+    </div>
+
   </main>
 </section>
 
@@ -1625,6 +1740,11 @@
               <span>↗</span>
             </a>
 
+            <div
+              id="competitionRankingLinkContainer"
+              style="display: none"
+            ></div>
+
            <div
             id="competitionOverviewDynamic"
             class="competition-overview-dynamic"
@@ -1700,6 +1820,53 @@
         </div>
       </main>
     </section>
+
+<!-- =========================
+     TORNOOI RANKING SCREEN
+========================== -->
+<section class="screen" id="tournamentRankingScreen">
+
+  <div class="page-header">
+
+    <button
+      type="button"
+      onclick="closeTournamentRanking()"
+      style="
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+      "
+    >
+      ‹
+    </button>
+
+    <span id="tournamentRankingTitle">
+      Ranking
+    </span>
+
+  </div>
+
+  <main class="content">
+
+    <div
+      id="tournamentRankingLoading"
+      class="competition-loading"
+    >
+      Ranking laden...
+    </div>
+
+    <div
+      id="tournamentRankingContent"
+      style="display: none"
+    ></div>
+
+  </main>
+
+</section>
+
     <!-- =========================
      WEDSTRIJD DETAIL SCREEN
 ========================== -->
