@@ -4493,3 +4493,22 @@ body.start2pool-viewer-open {
 #tournamentRankingScreen .page-header {
   margin-bottom: 16px;
 }
+
+.profile-tournament-ranking-row.own-player {
+  border-color: #e30613;
+  background: rgba(227, 6, 19, 0.12);
+}
+
+/* ===========================
+   PROFIEL - MATCH RESULTAAT
+=========================== */
+
+.my-profile-match-card.won {
+  border-color: #2e7d32;
+  background: rgba(46, 125, 50, 0.12);
+}
+
+.my-profile-match-card.lost {
+  border-color: #c62828;
+  background: rgba(198, 40, 40, 0.12);
+}

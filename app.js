@@ -698,6 +698,32 @@ testCueScoreAPI();
    OPEN COMPETITION DETAIL
 =========================== */
 
+async function openProfilePlayedMatch(matchId, tournamentId) {
+
+  if (!matchId || !tournamentId) {
+    return;
+  }
+
+  sessionStorage.setItem(
+    "competitionDetailSource",
+    "profileMatches"
+  );
+
+  sessionStorage.setItem(
+    "profileMatchReturnTab",
+    "played"
+  );
+
+  await openCompetitionDetail(
+    Number(tournamentId)
+  );
+
+  openMatchDetail(
+    Number(matchId),
+    Number(tournamentId)
+  );
+}
+
 function openProfileTournament(tournamentId) {
   sessionStorage.setItem(
     "competitionDetailSource",
@@ -776,11 +802,59 @@ async function openTournamentRanking(tournamentId) {
 
     rankingLoading.style.display = "none";
 
+    const profileUrl =
+    localStorage.getItem("myProfileUrl");
+
+let profilePlayerName = "";
+
+if (profileUrl) {
+
+    const cleanUrl =
+        profileUrl.trim().replace(/\/+$/, "");
+
+    const playerIdMatch =
+        cleanUrl.match(/\/(\d+)$/);
+
+    if (playerIdMatch) {
+
+        try {
+
+            const profileResponse = await fetch(
+                `https://api.cuescore.com/participant/?id=${playerIdMatch[1]}`
+            );
+
+            if (profileResponse.ok) {
+
+                const profilePlayer =
+                    await profileResponse.json();
+
+                profilePlayerName =
+                    profilePlayer.name ||
+                    `${profilePlayer.firstname || ""} ${profilePlayer.lastname || ""}`.trim();
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Eigen speler voor ranking ophalen mislukt:",
+                error
+            );
+        }
+    }
+}
+
     rankingContent.innerHTML = `
         <div class="profile-tournament-ranking-list">
 
-            ${data.ranking.players.map(player => `
-                <div class="profile-tournament-ranking-row">
+            ${data.ranking.players.map(player => {
+
+    const isOwnPlayer =
+        profilePlayerName &&
+        player.player.trim().toLowerCase() ===
+        profilePlayerName.trim().toLowerCase();
+
+    return `
+        <div class="profile-tournament-ranking-row ${isOwnPlayer ? "own-player" : ""}">
 
                     <div class="profile-tournament-ranking-position">
                         ${player.position}
@@ -795,7 +869,8 @@ async function openTournamentRanking(tournamentId) {
                     </div>
 
                 </div>
-            `).join("")}
+                        `;
+        }).join("")}
 
         </div>
     `;
@@ -2215,6 +2290,20 @@ function closeCompetitionDetail() {
             tournamentsTab
         );
 
+const matchesPanel =
+    document.getElementById("myProfileTabMatches");
+
+const tournamentsPanel =
+    document.getElementById("myProfileTabTournaments");
+
+if (matchesPanel) {
+    matchesPanel.style.display = "none";
+}
+
+if (tournamentsPanel) {
+    tournamentsPanel.style.display = "block";
+}
+
         sessionStorage.removeItem(
             "competitionDetailSource"
         );
@@ -2557,9 +2646,49 @@ if (matchVenue) {
 
 function closeMatchDetail() {
 
+    const detailSource =
+        sessionStorage.getItem("competitionDetailSource");
+
     document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
     });
+
+    if (detailSource === "profileMatches") {
+
+        document
+            .getElementById("myProfileScreen")
+            .classList.add("active");
+
+        const matchesTab =
+            document.querySelector(
+                '.my-profile-tab[data-profile-tab="matches"]'
+            );
+
+        showMyProfileTab(
+            "matches",
+            matchesTab
+        );
+
+        const playedMatchTab =
+    document.querySelector(
+        '.my-profile-match-tab[data-match-tab="played"]'
+    );
+
+showMyProfileMatchTab(
+    "played",
+    playedMatchTab
+);
+
+        sessionStorage.removeItem(
+            "competitionDetailSource"
+        );
+
+        sessionStorage.removeItem(
+            "profileMatchReturnTab"
+        );
+
+        return;
+    }
 
     document
         .getElementById("competitionDetailScreen")
@@ -4068,7 +4197,6 @@ async function openMyProfile() {
     return;
   }
 
-  // Player ID uit de opgeslagen CueScore-profiel-URL halen
   const cleanUrl = profileUrl.trim().replace(/\/+$/, "");
   const playerIdMatch = cleanUrl.match(/\/(\d+)$/);
 
@@ -4084,7 +4212,6 @@ async function openMyProfile() {
 
   const playerId = playerIdMatch[1];
 
-  // Profielscherm openen
   document.querySelectorAll(".screen").forEach(screen => {
     screen.classList.remove("active");
   });
@@ -4119,9 +4246,32 @@ async function openMyProfile() {
   }
 
   try {
-    const response = await fetch(
+    /*
+     * Alle requests starten onmiddellijk parallel.
+     * We wachten eerst alleen op de basisgegevens van de speler,
+     * zodat naam/foto/locatie zo snel mogelijk zichtbaar worden.
+     */
+    const participantRequest = fetch(
       `https://api.cuescore.com/participant/?id=${playerId}`
     );
+
+    const ratingsRequest = fetch(
+      `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileRatings&playerId=${playerId}`
+    );
+
+    const upcomingRequest = fetch(
+      `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileUpcoming&playerId=${playerId}`
+    );
+
+    const tournamentsRequest = fetch(
+      `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileTournaments&playerId=${playerId}`
+    );
+
+    const matchesRequest = fetch(
+      `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileMatches&playerId=${playerId}&page=1`
+    );
+
+    const response = await participantRequest;
 
     if (!response.ok) {
       throw new Error(
@@ -4132,297 +4282,39 @@ async function openMyProfile() {
     const player = await response.json();
 
     if (!player || !player.playerId) {
-      throw new Error("Geen geldige spelergegevens ontvangen.");
+      throw new Error(
+        "Geen geldige spelergegevens ontvangen."
+      );
     }
 
-const ratingsResponse = await fetch(
-  `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileRatings&playerId=${playerId}`
-);
+    const formatProfileMatchDate = value => {
+      if (!value) return "";
 
-if (!ratingsResponse.ok) {
-  throw new Error(
-    `Profielratings konden niet geladen worden (${ratingsResponse.status}).`
-  );
-}
+      const date = new Date(value);
 
-const ratingsData = await ratingsResponse.json();
+      if (Number.isNaN(date.getTime())) {
+        return value;
+      }
 
-if (!ratingsData.success || !Array.isArray(ratingsData.ratings)) {
-  throw new Error(
-    "Geen geldige profielratings ontvangen."
-  );
-}
+      const datePart = date.toLocaleDateString("nl-BE", {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
 
-const upcomingResponse = await fetch(
-  `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileUpcoming&playerId=${playerId}`
-);
+      const timePart = date.toLocaleTimeString("nl-BE", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      });
 
-if (!upcomingResponse.ok) {
-  throw new Error(
-    `Geplande profielwedstrijden konden niet geladen worden (${upcomingResponse.status}).`
-  );
-}
+      return `${datePart} · ${timePart}`;
+    };
 
-const upcomingData = await upcomingResponse.json();
-
-if (!upcomingData.success || !Array.isArray(upcomingData.matches)) {
-  throw new Error(
-    "Geen geldige geplande profielwedstrijden ontvangen."
-  );
-}
-
-const tournamentsResponse = await fetch(
-  `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileTournaments&playerId=${playerId}`
-);
-
-if (!tournamentsResponse.ok) {
-  throw new Error(
-    `Profieltornooien konden niet geladen worden (${tournamentsResponse.status}).`
-  );
-}
-
-const tournamentsData =
-  await tournamentsResponse.json();
-
-if (
-  !tournamentsData.success ||
-  !Array.isArray(tournamentsData.tournaments)
-) {
-  throw new Error(
-    "Geen geldige profieltornooien ontvangen."
-  );
-}
-
-    const matchesResponse = await fetch(
-  `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileMatches&playerId=${playerId}&page=1`
-);
-
-if (!matchesResponse.ok) {
-  throw new Error(
-    `Profielwedstrijden konden niet geladen worden (${matchesResponse.status}).`
-  );
-}
-
-const matchesData = await matchesResponse.json();
-
-if (!matchesData.success || !Array.isArray(matchesData.matches)) {
-  throw new Error(
-    "Geen geldige profielwedstrijden ontvangen."
-  );
-}
-
-const formatProfileMatchDate = value => {
-  if (!value) return "";
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  const datePart = date.toLocaleDateString("nl-BE", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  });
-
-  const timePart = date.toLocaleTimeString("nl-BE", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false
-  });
-
-  return `${datePart} · ${timePart}`;
-};
-
-const tournamentsPanel =
-  document.getElementById("myProfileTabTournaments");
-
-if (tournamentsPanel) {
-  const tournaments = tournamentsData.tournaments;
-
-  tournamentsPanel.innerHTML = `
-    ${
-      tournaments.length
-        ? tournaments.map(tournament => `
-            <div
-  class="my-profile-tournament-card"
-  onclick="openProfileTournament('${tournament.tournamentId}')"
->
-
-              <div class="my-profile-tournament-date">
-                ${tournament.date || ""}
-              </div>
-
-              <div class="my-profile-tournament-name">
-                ${tournament.name || ""}
-              </div>
-
-              <div class="my-profile-tournament-organizer">
-                ${tournament.organizer || ""}
-              </div>
-
-              <div class="my-profile-tournament-details">
-                ${
-                  tournament.position
-                    ? `<span>🏆 ${tournament.position}</span>`
-                    : tournament.status === "upcoming"
-                      ? `<span>Gepland</span>`
-                      : tournament.status === "live"
-                        ? `<span>Bezig</span>`
-                        : ""
-                }
-
-                ${
-                  tournament.participants
-                    ? `<span>👤 ${tournament.participants} deelnemers</span>`
-                    : ""
-                }
-              </div>
-
-            </div>
-          `).join("")
-        : `
-            <div class="my-profile-empty">
-              Geen tornooien gevonden.
-            </div>
-          `
-    }
-  `;
-}
-
-const matchesPanel =
-  document.getElementById("myProfileTabMatches");
-
-if (matchesPanel) {
-const upcomingMatches =
-  upcomingData.matches;
-
-const playedMatches =
-  matchesData.matches;
-
-  matchesPanel.innerHTML = `
-  <div class="my-profile-match-tabs">
-  <button
-    type="button"
-    class="my-profile-match-tab active"
-    data-match-tab="upcoming"
-  >
-    Gepland (${upcomingMatches.length})
-  </button>
-
-  <button
-    type="button"
-    class="my-profile-match-tab"
-    data-match-tab="played"
-  >
-    Gespeeld (${playedMatches.length})
-  </button>
-</div>
-
-    <div
-  class="my-profile-matches-section"
-  id="myProfileUpcomingSection"
->
-
-      <div id="myProfileUpcomingMatches">
-  ${
-    upcomingMatches.length
-      ? upcomingMatches.map(match => `
-          <div class="my-profile-match-card">
-
-            <div class="my-profile-match-date">
-              ${formatProfileMatchDate(match.date)}
-            </div>
-
-            <div class="my-profile-match-opponent">
-              ${match.opponent || ""}
-            </div>
-
-            <div class="my-profile-match-info">
-              ${
-                match.matchNo
-                  ? `Match ${match.matchNo}`
-                  : ""
-              }
-            </div>
-
-          </div>
-        `).join("")
-      : `
-          <div class="my-profile-empty">
-            Geen geplande wedstrijden.
-          </div>
-        `
-  }
-</div>
-    </div>
-
-    <div
-  class="my-profile-matches-section"
-  id="myProfilePlayedSection"
-  style="display: none;"
->
-
-      <div id="myProfilePlayedMatches">
-  ${
-    playedMatches.length
-      ? playedMatches.map(match => `
-          <div class="my-profile-match-card">
-
-            <div class="my-profile-match-date">
-              ${formatProfileMatchDate(match.date)}
-            </div>
-
-            <div class="my-profile-played-main">
-
-              <div class="my-profile-match-opponent">
-                ${match.opponent || ""}
-              </div>
-
-              <div class="my-profile-match-score">
-                ${match.scorePlayer} - ${match.scoreOpponent}
-              </div>
-
-            </div>
-
-            <div class="my-profile-match-tournament">
-              ${match.tournament || ""}
-            </div>
-
-            <div class="my-profile-match-result ${match.result || ""}">
-              ${
-                match.result === "win"
-                  ? "Gewonnen"
-                  : match.result === "loss"
-                    ? "Verloren"
-                    : ""
-              }
-            </div>
-</div>
-        `).join("")
-      : `
-          <div class="my-profile-empty">
-            Geen gespeelde wedstrijden.
-          </div>
-        `
-  }
-</div>
-
-<button
-  type="button"
-  id="myProfileLoadMoreMatches"
-  class="my-profile-load-more"
-  data-player-id="${playerId}"
-  data-next-page="2"
->
-  Meer wedstrijden laden
-</button>
-
-    </div>
-  `;
-}
-
+    /*
+     * Eerst de basis van het profiel renderen.
+     * Dit deel heeft alleen de participant-data nodig.
+     */
     const image =
       document.getElementById("myProfileImage");
 
@@ -4448,26 +4340,26 @@ const playedMatches =
     }
 
     if (name) {
-  const playerName =
-    player.name ||
-    `${player.firstname || ""} ${player.lastname || ""}`.trim();
+      const playerName =
+        player.name ||
+        `${player.firstname || ""} ${player.lastname || ""}`.trim();
 
-  name.innerHTML = `
-    <span>${playerName}</span>
+      name.innerHTML = `
+        <span>${playerName}</span>
 
-    ${
-      player.country?.image
-        ? `
-          <img
-            class="my-profile-name-flag"
-            src="${player.country.image}"
-            alt="${player.country.name || ""}"
-          >
-        `
-        : ""
+        ${
+          player.country?.image
+            ? `
+              <img
+                class="my-profile-name-flag"
+                src="${player.country.image}"
+                alt="${player.country.name || ""}"
+              >
+            `
+            : ""
+        }
+      `;
     }
-  `;
-}
 
     if (verified) {
       verified.style.display =
@@ -4493,46 +4385,6 @@ const playedMatches =
         locationParts.join(", ");
     }
 
-    const ratingsContainer =
-  document.getElementById("myProfileRatings");
-
-if (ratingsContainer) {
-  ratingsContainer.innerHTML = `
-    ${
-      ratingsData.ratings.length
-        ? ratingsData.ratings.map(rating => `
-            <div class="my-profile-rating">
-
-              <div class="my-profile-rating-value">
-                ${rating.value}
-              </div>
-
-              <div class="my-profile-rating-name">
-  ${
-    rating.name === "KNBB Pool Rating"
-      ? "🇳🇱 "
-      : rating.name === "P-B-B Pool Rating"
-        ? "🇧🇪 "
-        : ""
-  }
-  ${rating.name}
-</div>
-
-            </div>
-          `).join("")
-        : `
-            <div class="my-profile-empty">
-              Geen ratings beschikbaar.
-            </div>
-          `
-    }
-  `;
-}
-
-if (matchesPanel) {
-  matchesPanel.style.display = "block";
-}
-
     if (loading) {
       loading.style.display = "none";
     }
@@ -4540,6 +4392,322 @@ if (matchesPanel) {
     if (content) {
       content.style.display = "block";
     }
+
+    /*
+     * Nu pas wachten op de vier Worker-responses.
+     * De basis van het profiel staat ondertussen al op het scherm.
+     */
+    const [
+      ratingsResponse,
+      upcomingResponse,
+      tournamentsResponse,
+      matchesResponse
+    ] = await Promise.all([
+      ratingsRequest,
+      upcomingRequest,
+      tournamentsRequest,
+      matchesRequest
+    ]);
+
+    if (!ratingsResponse.ok) {
+      throw new Error(
+        `Profielratings konden niet geladen worden (${ratingsResponse.status}).`
+      );
+    }
+
+    if (!upcomingResponse.ok) {
+      throw new Error(
+        `Geplande profielwedstrijden konden niet geladen worden (${upcomingResponse.status}).`
+      );
+    }
+
+    if (!tournamentsResponse.ok) {
+      throw new Error(
+        `Profieltornooien konden niet geladen worden (${tournamentsResponse.status}).`
+      );
+    }
+
+    if (!matchesResponse.ok) {
+      throw new Error(
+        `Profielwedstrijden konden niet geladen worden (${matchesResponse.status}).`
+      );
+    }
+
+    const [
+      ratingsData,
+      upcomingData,
+      tournamentsData,
+      matchesData
+    ] = await Promise.all([
+      ratingsResponse.json(),
+      upcomingResponse.json(),
+      tournamentsResponse.json(),
+      matchesResponse.json()
+    ]);
+
+    if (
+      !ratingsData.success ||
+      !Array.isArray(ratingsData.ratings)
+    ) {
+      throw new Error(
+        "Geen geldige profielratings ontvangen."
+      );
+    }
+
+    if (
+      !upcomingData.success ||
+      !Array.isArray(upcomingData.matches)
+    ) {
+      throw new Error(
+        "Geen geldige geplande profielwedstrijden ontvangen."
+      );
+    }
+
+    if (
+      !tournamentsData.success ||
+      !Array.isArray(tournamentsData.tournaments)
+    ) {
+      throw new Error(
+        "Geen geldige profieltornooien ontvangen."
+      );
+    }
+
+    if (
+      !matchesData.success ||
+      !Array.isArray(matchesData.matches)
+    ) {
+      throw new Error(
+        "Geen geldige profielwedstrijden ontvangen."
+      );
+    }
+
+    /*
+     * Worker-afhankelijke inhoud renderen.
+     */
+    const tournamentsPanel =
+      document.getElementById("myProfileTabTournaments");
+
+    if (tournamentsPanel) {
+      const tournaments = tournamentsData.tournaments;
+
+      tournamentsPanel.innerHTML = `
+        ${
+          tournaments.length
+            ? tournaments.map(tournament => `
+                <div
+                  class="my-profile-tournament-card"
+                  onclick="openProfileTournament('${tournament.tournamentId}')"
+                >
+                  <div class="my-profile-tournament-date">
+                    ${tournament.date || ""}
+                  </div>
+
+                  <div class="my-profile-tournament-name">
+                    ${tournament.name || ""}
+                  </div>
+
+                  <div class="my-profile-tournament-organizer">
+                    ${tournament.organizer || ""}
+                  </div>
+
+                  <div class="my-profile-tournament-details">
+                    ${
+                      tournament.position
+                        ? `<span>🏆 ${tournament.position}</span>`
+                        : tournament.status === "upcoming"
+                          ? `<span>Gepland</span>`
+                          : tournament.status === "live"
+                            ? `<span>Bezig</span>`
+                            : ""
+                    }
+
+                    ${
+                      tournament.participants
+                        ? `<span>👤 ${tournament.participants} deelnemers</span>`
+                        : ""
+                    }
+                  </div>
+                </div>
+              `).join("")
+            : `
+                <div class="my-profile-empty">
+                  Geen tornooien gevonden.
+                </div>
+              `
+        }
+      `;
+    }
+
+    const matchesPanel =
+      document.getElementById("myProfileTabMatches");
+
+    if (matchesPanel) {
+      const upcomingMatches =
+        upcomingData.matches;
+
+      const playedMatches =
+        matchesData.matches;
+
+      matchesPanel.innerHTML = `
+        <div class="my-profile-match-tabs">
+          <button
+            type="button"
+            class="my-profile-match-tab active"
+            data-match-tab="upcoming"
+          >
+            Gepland (${upcomingMatches.length})
+          </button>
+
+          <button
+            type="button"
+            class="my-profile-match-tab"
+            data-match-tab="played"
+          >
+            Gespeeld (${playedMatches.length})
+          </button>
+        </div>
+
+        <div
+          class="my-profile-matches-section"
+          id="myProfileUpcomingSection"
+        >
+          <div id="myProfileUpcomingMatches">
+            ${
+              upcomingMatches.length
+                ? upcomingMatches.map(match => `
+                    <div class="my-profile-match-card">
+                      <div class="my-profile-match-date">
+                        ${formatProfileMatchDate(match.date)}
+                      </div>
+
+                      <div class="my-profile-match-opponent">
+                        ${match.opponent || ""}
+                      </div>
+
+                      <div class="my-profile-match-info">
+                        ${
+                          match.matchNo
+                            ? `Match ${match.matchNo}`
+                            : ""
+                        }
+                      </div>
+                    </div>
+                  `).join("")
+                : `
+                    <div class="my-profile-empty">
+                      Geen geplande wedstrijden.
+                    </div>
+                  `
+            }
+          </div>
+        </div>
+
+        <div
+          class="my-profile-matches-section"
+          id="myProfilePlayedSection"
+          style="display: none;"
+        >
+          <div id="myProfilePlayedMatches">
+            ${
+              playedMatches.length
+                ? playedMatches.map(match => `
+                    <div
+                      class="my-profile-match-card ${match.result === "win" ? "won" : match.result === "loss" ? "lost" : ""}"
+                      onclick="openProfilePlayedMatch('${match.matchId}', '${match.tournamentId}')"
+                    >
+                      <div class="my-profile-match-date">
+                        ${formatProfileMatchDate(match.date)}
+                      </div>
+
+                      <div class="my-profile-played-main">
+                        <div class="my-profile-match-opponent">
+                          ${match.opponent || ""}
+                        </div>
+
+                        <div class="my-profile-match-score">
+                          ${match.scorePlayer} - ${match.scoreOpponent}
+                        </div>
+                      </div>
+
+                      <div class="my-profile-match-tournament">
+                        ${match.tournament || ""}
+                      </div>
+
+                      <div class="my-profile-match-result ${match.result || ""}">
+                        ${
+                          match.result === "win"
+                            ? "Gewonnen"
+                            : match.result === "loss"
+                              ? "Verloren"
+                              : ""
+                        }
+                      </div>
+                    </div>
+                  `).join("")
+                : `
+                    <div class="my-profile-empty">
+                      Geen gespeelde wedstrijden.
+                    </div>
+                  `
+            }
+          </div>
+
+          <button
+            type="button"
+            id="myProfileLoadMoreMatches"
+            class="my-profile-load-more"
+            data-player-id="${playerId}"
+            data-next-page="2"
+          >
+            Meer wedstrijden laden
+          </button>
+        </div>
+      `;
+    }
+
+    const ratingsContainer =
+      document.getElementById("myProfileRatings");
+
+    if (ratingsContainer) {
+      ratingsContainer.innerHTML = `
+        ${
+          ratingsData.ratings.length
+            ? ratingsData.ratings.map(rating => `
+                <div class="my-profile-rating">
+                  <div class="my-profile-rating-value">
+                    ${rating.value}
+                  </div>
+
+                  <div class="my-profile-rating-name">
+                    ${
+                      rating.name === "KNBB Pool Rating"
+                        ? "🇳🇱 "
+                        : rating.name === "P-B-B Pool Rating"
+                          ? "🇧🇪 "
+                          : ""
+                    }
+                    ${rating.name}
+                  </div>
+                </div>
+              `).join("")
+            : `
+                <div class="my-profile-empty">
+                  Geen ratings beschikbaar.
+                </div>
+              `
+        }
+      `;
+    }
+
+    const defaultProfileTab =
+      document.querySelector(
+        '.my-profile-tab[data-profile-tab="matches"]'
+      );
+
+    showMyProfileTab(
+      "matches",
+      defaultProfileTab
+    );
 
   } catch (err) {
     console.error("CueScore-profiel laden mislukt:", err);
