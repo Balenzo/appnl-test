@@ -4099,6 +4099,10 @@ body.start2pool-viewer-open {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .my-profile-tab.active {
@@ -4511,4 +4515,76 @@ body.start2pool-viewer-open {
 .my-profile-match-card.lost {
   border-color: #c62828;
   background: rgba(198, 40, 40, 0.12);
+}
+
+.my-profile-tab[data-profile-tab="cuescore"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.my-profile-cuescore-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ===========================
+   CUESCORE LOGO + PROFIELTAB ICONEN
+=========================== */
+.competition-cuescore-link-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.competition-cuescore-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.my-profile-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.my-profile-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Eigen CueScore-profiel in standen en wedstrijden */
+.linked-profile-player {
+  color: #e30613 !important;
+  font-weight: 800 !important;
+}
+
+.competition-cuescore-link-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.competition-cuescore-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.competition-cuescore-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  padding-left: 18px;
 }

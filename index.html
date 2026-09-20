@@ -1298,39 +1298,47 @@
       <!-- PROFIELTABS -->
       <div class="my-profile-tabs">
 
-        <button
-          type="button"
-          class="my-profile-tab active"
-          data-profile-tab="matches"
-        >
-          Wedstrijden
-        </button>
+  <button
+    type="button"
+    class="my-profile-tab active"
+    data-profile-tab="matches"
+  >
+    <span aria-hidden="true">🎱</span>
+    <span>Wedstrijden</span>
+  </button>
 
-        <button
-          type="button"
-          class="my-profile-tab"
-          data-profile-tab="tournaments"
-        >
-          Tornooien
-        </button>
+  <button
+    type="button"
+    class="my-profile-tab"
+    data-profile-tab="tournaments"
+  >
+    <span aria-hidden="true">🏆</span>
+    <span>Tornooien</span>
+  </button>
 
-        <button
-          type="button"
-          class="my-profile-tab"
-          data-profile-tab="results"
-        >
-          Resultaten
-        </button>
+  <button
+    type="button"
+    class="my-profile-tab"
+    data-profile-tab="teams"
+  >
+    <span aria-hidden="true">👥</span>
+    <span>Teams</span>
+  </button>
 
-        <button
-          type="button"
-          class="my-profile-tab"
-          data-profile-tab="teams"
-        >
-          Teams
-        </button>
+  <button
+    type="button"
+    class="my-profile-tab"
+    data-profile-tab="cuescore"
+  >
+    <img
+      src="cuescore.png"
+      alt=""
+      class="my-profile-cuescore-logo"
+    >
+    <span>CueScore</span>
+  </button>
 
-      </div>
+</div>
 
       <!-- WEDSTRIJDEN -->
       <div
@@ -1348,14 +1356,6 @@
       >
       </div>
 
-      <!-- RESULTATEN -->
-      <div
-        id="myProfileTabResults"
-        class="my-profile-tab-panel"
-        style="display: none;"
-      >
-      </div>
-
       <!-- TEAMS -->
       <div
         id="myProfileTabTeams"
@@ -1367,6 +1367,47 @@
     </div>
 
   </main>
+</section>
+
+<!-- =========================
+     CUESCORE PROFIEL SCREEN
+========================= -->
+<section class="screen" id="myProfileCueScoreScreen">
+
+  <div class="page-header">
+    <button
+      type="button"
+      onclick="closeMyProfileCueScore()"
+      style="
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+      "
+    >
+      ‹
+    </button>
+
+    <span>CueScore</span>
+  </div>
+
+  <main class="content">
+    <div class="reservation-container">
+
+      <div class="reservation-frame">
+        <iframe
+          id="myProfileCueScoreIframe"
+          src=""
+          title="CueScore profiel"
+        >
+        </iframe>
+      </div>
+
+    </div>
+  </main>
+
 </section>
 
     <!-- =========================
@@ -1587,65 +1628,124 @@
             <div class="competition-arrow">›</div>
           </a>
         </div>
+
         <!-- TORNOOIEN -->
-        <div class="tab-content" id="tab-tournaments">
-          <a
-            class="competition-card"
-            href="#"
-            onclick="
-              window.open(
-                'https://cuescore.com/tournaments/?date=' +
-                  new Date().toISOString().split('T')[0] +
-                  '&amp;sort=asc&amp;c=1000237&amp;d=0&amp;q=',
-                '_blank',
-              );
-              return false;
-            "
-          >
-            <div class="competition-icon">🇧🇪</div>
-            <div class="competition-info">
-              <div class="competition-title" data-i18n="ui.tornooien.belgie">
-                Tornooien België
-              </div>
-              <div
-                class="competition-subtitle"
-                data-i18n="ui.vanaf.de.dag.van.raadpleging"
-              >
-                Vanaf de dag van raadpleging
-              </div>
-            </div>
-            <div class="competition-arrow">›</div>
-          </a>
-          <a
-            class="competition-card"
-            href="#"
-            onclick="
-              window.open(
-                'https://cuescore.com/tournaments/?date=' +
-                  new Date().toISOString().split('T')[0] +
-                  '&amp;sort=asc&amp;c=1000231&amp;d=0&amp;q=',
-                '_blank',
-              );
-              return false;
-            "
-          >
-            <div class="competition-icon">🇳🇱</div>
-            <div class="competition-info">
-              <div class="competition-title" data-i18n="ui.tornooien.nederland">
-                Tornooien Nederland
-              </div>
-              <div
-                class="competition-subtitle"
-                data-i18n="ui.vanaf.de.dag.van.raadpleging"
-              >
-                Vanaf de dag van raadpleging
-              </div>
-            </div>
-            <div class="competition-arrow">›</div>
-          </a>
-        </div>
+<div class="tab-content" id="tab-tournaments">
+
+  <button
+    type="button"
+    class="competition-card"
+    onclick="openCountryTournaments('belgium')"
+    style="width: 100%; border: none; cursor: pointer;"
+  >
+    <div class="competition-icon">🇧🇪</div>
+
+    <div class="competition-info">
+      <div
+        class="competition-title"
+        data-i18n="ui.tornooien.belgie"
+      >
+        Tornooien België
+      </div>
+
+      <div class="competition-subtitle">
+        Komende en vorige tornooien
+      </div>
+    </div>
+
+    <div class="competition-arrow">›</div>
+  </button>
+
+  <button
+    type="button"
+    class="competition-card"
+    onclick="openCountryTournaments('netherlands')"
+    style="width: 100%; border: none; cursor: pointer;"
+  >
+    <div class="competition-icon">🇳🇱</div>
+
+    <div class="competition-info">
+      <div
+        class="competition-title"
+        data-i18n="ui.tornooien.nederland"
+      >
+        Tornooien Nederland
+      </div>
+
+      <div class="competition-subtitle">
+        Komende en vorige tornooien
+      </div>
+    </div>
+
+    <div class="competition-arrow">›</div>
+  </button>
+
+</div>
       </main>
     </section>
+
+<!-- =========================
+     LAND TORNOOIEN SCREEN
+========================= -->
+<section class="screen" id="countryTournamentsScreen">
+
+  <div class="page-header">
+    <button
+      type="button"
+      onclick="closeCountryTournaments()"
+      style="
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+      "
+    >
+      ‹
+    </button>
+
+    <span id="countryTournamentsTitle">
+      Tornooien België
+    </span>
+  </div>
+
+  <main class="content">
+
+    <div class="competition-detail-tabs">
+
+      <button
+        type="button"
+        class="competition-detail-tab active"
+        id="countryTournamentsUpcomingTab"
+        onclick="showCountryTournamentView('upcoming')"
+      >
+        Komende
+      </button>
+
+      <button
+        type="button"
+        class="competition-detail-tab"
+        id="countryTournamentsPastTab"
+        onclick="showCountryTournamentView('past')"
+      >
+        Vorige
+      </button>
+
+    </div>
+
+    <div id="countryTournamentsList">
+
+      <div class="competition-loading">
+        Tornooien laden...
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
     <!-- =========================
      COMPETITIE DETAIL SCREEN
 ========================== -->
@@ -1701,12 +1801,12 @@
               Wedstrijden
             </button>
             <button
-              class="competition-detail-tab"
-              data-i18n="ui.teams"
-              onclick="showCompetitionTab('teams', this)"
-            >
-              Teams
-            </button>
+  class="competition-detail-tab"
+  id="competitionTeamsTab"
+  onclick="showCompetitionTab('teams', this)"
+>
+  Teams
+</button>
           </div>
           <!-- OVERZICHT TAB -->
           <div class="competition-tab-panel" id="competitionTabOverview">
@@ -1728,17 +1828,25 @@
               </div>
             </div>
             <a
-              class="competition-cuescore-link"
-              href="#"
-              id="competitionCueScoreLink"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <span data-i18n="ui.bekijk.op.cuescore"
-                >🎱 Bekijk op CueScore</span
-              >
-              <span>↗</span>
-            </a>
+  class="competition-cuescore-link"
+  href="#"
+  id="competitionCueScoreLink"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  <span class="competition-cuescore-main">
+    <img
+      src="cuescore.png"
+      alt=""
+      class="competition-cuescore-logo"
+    >
+    <span data-i18n="ui.bekijk.op.cuescore">
+      Bekijk op CueScore
+    </span>
+  </span>
+
+  <span class="competition-cuescore-arrow">↗</span>
+</a>
 
             <div
               id="competitionRankingLinkContainer"

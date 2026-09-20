@@ -57,7 +57,7 @@ function formatMoneygameDiscipline(discipline) {
   if (discipline === "any") {
     return moneygameTr(
       "moneygames.anyDiscipline",
-      "Eender"
+      "Multiball"
     );
   }
 
@@ -1516,7 +1516,7 @@ function buildMoneygameClubMatchCard(
     match.discipline === "any"
       ? moneygameTr(
           "moneygames.anyDiscipline",
-          "Eender"
+          "Multiball"
         )
       : match.discipline || "";
 

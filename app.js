@@ -21,6 +21,59 @@ function appLocale() {
     : "nl-BE";
 }
 
+let linkedProfilePlayerNameCache = null;
+
+async function getLinkedProfilePlayerName() {
+  if (linkedProfilePlayerNameCache !== null) {
+    return linkedProfilePlayerNameCache;
+  }
+
+  const profileUrl = localStorage.getItem("myProfileUrl");
+
+  if (!profileUrl) {
+    linkedProfilePlayerNameCache = "";
+    return "";
+  }
+
+  const cleanUrl = profileUrl.trim().replace(/\/+$/, "");
+  const playerIdMatch = cleanUrl.match(/\/(\d+)$/);
+
+  if (!playerIdMatch) {
+    linkedProfilePlayerNameCache = "";
+    return "";
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.cuescore.com/participant/?id=${playerIdMatch[1]}`
+    );
+
+    if (!response.ok) {
+      return "";
+    }
+
+    const player = await response.json();
+
+    linkedProfilePlayerNameCache =
+      player.name ||
+      `${player.firstname || ""} ${player.lastname || ""}`.trim();
+
+    return linkedProfilePlayerNameCache;
+  } catch (error) {
+    console.error("Gekoppelde CueScore-speler ophalen mislukt:", error);
+    return "";
+  }
+}
+
+function isLinkedProfilePlayer(playerName, linkedProfilePlayerName) {
+  return Boolean(
+    playerName &&
+    linkedProfilePlayerName &&
+    String(playerName).trim().toLowerCase() ===
+      String(linkedProfilePlayerName).trim().toLowerCase()
+  );
+}
+
 function getCompetitionMatchVenue(match) {
   const comment = String(match?.comment || "").trim().toUpperCase();
 
@@ -669,32 +722,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /* ===========================
-   TEST CUESCORE API
-=========================== */
-
-async function testCueScoreAPI() {
-
-    try {
-
-        const response = await fetch(
-            "https://api.cuescore.com/tournament/?id=74130085"
-        );
-
-        const data = await response.json();
-
-        console.log("🎱 CueScore API TEST:", data);
-
-    } catch (error) {
-
-        console.error("❌ CueScore API fout:", error);
-
-    }
-
-}
-
-testCueScoreAPI();
-
-/* ===========================
    OPEN COMPETITION DETAIL
 =========================== */
 
@@ -715,7 +742,8 @@ async function openProfilePlayedMatch(matchId, tournamentId) {
   );
 
   await openCompetitionDetail(
-    Number(tournamentId)
+    Number(tournamentId),
+    "profileMatches"
   );
 
   openMatchDetail(
@@ -730,7 +758,10 @@ function openProfileTournament(tournamentId) {
     "profileTournaments"
   );
 
-  openCompetitionDetail(tournamentId);
+  openCompetitionDetail(
+    tournamentId,
+    "profileTournaments"
+  );
 }
 
 async function openTournamentRanking(tournamentId) {
@@ -904,7 +935,494 @@ function closeTournamentRanking() {
     }
 }
 
-async function openCompetitionDetail(tournamentId) {
+let currentTournamentCountry = null;
+let currentTournamentView = "upcoming";
+
+let countryTournamentItems = [];
+let countryTournamentVisibleCount = 10;
+let countryTournamentOffset = 0;
+
+function openCountryTournaments(country) {
+  currentTournamentCountry = country;
+  currentTournamentView = "upcoming";
+
+  const competitionsScreen =
+    document.getElementById("competitionsScreen");
+
+  const tournamentsScreen =
+    document.getElementById("countryTournamentsScreen");
+
+  const title =
+    document.getElementById("countryTournamentsTitle");
+
+  const upcomingTab =
+    document.getElementById("countryTournamentsUpcomingTab");
+
+  const pastTab =
+    document.getElementById("countryTournamentsPastTab");
+
+  if (title) {
+    title.textContent =
+      country === "netherlands"
+        ? "🇳🇱 Tornooien Nederland"
+        : "🇧🇪 Tornooien België";
+  }
+
+  if (upcomingTab) {
+    upcomingTab.classList.add("active");
+  }
+
+  if (pastTab) {
+    pastTab.classList.remove("active");
+  }
+
+  if (competitionsScreen) {
+    competitionsScreen.classList.remove("active");
+  }
+
+    if (tournamentsScreen) {
+    tournamentsScreen.classList.add("active");
+  }
+
+  loadCountryTournaments();
+}
+
+function closeCountryTournaments() {
+  const tournamentsScreen =
+    document.getElementById("countryTournamentsScreen");
+
+  const competitionsScreen =
+    document.getElementById("competitionsScreen");
+
+  if (tournamentsScreen) {
+    tournamentsScreen.classList.remove("active");
+  }
+
+  if (competitionsScreen) {
+    competitionsScreen.classList.add("active");
+  }
+}
+
+function showCountryTournamentView(view) {
+  currentTournamentView =
+    view === "past" ? "past" : "upcoming";
+
+  const upcomingTab =
+    document.getElementById("countryTournamentsUpcomingTab");
+
+  const pastTab =
+    document.getElementById("countryTournamentsPastTab");
+
+  if (upcomingTab) {
+    upcomingTab.classList.toggle(
+      "active",
+      currentTournamentView === "upcoming"
+    );
+  }
+
+    if (pastTab) {
+    pastTab.classList.toggle(
+      "active",
+      currentTournamentView === "past"
+    );
+  }
+
+  loadCountryTournaments();
+}
+
+async function loadCountryTournaments() {
+  const list =
+    document.getElementById("countryTournamentsList");
+
+  if (!list || !currentTournamentCountry) {
+    return;
+  }
+
+  countryTournamentItems = [];
+  countryTournamentVisibleCount = 10;
+  countryTournamentOffset = 0;
+
+  list.innerHTML = `
+    <div class="competition-loading">
+      Tornooien laden...
+    </div>
+  `;
+
+  try {
+    await loadCountryTournamentPage(0);
+    renderCountryTournaments();
+
+  } catch (error) {
+    console.error(
+      "Tornooien ophalen mislukt:",
+      error
+    );
+
+    list.innerHTML = `
+      <div class="competition-loading">
+        Tornooien konden niet geladen worden.
+      </div>
+    `;
+  }
+}
+
+
+async function loadCountryTournamentPage(offset) {
+  const workerUrl =
+    new URL(
+      "https://balenzo-cuescore.nicolasmintjens.workers.dev/"
+    );
+
+  workerUrl.searchParams.set(
+    "type",
+    "countryTournaments"
+  );
+
+  workerUrl.searchParams.set(
+    "country",
+    currentTournamentCountry
+  );
+
+  workerUrl.searchParams.set(
+    "view",
+    currentTournamentView
+  );
+
+  workerUrl.searchParams.set(
+    "offset",
+    String(offset)
+  );
+
+  const response =
+    await fetch(workerUrl.toString(), {
+      cache: "no-store"
+    });
+
+  if (!response.ok) {
+    throw new Error(
+      `Worker gaf HTTP ${response.status}`
+    );
+  }
+
+  const data =
+    await response.json();
+
+  if (!data.success) {
+    throw new Error(
+      data.error || "Tornooien ophalen mislukt"
+    );
+  }
+
+  const tournaments =
+    Array.isArray(data.tournaments)
+      ? data.tournaments
+      : [];
+
+  countryTournamentItems.push(
+    ...tournaments
+  );
+
+  countryTournamentOffset = offset;
+
+  return tournaments.length;
+}
+
+
+function renderCountryTournaments() {
+  const list =
+    document.getElementById("countryTournamentsList");
+
+  if (!list) {
+    return;
+  }
+
+  if (!countryTournamentItems.length) {
+    list.innerHTML = `
+      <div class="competition-loading">
+        Geen tornooien gevonden.
+      </div>
+    `;
+    return;
+  }
+
+  const visibleTournaments =
+    countryTournamentItems.slice(
+      0,
+      countryTournamentVisibleCount
+    );
+
+  const cards =
+    visibleTournaments
+      .map(tournament => {
+
+        let dateText = "";
+
+        if (tournament.starttime) {
+          const date =
+            new Date(tournament.starttime);
+
+          if (!Number.isNaN(date.getTime())) {
+            dateText =
+              new Intl.DateTimeFormat(
+                "nl-BE",
+                {
+                  weekday: "short",
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                }
+              ).format(date);
+          }
+        }
+
+        const details = [];
+
+        if (tournament.discipline) {
+          details.push(
+            tournament.discipline
+          );
+        }
+
+        if (tournament.location) {
+          details.push(
+            tournament.location
+          );
+        } else if (tournament.organizer) {
+          details.push(
+            tournament.organizer
+          );
+        }
+
+        if (
+          tournament.numParticipants !== null &&
+          tournament.numParticipants !== undefined
+        ) {
+          details.push(
+            `${tournament.numParticipants} deelnemers`
+          );
+        }
+
+        return `
+          <button
+  type="button"
+  class="competition-card"
+  onclick="openCountryTournamentDetail(
+    '${escapeCountryTournamentHtml(
+      tournament.tournamentId || ""
+    )}',
+    '${escapeCountryTournamentHtml(
+      tournament.url || ""
+    )}'
+  )"
+  style="
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  "
+>
+            <div class="competition-icon">
+              ${
+                currentTournamentCountry ===
+                "netherlands"
+                  ? "🇳🇱"
+                  : "🇧🇪"
+              }
+            </div>
+
+            <div class="competition-info">
+
+              ${
+                dateText
+                  ? `
+                    <div class="competition-subtitle">
+                      ${escapeCountryTournamentHtml(
+                        dateText
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+              <div class="competition-title">
+                ${escapeCountryTournamentHtml(
+                  tournament.name || "Tornooi"
+                )}
+              </div>
+
+              ${
+                details.length
+                  ? `
+                    <div class="competition-subtitle">
+                      ${escapeCountryTournamentHtml(
+                        details.join(" • ")
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+            </div>
+
+            <div class="competition-arrow">
+              ›
+            </div>
+          </button>
+        `;
+      })
+      .join("");
+
+  const moreButton = `
+    <button
+      type="button"
+      class="competition-card"
+      onclick="loadMoreCountryTournaments()"
+      style="
+        width: 100%;
+        border: none;
+        cursor: pointer;
+        justify-content: center;
+      "
+    >
+      <div
+        class="competition-title"
+        style="text-align: center;"
+      >
+        Meer tornooien laden
+      </div>
+    </button>
+  `;
+
+  list.innerHTML =
+    cards +
+    (
+      countryTournamentVisibleCount <
+      countryTournamentItems.length
+        ? moreButton
+        : countryTournamentItems.length === 50 ||
+          countryTournamentItems.length > 50
+          ? moreButton
+          : ""
+    );
+}
+
+
+async function loadMoreCountryTournaments() {
+  const list =
+    document.getElementById("countryTournamentsList");
+
+  if (!list) {
+    return;
+  }
+
+  /*
+   * Er zijn nog reeds opgehaalde tornooien
+   * die niet zichtbaar zijn.
+   */
+  if (
+    countryTournamentVisibleCount <
+    countryTournamentItems.length
+  ) {
+    countryTournamentVisibleCount += 10;
+    renderCountryTournaments();
+    return;
+  }
+
+  /*
+   * De huidige CueScore-pagina is opgebruikt.
+   * Haal de volgende 50 op.
+   */
+  const nextOffset =
+    countryTournamentOffset + 50;
+
+  try {
+    const amountLoaded =
+      await loadCountryTournamentPage(
+        nextOffset
+      );
+
+    if (!amountLoaded) {
+      renderCountryTournaments();
+      return;
+    }
+
+    countryTournamentVisibleCount += 10;
+    renderCountryTournaments();
+
+  } catch (error) {
+    console.error(
+      "Meer tornooien ophalen mislukt:",
+      error
+    );
+  }
+}
+
+function openCountryTournamentDetail(
+  tournamentId,
+  tournamentUrl
+) {
+  if (!tournamentId) {
+    return;
+  }
+
+  /*
+   * Bewaren waar we vandaan komen.
+   * Dit gebruiken we straks voor de terugknop.
+   */
+  sessionStorage.setItem(
+    "competitionDetailSource",
+    "countryTournaments"
+  );
+
+  sessionStorage.setItem(
+    "countryTournamentCountry",
+    currentTournamentCountry || ""
+  );
+
+  sessionStorage.setItem(
+    "countryTournamentView",
+    currentTournamentView || "upcoming"
+  );
+
+  sessionStorage.setItem(
+    "countryTournamentUrl",
+    tournamentUrl || ""
+  );
+
+  openCompetitionDetail(
+    String(tournamentId),
+    "countryTournaments"
+  );
+}
+
+function escapeCountryTournamentHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function isTournamentDetailSource(detailSource) {
+    return (
+        detailSource === "profileTournaments" ||
+        detailSource === "countryTournaments"
+    );
+}
+
+async function openCompetitionDetail(tournamentId, detailSourceOverride = null) {
+
+if (detailSourceOverride) {
+    sessionStorage.setItem(
+        "competitionDetailSource",
+        detailSourceOverride
+    );
+} else {
+    sessionStorage.removeItem(
+        "competitionDetailSource"
+    );
+}
 
 document.querySelectorAll(".competition-tab-panel").forEach(panel => {
     panel.style.display = "none";
@@ -943,9 +1461,29 @@ if (overviewTab) {
     sessionStorage.getItem("competitionDetailSource");
 
 document.getElementById("competitionDetailTitle").textContent =
-    detailSource === "profileTournaments"
+    isTournamentDetailSource(detailSource)
         ? "Tornooi"
         : "Competitie";
+
+    const teamsHeadingOnLoad =
+    document.getElementById("competitionTeamsTitle");
+
+if (teamsHeadingOnLoad) {
+    teamsHeadingOnLoad.textContent =
+        isTournamentDetailSource(detailSource)
+            ? tr("competition.players", "Spelers")
+            : tr("common.teams", "Teams");
+}    
+
+const teamsTabOnLoad =
+    document.getElementById("competitionTeamsTab");
+
+if (teamsTabOnLoad) {
+    teamsTabOnLoad.textContent =
+        isTournamentDetailSource(detailSource)
+            ? tr("competition.players", "Spelers")
+            : tr("common.teams", "Teams");
+}
 
     document.getElementById("competitionName").textContent =
         "Competitie laden...";
@@ -965,6 +1503,9 @@ document.getElementById("competitionDetailTitle").textContent =
         currentCompetitionData = data;
 
         currentCompetitionTournamentId = String(tournamentId);
+
+        const linkedProfilePlayerName =
+            await getLinkedProfilePlayerName();
 
         startCompetitionLiveRefresh();
 
@@ -987,7 +1528,13 @@ if (cueScoreLink) {
     "85929085": "https://cuescore.com/tournament/POULE+5+BREAK+%2526+PLAY+%252F+HERFST+2026+%2AClubcompetitie%2A/85929085"
 };
 
+    const countryTournamentUrl =
+        detailSource === "countryTournaments"
+            ? sessionStorage.getItem("countryTournamentUrl")
+            : "";
+
     cueScoreLink.href =
+        countryTournamentUrl ||
         cueScoreUrls[String(tournamentId)] ||
         `https://cuescore.com/tournament/${tournamentId}`;
 
@@ -1043,9 +1590,9 @@ if (String(tournamentId) === "74130139") {
 };
 
 document.getElementById("competitionDetailTitle").textContent =
-    detailSource === "profileTournaments"
+    isTournamentDetailSource(detailSource)
         ? "Tornooi"
-        : (competitionTitles[String(tournamentId)] || "Competitie");
+        : "Competitie";
 
         document.getElementById("competitionName").textContent =
             data.name.replace(/\*/g, "");
@@ -1072,7 +1619,6 @@ if (hasMvp && mvpContainer) {
 
         const mvpData = await mvpResponse.json();
 
-        console.log("🏆 MVP DATA:", mvpData);
         if (
     mvpData.success &&
     Array.isArray(mvpData.players) &&
@@ -1140,127 +1686,176 @@ if (balEnzoFilter) {
     }
 }
 
-let individualTournamentStandings = [];
-
-if (detailSource === "profileTournaments") {
-
-    try {
-
-        const standingsResponse = await fetch(
-            `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=tournamentStandings&tournamentId=${tournamentId}`
-        );
-
-        if (standingsResponse.ok) {
-
-            const standingsData =
-                await standingsResponse.json();
-
-            if (
-                standingsData.success &&
-                Array.isArray(standingsData.standings)
-            ) {
-                individualTournamentStandings =
-                    standingsData.standings;
-            }
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Individuele tornooistand laden mislukt:",
-            error
-        );
-    }
-    }
-let tournamentRankingLink = null;
-
-if (detailSource === "profileTournaments") {
-
-    try {
-
-        const rankingLinkResponse = await fetch(
-            `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=tournamentRankingLink&tournamentId=${tournamentId}`
-        );
-
-        if (rankingLinkResponse.ok) {
-
-            const rankingLinkData =
-                await rankingLinkResponse.json();
-
-            if (
-                rankingLinkData.success &&
-                rankingLinkData.ranking
-            ) {
-                tournamentRankingLink =
-                    rankingLinkData.ranking;
-            }
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Gekoppelde ranking controleren mislukt:",
-            error
-        );
-    }
-}   
-
 const rankingLinkContainer =
     document.getElementById(
         "competitionRankingLinkContainer"
     );
 
 if (rankingLinkContainer) {
-
-    if (
-        detailSource === "profileTournaments" &&
-        tournamentRankingLink
-    ) {
-
-        rankingLinkContainer.innerHTML = `
-            <button
-                type="button"
-                class="profile-tournament-ranking-button"
-                onclick="openTournamentRanking(
-                    '${tournamentId}'
-                )"
-            >
-                <div class="profile-tournament-ranking-button-content">
-
-                    <div class="profile-tournament-ranking-button-icon">
-                        🏆
-                    </div>
-
-                    <div class="profile-tournament-ranking-button-info">
-
-                        <div class="profile-tournament-ranking-button-title">
-                            Ranking
-                        </div>
-
-                        <div class="profile-tournament-ranking-button-name">
-                            ${tournamentRankingLink.name}
-                        </div>
-
-                    </div>
-
-                    <div class="profile-tournament-ranking-button-arrow">
-                        ›
-                    </div>
-
-                </div>
-            </button>
-        `;
-
-        rankingLinkContainer.style.display = "block";
-
-    } else {
-
-        rankingLinkContainer.innerHTML = "";
-        rankingLinkContainer.style.display = "none";
-    }
+    rankingLinkContainer.innerHTML = "";
+    rankingLinkContainer.style.display = "none";
 }
 
-            const standingsContainer =
+if (isTournamentDetailSource(detailSource)) {
+
+    const profileStandingsContainer =
+        document.getElementById("competitionStandingsList");
+
+    if (profileStandingsContainer) {
+        profileStandingsContainer.innerHTML =
+            `<p>${tr("competition.loadingStandings", "Stand laden...")}</p>`;
+    }
+
+    (async () => {
+        try {
+            const standingsResponse = await fetch(
+                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=tournamentStandings&tournamentId=${tournamentId}`
+            );
+
+            if (!standingsResponse.ok) {
+                throw new Error(`Stand kon niet geladen worden (${standingsResponse.status}).`);
+            }
+
+            const standingsData = await standingsResponse.json();
+
+            if (
+                currentCompetitionTournamentId !== String(tournamentId) ||
+                !isTournamentDetailSource(sessionStorage.getItem("competitionDetailSource"))
+            ) {
+                return;
+            }
+
+            const standings =
+                standingsData.success && Array.isArray(standingsData.standings)
+                    ? standingsData.standings
+                    : [];
+
+            const container =
+                document.getElementById("competitionStandingsList");
+
+            if (!container) {
+                return;
+            }
+
+            if (!standings.length) {
+                container.innerHTML =
+                    `<p>${tr("competition.noStandings", "Geen stand beschikbaar.")}</p>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="profile-tournament-standings">
+                    ${standings.map(player => `
+                        <div class="profile-tournament-standing-row">
+                            <div class="profile-tournament-standing-position">
+                                ${player.position}
+                            </div>
+                            <div class="profile-tournament-standing-player">
+                                <div class="profile-tournament-standing-name ${
+                                    isLinkedProfilePlayer(
+                                        player.player,
+                                        linkedProfilePlayerName
+                                    )
+                                        ? "linked-profile-player"
+                                        : ""
+                                }">
+                                    ${player.player}
+                                </div>
+                                <div class="profile-tournament-standing-stats">
+                                    Wedstrijden:
+                                    <strong>${player.matches}</strong>
+                                    (${player.matchesWon}/${player.matchesLost})
+                                    · Frames:
+                                    <strong>${player.frames}</strong>
+                                    (${player.framesWon}/${player.framesLost})
+                                </div>
+                            </div>
+                            <div class="profile-tournament-standing-percentage">
+                                ${player.winPercentage}%
+                            </div>
+                        </div>
+                    `).join("")}
+                </div>
+            `;
+
+        } catch (error) {
+            const container =
+                document.getElementById("competitionStandingsList");
+
+            if (
+                container &&
+                currentCompetitionTournamentId === String(tournamentId)
+            ) {
+                container.innerHTML =
+                    `<p>${tr("competition.noStandings", "Geen stand beschikbaar.")}</p>`;
+            }
+        }
+    })();
+
+    (async () => {
+        try {
+            const rankingLinkResponse = await fetch(
+                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=tournamentRankingLink&tournamentId=${tournamentId}`
+            );
+
+            if (!rankingLinkResponse.ok) {
+                return;
+            }
+
+            const rankingLinkData = await rankingLinkResponse.json();
+
+            if (
+                currentCompetitionTournamentId !== String(tournamentId) ||
+                !isTournamentDetailSource(sessionStorage.getItem("competitionDetailSource")) ||
+                !rankingLinkData.success ||
+                !rankingLinkData.ranking
+            ) {
+                return;
+            }
+
+            const container =
+                document.getElementById("competitionRankingLinkContainer");
+
+            if (!container) {
+                return;
+            }
+
+            const ranking = rankingLinkData.ranking;
+
+            container.innerHTML = `
+                <button
+                    type="button"
+                    class="profile-tournament-ranking-button"
+                    onclick="openTournamentRanking('${tournamentId}')"
+                >
+                    <div class="profile-tournament-ranking-button-content">
+                        <div class="profile-tournament-ranking-button-icon">
+                            🏆
+                        </div>
+                        <div class="profile-tournament-ranking-button-info">
+                            <div class="profile-tournament-ranking-button-title">
+                                Ranking
+                            </div>
+                            <div class="profile-tournament-ranking-button-name">
+                                ${ranking.name}
+                            </div>
+                        </div>
+                        <div class="profile-tournament-ranking-button-arrow">
+                            ›
+                        </div>
+                    </div>
+                </button>
+            `;
+
+            container.style.display = "block";
+
+        } catch (error) {
+            // Ranking is extra informatie; het tornooi blijft bruikbaar zonder deze link.
+        }
+    })();
+}
+
+const standingsContainer =
     document.getElementById("competitionStandingsList");
 
 const isBreakAndPlay = [
@@ -1282,10 +1877,18 @@ const teamsPanel =
 if (teamsTab && teamsPanel) {
 
     if (isBreakAndPlay) {
+
         teamsTab.style.display = "none";
         teamsPanel.style.display = "none";
+
     } else {
+
         teamsTab.style.display = "";
+
+        teamsTab.textContent =
+            isTournamentDetailSource(detailSource)
+                ? tr("competition.players", "Spelers")
+                : tr("common.teams", "Teams");
     }
 }
 
@@ -1294,48 +1897,10 @@ if (teamsTab && teamsPanel) {
         ? data.standings["1"]
         : [];
 
-if (
-    detailSource === "profileTournaments" &&
-    individualTournamentStandings.length
-) {
+if (isTournamentDetailSource(detailSource)) {
 
-    standingsContainer.innerHTML = `
-        <div class="profile-tournament-standings">
-
-            ${individualTournamentStandings.map(player => `
-                <div class="profile-tournament-standing-row">
-
-                    <div class="profile-tournament-standing-position">
-                        ${player.position}
-                    </div>
-
-                    <div class="profile-tournament-standing-player">
-
-                        <div class="profile-tournament-standing-name">
-                            ${player.player}
-                        </div>
-
-                        <div class="profile-tournament-standing-stats">
-                            Wedstrijden:
-                            <strong>${player.matches}</strong>
-                            (${player.matchesWon}/${player.matchesLost})
-                            ·
-                            Frames:
-                            <strong>${player.frames}</strong>
-                            (${player.framesWon}/${player.framesLost})
-                        </div>
-
-                    </div>
-
-                    <div class="profile-tournament-standing-percentage">
-                        ${player.winPercentage}%
-                    </div>
-
-                </div>
-            `).join("")}
-
-        </div>
-    `;
+    // De individuele tornooistand wordt hierboven asynchroon geladen.
+    // Hierdoor blokkeren Overzicht, Wedstrijden en Spelers niet langer.
 
 } else if (!standings.length) {
 
@@ -1392,7 +1957,15 @@ if (
                             ${team.position}
                         </div>
 
-                        <div class="standings-team">
+                        <div class="standings-team ${
+                            isBreakAndPlay &&
+                            isLinkedProfilePlayer(
+                                team.player.name,
+                                linkedProfilePlayerName
+                            )
+                                ? "linked-profile-player"
+                                : ""
+                        }">
                             ${team.player.name}
                         </div>
 
@@ -1447,46 +2020,193 @@ if (
 const teamsContainer =
     document.getElementById("competitionTeamsList");
 
-const teams =
-    data.standings && data.standings["1"]
-        ? data.standings["1"]
-        : [];
+const teamsHeading =
+    teamsContainer?.previousElementSibling;
 
-if (!teams.length) {
+if (teamsHeading) {
+    teamsHeading.textContent =
+        isTournamentDetailSource(detailSource)
+            ? tr("competition.players", "Spelers")
+            : tr("common.teams", "Teams");
+}    
 
-    teamsContainer.innerHTML =
-        `<p>${tr("competition.noTeams", "Geen teams beschikbaar.")}</p>`;
+if (isTournamentDetailSource(detailSource)) {
+
+    const tournamentPlayers = new Map();
+
+try {
+
+    const participantsResponse = await fetch(
+        `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=tournamentParticipants&tournamentId=${encodeURIComponent(tournamentId)}`
+    );
+
+    const participantsData =
+        await participantsResponse.json();
+
+    if (
+        participantsData.success &&
+        Array.isArray(participantsData.participants)
+    ) {
+
+        participantsData.participants.forEach(player => {
+
+            if (!player?.name) {
+                return;
+            }
+
+            const playerKey =
+                String(player.id || player.name);
+
+            if (!tournamentPlayers.has(playerKey)) {
+
+                tournamentPlayers.set(playerKey, {
+                    id: player.id || null,
+                    name: player.name,
+                    url: player.url || null
+                });
+            }
+        });
+    }
+
+} catch (error) {
+
+    console.warn(
+        "Tornooideelnemers konden niet geladen worden:",
+        error
+    );
+}
+
+
+/*
+ * FALLBACK
+ * Als CueScore geen deelnemerslijst teruggeeft,
+ * halen we de spelers zoals vroeger uit de wedstrijden.
+ */
+if (!tournamentPlayers.size) {
+
+    (data.matches || []).forEach(match => {
+
+        [
+            match.playerA,
+            match.playerB
+        ].forEach(player => {
+
+            if (!player?.name) {
+                return;
+            }
+
+            const playerKey =
+                String(
+                    player.playerId ||
+                    player.participantId ||
+                    player.id ||
+                    player.name
+                );
+
+            if (!tournamentPlayers.has(playerKey)) {
+
+                tournamentPlayers.set(playerKey, {
+                    id:
+                        player.playerId ||
+                        player.participantId ||
+                        player.id ||
+                        null,
+                    name: player.name,
+                    url: null
+                });
+            }
+        });
+    });
+}
+
+    const sortedTournamentPlayers =
+        [...tournamentPlayers.values()].sort(
+            (a, b) =>
+                a.name.localeCompare(
+                    b.name,
+                    appLocale()
+                )
+        );
+
+    if (!sortedTournamentPlayers.length) {
+
+        teamsContainer.innerHTML =
+            `<p>${tr(
+                "competition.noPlayers",
+                "Geen spelers beschikbaar."
+            )}</p>`;
+
+    } else {
+
+        teamsContainer.innerHTML =
+            sortedTournamentPlayers.map(player => `
+
+                <div class="competition-card">
+
+                    <div class="competition-info">
+
+                        <div class="competition-title">
+                            ${player.name}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+    }
 
 } else {
 
-    teamsContainer.innerHTML = teams.map(team => `
+    const teams =
+        data.standings && data.standings["1"]
+            ? data.standings["1"]
+            : [];
 
-    <div
-    class="competition-card"
-    onclick="openTeamDetail(${team.player.teamId})"
-    style="cursor:pointer;"
->
+    if (!teams.length) {
 
-        <div class="competition-info">
+        teamsContainer.innerHTML =
+            `<p>${tr(
+                "competition.noTeams",
+                "Geen teams beschikbaar."
+            )}</p>`;
 
-            <div class="competition-title">
-                ${team.player.name}
+    } else {
+
+        teamsContainer.innerHTML = teams.map(team => `
+
+            <div
+                class="competition-card"
+                onclick="openTeamDetail(${team.player.teamId})"
+                style="cursor:pointer;"
+            >
+
+                <div class="competition-info">
+
+                    <div class="competition-title">
+                        ${team.player.name}
+                    </div>
+
+                    <div class="competition-subtitle">
+                        ${team.position}${tr(
+                            "competition.placeSuffix",
+                            "e"
+                        )} ${tr(
+                            "competition.place",
+                            "plaats"
+                        )}
+                    </div>
+
+                </div>
+
+                <div class="competition-arrow">
+                    ›
+                </div>
+
             </div>
 
-            <div class="competition-subtitle">
-    ${team.position}${tr("competition.placeSuffix", "e")} ${tr("competition.place", "plaats")}
-</div>
-
-        </div>
-
-        <div class="competition-arrow">
-            ›
-        </div>
-
-    </div>
-
-`).join("");
-
+        `).join("");
+    }
 }
 
 const matchesContainer =
@@ -1534,7 +2254,12 @@ if (overviewDynamic) {
 
                                 <div class="competition-overview-live-teams">
 
-                                    <div class="competition-overview-live-team">
+                                    <div class="competition-overview-live-team ${
+                                        (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                        isLinkedProfilePlayer(match.playerA?.name, linkedProfilePlayerName)
+                                            ? "linked-profile-player"
+                                            : ""
+                                    }">
                                         ${match.playerA?.name || "-"}
                                     </div>
 
@@ -1544,7 +2269,12 @@ if (overviewDynamic) {
                                         ${match.scoreB ?? 0}
                                     </div>
 
-                                    <div class="competition-overview-live-team competition-overview-live-team-away">
+                                    <div class="competition-overview-live-team competition-overview-live-team-away ${
+                                        (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                        isLinkedProfilePlayer(match.playerB?.name, linkedProfilePlayerName)
+                                            ? "linked-profile-player"
+                                            : ""
+                                    }">
                                         ${match.playerB?.name || "-"}
                                     </div>
 
@@ -1566,12 +2296,9 @@ if (overviewDynamic) {
 
         if (!nextRound || !nextRound.matches.length) {
 
-    if (
-        detailSource === "profileTournaments" &&
-        data.status === "Finished"
-    ) {
-        overviewDynamic.innerHTML = "";
-    } else {
+    if (isTournamentDetailSource(detailSource)) {
+    overviewDynamic.innerHTML = "";
+} else {
         overviewDynamic.innerHTML = `
             <div class="competition-overview-section">
 
@@ -1638,7 +2365,12 @@ if (overviewDynamic) {
                         ${sortedRoundMatches.map(match => `
                             <div class="competition-overview-match">
 
-                                <div class="competition-overview-match-team">
+                                <div class="competition-overview-match-team ${
+                                    (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                    isLinkedProfilePlayer(match.playerA?.name, linkedProfilePlayerName)
+                                        ? "linked-profile-player"
+                                        : ""
+                                }">
                                     ${match.playerA?.name || "-"}
                                 </div>
 
@@ -1646,7 +2378,12 @@ if (overviewDynamic) {
                                     –
                                 </div>
 
-                                <div class="competition-overview-match-team competition-overview-match-team-away">
+                                <div class="competition-overview-match-team competition-overview-match-team-away ${
+                                    (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                    isLinkedProfilePlayer(match.playerB?.name, linkedProfilePlayerName)
+                                        ? "linked-profile-player"
+                                        : ""
+                                }">
                                     ${match.playerB?.name || "-"}
                                 </div>
 
@@ -1672,7 +2409,7 @@ if (teamFilter) {
 
     const teamNames = new Set();
 
-    matches.forEach(match => {
+    (data.matches || []).forEach(match => {
 
         if (match.playerA?.name) {
             teamNames.add(match.playerA.name);
@@ -1689,9 +2426,17 @@ if (teamFilter) {
             a.localeCompare(b, "nl")
         );
 
-    teamFilter.innerHTML = `
+    const usePlayerLabels =
+    isBreakAndPlay ||
+    isTournamentDetailSource(detailSource);
+
+teamFilter.innerHTML = `
     <option value="">
-        ${isBreakAndPlay ? tr("filters.allPlayers", "Alle spelers") : tr("filters.allTeams", "Alle teams")}
+        ${
+            usePlayerLabels
+                ? tr("filters.allPlayers", "Alle spelers")
+                : tr("filters.allTeams", "Alle teams")
+        }
     </option>
 
     ${sortedTeamNames.map(teamName => `
@@ -1782,6 +2527,75 @@ if (String(tournamentId) === "74130139") {
 
     });
 
+} else if (isTournamentDetailSource(detailSource)) {
+
+    function getProfileTournamentRoundOrder(roundName, roundNumber) {
+
+        const name = String(roundName || "")
+            .toLowerCase()
+            .trim();
+
+        const roundMatch = name.match(/^round\s+(\d+)$/i);
+        if (roundMatch) {
+            return Number(roundMatch[1]) * 100;
+        }
+
+        const winnersRoundMatch =
+            name.match(/^winner(?:s)?\s+round\s+(\d+)$/i);
+        if (winnersRoundMatch) {
+            return Number(winnersRoundMatch[1]) * 100 + 10;
+        }
+
+        const losersRoundMatch =
+            name.match(/^loser(?:s)?\s+round\s+(\d+)$/i);
+        if (losersRoundMatch) {
+            return Number(losersRoundMatch[1]) * 100 + 20;
+        }
+
+        const specialRounds = {
+            "winners qualification": 900,
+            "winner qualification": 900,
+            "losers qualification": 910,
+            "loser qualification": 910,
+            "last 32": 920,
+            "last 16": 930,
+            "round of 16": 930,
+            "quarter final": 940,
+            "quarter finals": 940,
+            "semi final": 950,
+            "semi finals": 950,
+            "third place": 960,
+            "bronze final": 960,
+            "final": 970
+        };
+
+        if (specialRounds[name] != null) {
+            return specialRounds[name];
+        }
+
+        const numericRound = Number(roundNumber);
+        if (Number.isFinite(numericRound)) {
+            return 500 + numericRound;
+        }
+
+        return 9999;
+    }
+
+    sortedMatches = [...matchesToShow].sort((a, b) => {
+
+        const orderA =
+            getProfileTournamentRoundOrder(a.roundName, a.round);
+
+        const orderB =
+            getProfileTournamentRoundOrder(b.roundName, b.round);
+
+        if (orderA !== orderB) {
+            return orderA - orderB;
+        }
+
+        return (a.matchno || 0) - (b.matchno || 0);
+    });
+
 } else {
 
     sortedMatches = [...matchesToShow].sort((a, b) => {
@@ -1867,7 +2681,15 @@ matchesContainer.innerHTML =
 
                         <div class="competition-match-teams">
 
-                            <div class="competition-match-team">
+                            <div class="competition-match-team ${
+                                (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                isLinkedProfilePlayer(
+                                    match.playerA?.name,
+                                    linkedProfilePlayerName
+                                )
+                                    ? "linked-profile-player"
+                                    : ""
+                            }">
                                 ${match.playerA?.name || "Onbekend"}
                             </div>
 
@@ -1877,7 +2699,15 @@ matchesContainer.innerHTML =
     : "vs"}
                             </div>
 
-                            <div class="competition-match-team competition-match-team-away">
+                            <div class="competition-match-team competition-match-team-away ${
+                                (isBreakAndPlay || isTournamentDetailSource(detailSource)) &&
+                                isLinkedProfilePlayer(
+                                    match.playerB?.name,
+                                    linkedProfilePlayerName
+                                )
+                                    ? "linked-profile-player"
+                                    : ""
+                            }">
                                 ${match.playerB?.name || "Onbekend"}
                             </div>
 
@@ -2167,13 +2997,10 @@ else {
     const detailSource =
         sessionStorage.getItem("competitionDetailSource");
 
-    if (
-        detailSource === "profileTournaments" &&
-        currentCompetitionData?.status === "Finished"
-    ) {
-        overviewDynamic.innerHTML = "";
-        return;
-    }
+    if (isTournamentDetailSource(detailSource)) {
+    overviewDynamic.innerHTML = "";
+    return;
+}
 
     overviewDynamic.innerHTML = `
         <div class="competition-overview-section">
@@ -2273,6 +3100,61 @@ function closeCompetitionDetail() {
     document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
     });
+
+    if (detailSource === "countryTournaments") {
+
+        currentTournamentCountry =
+            sessionStorage.getItem("countryTournamentCountry") ||
+            currentTournamentCountry ||
+            "belgium";
+
+        currentTournamentView =
+            sessionStorage.getItem("countryTournamentView") === "past"
+                ? "past"
+                : "upcoming";
+
+        const tournamentsScreen =
+            document.getElementById("countryTournamentsScreen");
+
+        const title =
+            document.getElementById("countryTournamentsTitle");
+
+        const upcomingTab =
+            document.getElementById("countryTournamentsUpcomingTab");
+
+        const pastTab =
+            document.getElementById("countryTournamentsPastTab");
+
+        if (title) {
+            title.textContent =
+                currentTournamentCountry === "netherlands"
+                    ? "🇳🇱 Tornooien Nederland"
+                    : "🇧🇪 Tornooien België";
+        }
+
+        if (upcomingTab) {
+            upcomingTab.classList.toggle(
+                "active",
+                currentTournamentView === "upcoming"
+            );
+        }
+
+        if (pastTab) {
+            pastTab.classList.toggle(
+                "active",
+                currentTournamentView === "past"
+            );
+        }
+
+        if (tournamentsScreen) {
+            tournamentsScreen.classList.add("active");
+        }
+
+        sessionStorage.removeItem("competitionDetailSource");
+        sessionStorage.removeItem("countryTournamentUrl");
+
+        return;
+    }
 
     if (detailSource === "profileTournaments") {
 
@@ -4344,6 +5226,8 @@ async function openMyProfile() {
         player.name ||
         `${player.firstname || ""} ${player.lastname || ""}`.trim();
 
+      linkedProfilePlayerNameCache = playerName;
+
       name.innerHTML = `
         <span>${playerName}</span>
 
@@ -4729,6 +5613,43 @@ async function openMyProfile() {
 }
 
 function showMyProfileTab(tabName, button) {
+      if (tabName === "cuescore") {
+    const profileUrl =
+      localStorage.getItem("myProfileUrl");
+
+    if (!profileUrl || !profileUrl.trim()) {
+      alert(
+        tr(
+          "profile.noProfile",
+          "Er is nog geen CueScore-profiel ingesteld."
+        )
+      );
+      return;
+    }
+
+    const profileScreen =
+      document.getElementById("myProfileScreen");
+
+    const cueScoreScreen =
+      document.getElementById("myProfileCueScoreScreen");
+
+    const cueScoreIframe =
+      document.getElementById("myProfileCueScoreIframe");
+
+    if (cueScoreIframe) {
+      cueScoreIframe.src = profileUrl.trim();
+    }
+
+    if (profileScreen) {
+      profileScreen.classList.remove("active");
+    }
+
+    if (cueScoreScreen) {
+      cueScoreScreen.classList.add("active");
+    }
+
+    return;
+  }
   document.querySelectorAll(".my-profile-tab-panel").forEach(panel => {
     panel.style.display = "none";
   });
@@ -4795,11 +5716,34 @@ document.addEventListener("click", function (event) {
     return;
   }
 
-  showMyProfileTab(
+    showMyProfileTab(
     tabName,
     profileTab
   );
 });
+
+function closeMyProfileCueScore() {
+  const cueScoreScreen =
+    document.getElementById("myProfileCueScoreScreen");
+
+  const profileScreen =
+    document.getElementById("myProfileScreen");
+
+  const cueScoreIframe =
+    document.getElementById("myProfileCueScoreIframe");
+
+  if (cueScoreIframe) {
+    cueScoreIframe.src = "";
+  }
+
+  if (cueScoreScreen) {
+    cueScoreScreen.classList.remove("active");
+  }
+
+  if (profileScreen) {
+    profileScreen.classList.add("active");
+  }
+}
 
 document.addEventListener("click", function (event) {
   const matchTab =
