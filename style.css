@@ -5984,12 +5984,12 @@ body {
 filter:
     brightness(0)
     saturate(100%)
-    invert(65%)
-    sepia(95%)
+    invert(72%)
+    sepia(86%)
     saturate(1800%)
-    hue-rotate(345deg)
-    brightness(105%)
-    contrast(102%);
+    hue-rotate(350deg)
+    brightness(108%)
+    contrast(101%);
 
 /* =========================================
    FAVORIETEN - START2POOL LOGO
