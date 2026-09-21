@@ -1286,54 +1286,9 @@ function renderCountryTournaments() {
   "
 >
             <div class="competition-icon">
-  ${
-    currentTournamentCountry === "netherlands"
-      ? `
-        <svg class="competition-country-icon" viewBox="0 0 40 40" aria-hidden="true">
-          <path d="M13 5
-                   L18 6
-                   L21 10
-                   L26 11
-                   L28 15
-                   L27 20
-                   L30 23
-                   L27 27
-                   L24 26
-                   L22 31
-                   L17 34
-                   L14 31
-                   L15 26
-                   L11 23
-                   L12 18
-                   L9 14
-                   L11 10
-                   Z"></path>
-        </svg>
-      `
-      : `
-        <svg class="competition-country-icon" viewBox="0 0 40 40" aria-hidden="true">
-          <path d="M13 7
-                   L18 6
-                   L21 9
-                   L25 8
-                   L28 12
-                   L27 16
-                   L31 19
-                   L28 23
-                   L29 28
-                   L25 31
-                   L21 30
-                   L18 34
-                   L14 31
-                   L15 27
-                   L11 25
-                   L12 20
-                   L9 17
-                   L12 13
-                   Z"></path>
-        </svg>
-      `
-  }
+  <span class="competition-country-label">
+    ${currentTournamentCountry === "netherlands" ? "NL" : "BE"}
+  </span>
 </div>
 
             <div class="competition-info">
