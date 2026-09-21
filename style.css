@@ -6542,3 +6542,190 @@ body {
     position: relative;
     z-index: 1;
 }
+
+/* =========================================================
+   LAATSTE VISUELE FINETUNING — SEPTEMBER 2026
+   ========================================================= */
+
+/* Onderste navigatie: geen vierkant/kader rond actieve tab */
+.bottom-nav .nav-item {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav .nav-item.active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Sparring Matches - help scherm volledig in de nieuwe Bal Enzo stijl */
+#moneygamesHelpScreen .page-header {
+  color: var(--be-text);
+}
+
+#moneygamesHelpContent {
+  gap: 14px;
+  padding-bottom: 28px;
+}
+
+#moneygamesHelpContent .moneygames-help-card {
+  background:
+    linear-gradient(145deg, rgba(15, 32, 52, 0.96), rgba(7, 19, 33, 0.98));
+  border: 1px solid var(--be-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.20);
+}
+
+#moneygamesHelpContent .moneygames-help-card h2 {
+  margin: 0 0 12px;
+  color: var(--be-text);
+  font-size: 18px;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+#moneygamesHelpContent .moneygames-help-card p {
+  margin: 0 0 12px;
+  color: var(--be-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#moneygamesHelpContent .moneygames-help-card p:last-child {
+  margin-bottom: 0;
+}
+
+#moneygamesHelpContent .moneygames-help-example {
+  margin-top: 14px;
+  padding: 14px;
+  background: rgba(3, 9, 20, 0.72);
+  border-left: 3px solid var(--be-orange);
+  border-radius: 12px;
+  color: #cbd5e3;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+#moneygamesHelpContent .moneygames-help-example strong {
+  color: var(--be-text);
+}
+
+#moneygamesHelpContent .moneygames-help-start-button {
+  min-height: 50px;
+  margin-top: 2px;
+  border: 1px solid rgba(255, 155, 61, 0.55);
+  border-radius: 14px;
+  background:
+    linear-gradient(145deg, rgba(255, 155, 61, 0.18), rgba(255, 155, 61, 0.08));
+  color: #ffb26a;
+  box-shadow: 0 0 24px rgba(255, 155, 61, 0.08);
+}
+
+/* Break & Play-logo: subtiel grijs */
+.competition-detail-breakplay-logo,
+.favorite-breakplay-logo {
+  filter: grayscale(1) brightness(1.35) !important;
+  opacity: 0.62 !important;
+}
+
+/* Eigen CueScore-speler: subtiel oranje i.p.v. rood */
+.linked-profile-player {
+  color: var(--be-orange) !important;
+  font-weight: 750 !important;
+}
+
+
+/* Moderne subtiele iconen voor de Sparring Matches-uitleg */
+#moneygamesHelpContent .moneygames-help-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+#moneygamesHelpContent .moneygames-help-icon,
+.reservation-title-icon {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--be-orange);
+}
+
+#moneygamesHelpContent .moneygames-help-icon svg,
+.reservation-title-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#moneygamesHelpContent .moneygames-help-icon text,
+.reservation-title-icon text {
+  fill: currentColor;
+  stroke: none;
+  font-size: 6px;
+  font-weight: 800;
+  font-family: inherit;
+}
+
+.reservation-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+/* Landen-tornooien: dezelfde vervagende fotostijl als de andere kaarten */
+#tab-tournaments .competition-country-photo::before {
+  width: 62%;
+  opacity: 0.34;
+  background:
+    linear-gradient(
+      90deg,
+      #0b1828 0%,
+      rgba(11, 24, 40, 0.72) 32%,
+      rgba(11, 24, 40, 0.18) 100%
+    ),
+    var(--competition-bg) center / cover no-repeat;
+}
+
+#tab-tournaments .competition-country-photo > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Start2Pool: moderne kleine lijniconen i.p.v. oude emoji's */
+.start2pool-info-card strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.start2pool-info-icon {
+  width: 19px;
+  height: 19px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 19px;
+}
+
+.start2pool-info-icon svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: #ff9d42;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px rgba(255, 157, 66, 0.16));
+}
+
+.start2pool-icon-warning svg {
+  stroke: #ffb568;
+}
