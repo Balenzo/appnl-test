@@ -5981,16 +5981,15 @@ body {
     vertical-align: middle;
 
     /* Bal Enzo oranje */
-    filter:
-        brightness(0)
-        saturate(100%)
-        invert(68%)
-        sepia(72%)
-        saturate(1645%)
-        hue-rotate(329deg)
-        brightness(104%)
-        contrast(101%);
-}
+filter:
+    brightness(0)
+    saturate(100%)
+    invert(65%)
+    sepia(95%)
+    saturate(1800%)
+    hue-rotate(345deg)
+    brightness(105%)
+    contrast(102%);
 
 /* =========================================
    FAVORIETEN - START2POOL LOGO
