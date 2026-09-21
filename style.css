@@ -6103,9 +6103,18 @@ body {
 .live-scores-title { display:flex; align-items:center; gap:10px; }
 .live-scores-brand-logo { width:28px; height:28px; object-fit:contain; flex-shrink:0; }
 
-/* Favorieten: divisienamen op één regel */
-.favorite-title { white-space: nowrap !important; font-size: 13px !important; letter-spacing: -0.15px; }
-.favorite-card { min-width: 118px !important; }
+/* Favorieten: compactere tegels */
+.favorite-title {
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  letter-spacing: -0.15px;
+}
+
+#homeScreen .favorite-card {
+  width: 96px !important;
+  min-width: 96px !important;
+  flex-basis: 96px !important;
+}
 
 /* Start2Pool: legacy rood -> Bal Enzo oranje */
 .start2pool-level-tab.active {
@@ -6363,6 +6372,15 @@ body {
 #myProfileScreen .my-profile-match-card {
   background: linear-gradient(145deg, rgba(15, 33, 54, 0.97), rgba(8, 21, 36, 0.97)) !important;
   border-color: rgba(143, 163, 189, 0.20) !important;
+}
+
+/* Wedstrijdresultaat: alleen een subtiel gekleurd kader */
+#myProfileScreen .my-profile-match-card.won {
+  border-color: rgba(74, 190, 100, 0.65) !important;
+}
+
+#myProfileScreen .my-profile-match-card.lost {
+  border-color: rgba(220, 75, 75, 0.65) !important;
 }
 
 #myProfileScreen .my-profile-match-date,
@@ -6728,4 +6746,32 @@ body {
 
 .start2pool-icon-warning svg {
   stroke: #ffb568;
+}
+
+/* SNELLE ACTIES IETS COMPACTER */
+#homeScreen .quick-action-card {
+  height: 140px !important;
+  min-height: 140px !important;
+  max-height: 140px !important;
+}
+
+#homeScreen .quick-action-content {
+  min-height: 58px !important;
+  padding: 20px 12px 9px !important;
+}
+
+#homeScreen .quick-grid {
+  gap: 9px !important;
+}
+
+/* SPARRING MATCHES - WIN / VERLIES */
+
+#moneygamesScreen .moneygames-history-card.moneygames-history-win {
+  border-color: rgba(70, 190, 90, 0.75) !important;
+  box-shadow: 0 0 14px rgba(70, 190, 90, 0.10) !important;
+}
+
+#moneygamesScreen .moneygames-history-card.moneygames-history-loss {
+  border-color: rgba(229, 9, 20, 0.75) !important;
+  box-shadow: 0 0 14px rgba(229, 9, 20, 0.10) !important;
 }

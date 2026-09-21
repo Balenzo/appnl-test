@@ -3795,10 +3795,43 @@ async function openTeamDetail(teamId) {
         );
 
 
-    const playerNames = new Set();
-
+        const playerNames = new Set();
 
     try {
+
+        /*
+         * Competitie NL start later in het seizoen.
+         * Daarom halen we daar de vaste spelerslijst
+         * rechtstreeks uit de CueScore-teampagina.
+         */
+        if (
+            String(currentCompetitionData.tournamentId) ===
+            "83574892"
+        ) {
+            const rosterResponse = await fetch(
+                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=teamParticipants&teamId=${encodeURIComponent(teamId)}`
+            );
+
+            if (!rosterResponse.ok) {
+                throw new Error(
+                    `Teamspelers konden niet geladen worden (${rosterResponse.status}).`
+                );
+            }
+
+            const rosterData =
+                await rosterResponse.json();
+
+            if (
+                rosterData.success &&
+                Array.isArray(rosterData.participants)
+            ) {
+                rosterData.participants.forEach(player => {
+                    if (player?.name) {
+                        playerNames.add(player.name);
+                    }
+                });
+            }
+        }
 
         const results = await Promise.all(
 
@@ -5657,15 +5690,6 @@ async function openMyProfile() {
                         ${match.tournament || ""}
                       </div>
 
-                      <div class="my-profile-match-result ${match.result || ""}">
-                        ${
-                          match.result === "win"
-                            ? "Gewonnen"
-                            : match.result === "loss"
-                              ? "Verloren"
-                              : ""
-                        }
-                      </div>
                     </div>
                   `).join("")
                 : `
@@ -5974,7 +5998,14 @@ async function loadMoreProfileMatches(button) {
     data.matches.forEach(match => {
       const card = document.createElement("div");
 
-      card.className = "my-profile-match-card";
+            card.className =
+        `my-profile-match-card ${
+          match.result === "win"
+            ? "won"
+            : match.result === "loss"
+              ? "lost"
+              : ""
+        }`;
 
       card.innerHTML = `
         <div class="my-profile-match-date">
@@ -5995,16 +6026,6 @@ async function loadMoreProfileMatches(button) {
 
         <div class="my-profile-match-tournament">
           ${match.tournament || ""}
-        </div>
-
-        <div class="my-profile-match-result ${match.result || ""}">
-          ${
-            match.result === "win"
-              ? "Gewonnen"
-              : match.result === "loss"
-                ? "Verloren"
-                : ""
-          }
         </div>
       `;
 
