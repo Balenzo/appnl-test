@@ -577,7 +577,10 @@ function openFavoritesEditor() {
       <input type="checkbox"
              value="${id}"
              ${favorites.includes(id) ? 'checked' : ''}>
-      <span>${item.icon} ${item.title}</span>
+      <span class="favorite-option-content">
+    <span class="favorite-option-icon">${item.icon}</span>
+    <span class="favorite-option-title">${item.title}</span>
+</span>
     `;
 
     container.appendChild(row);
