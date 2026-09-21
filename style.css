@@ -4588,3 +4588,1920 @@ body.start2pool-viewer-open {
   flex: 1;
   padding-left: 18px;
 }
+/* =========================================================
+   BAL ENZO — HIGH-END NAVY / ORANGE VISUAL REFRESH
+   Toegevoegd als override: bestaande functionaliteit blijft behouden.
+   ========================================================= */
+
+:root {
+  --be-bg: #07111f;
+  --be-bg-deep: #030914;
+  --be-panel: rgba(14, 29, 48, 0.92);
+  --be-panel-soft: rgba(17, 35, 57, 0.82);
+  --be-border: rgba(113, 153, 199, 0.18);
+  --be-border-strong: rgba(113, 153, 199, 0.28);
+  --be-text: #f7f9fc;
+  --be-muted: #91a0b6;
+  --be-orange: #ff9b3d;
+  --be-orange-soft: rgba(255, 155, 61, 0.16);
+  --be-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+}
+
+html,
+body {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(29, 68, 108, 0.24), transparent 38%),
+    linear-gradient(180deg, var(--be-bg) 0%, var(--be-bg-deep) 100%);
+  color: var(--be-text);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+}
+
+.screen,
+#teamDetailScreen {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(27, 65, 103, 0.22), transparent 34%),
+    linear-gradient(180deg, #081525 0%, #050d18 58%, #030914 100%);
+}
+
+/* HERO — bestaande foto en logo blijven */
+.hero {
+  height: 228px;
+  background:
+    linear-gradient(to bottom, rgba(3, 9, 20, 0.02) 0%, rgba(3, 9, 20, 0.08) 45%, rgba(5, 14, 25, 0.96) 100%),
+    url('hero.jpg') center center / cover no-repeat;
+}
+
+.hero-logo {
+  top: 40px;
+  width: 155px;
+  max-width: 48%;
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,0.35));
+}
+
+.section-block {
+  padding: 22px 18px 0;
+}
+
+.section-header {
+  margin-bottom: 14px;
+}
+
+.section-header h2 {
+  color: #9aaac0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1.05px;
+  text-transform: uppercase;
+}
+
+.link-btn {
+  color: var(--be-orange);
+  font-weight: 700;
+}
+
+/* FAVORIETEN */
+.favorite-card {
+  min-width: 116px;
+  min-height: 102px;
+  padding: 14px 12px;
+  background: linear-gradient(145deg, rgba(19, 39, 64, 0.96), rgba(10, 23, 39, 0.96));
+  border: 1px solid var(--be-border);
+  border-radius: 18px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.025), 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.favorite-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* SNELLE ACTIES — foto loopt via gradient over in tekstgedeelte */
+.quick-grid {
+  gap: 12px;
+}
+
+.quick-action-card {
+  position: relative;
+  min-height: 188px;
+  display: block;
+  overflow: hidden;
+  border-radius: 19px;
+  background: #0b1828;
+  border: 1px solid var(--be-border);
+  box-shadow: var(--be-shadow);
+  isolation: isolate;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--be-border-strong);
+}
+
+.quick-action-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.quick-action-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 9, 18, 0.02) 0%,
+    rgba(5, 13, 24, 0.10) 35%,
+    rgba(7, 18, 31, 0.78) 62%,
+    rgba(7, 18, 31, 0.98) 100%
+  );
+}
+
+.quick-action-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 82px;
+  padding: 30px 15px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: transparent;
+}
+
+.quick-action-title {
+  padding-right: 24px;
+  margin: 0 0 5px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.15px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+}
+
+.quick-action-subtitle {
+  display: block !important;
+  padding-right: 22px;
+  color: #9baac0 !important;
+  font-size: 11px !important;
+  line-height: 1.35;
+}
+
+.quick-action-external {
+  position: absolute;
+  right: 14px;
+  bottom: 15px;
+  margin: 0 !important;
+  color: var(--be-orange) !important;
+  font-size: 1.15rem !important;
+}
+
+/* Oude losse quick-card styling ook in dezelfde visuele taal */
+.quick-card {
+  background: linear-gradient(145deg, #12253d, #091726);
+  border: 1px solid var(--be-border);
+  box-shadow: var(--be-shadow);
+}
+
+/* PAGINATITELS */
+.page-header {
+  padding: 34px 20px 22px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+/* HOOFDTABS */
+.tab {
+  border: 1px solid var(--be-border);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(18, 37, 60, 0.92), rgba(10, 23, 39, 0.92));
+  color: #fff;
+}
+
+.tab.active {
+  background: linear-gradient(145deg, rgba(255,155,61,0.20), rgba(255,155,61,0.08));
+  border: 1px solid var(--be-orange);
+  color: #ffb26a;
+  box-shadow: 0 0 24px rgba(255,155,61,0.10), inset 0 0 20px rgba(255,155,61,0.05);
+}
+
+/* COMPETITIEKAARTEN */
+.competition-card {
+  padding: 19px 18px;
+  margin-bottom: 13px;
+  background:
+    linear-gradient(100deg, rgba(15, 32, 52, 0.98), rgba(9, 22, 37, 0.96));
+  border: 1px solid var(--be-border);
+  border-radius: 17px;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+button.competition-card {
+  border: 1px solid var(--be-border);
+}
+
+.competition-icon {
+  color: var(--be-orange);
+}
+
+.competition-title {
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.competition-subtitle {
+  color: var(--be-muted);
+}
+
+.competition-arrow {
+  color: var(--be-orange);
+  opacity: 0.9;
+}
+
+/* DETAILTABS */
+.competition-detail-tab {
+  border: 1px solid var(--be-border);
+  border-radius: 11px;
+  background: rgba(15, 31, 51, 0.88);
+  color: var(--be-muted);
+}
+
+.competition-detail-tab.active {
+  background: linear-gradient(145deg, rgba(255,155,61,0.22), rgba(255,155,61,0.08));
+  border-color: var(--be-orange);
+  color: #ffb26a;
+}
+
+/* ALGEMENE KAARTEN / DETAIL */
+.modal-content,
+.moneygames-auth-card,
+.team-detail-card,
+.player-stat-card,
+.player-discipline-card,
+.team-player-card,
+.competition-match-card,
+.individual-match-card,
+.competition-overview-section,
+.live-table-card,
+.reservation-summary-card {
+  background: linear-gradient(145deg, rgba(17, 35, 57, 0.96), rgba(8, 20, 34, 0.96));
+  border-color: var(--be-border);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.16);
+}
+
+.competition-overview-match,
+.competition-overview-live-match {
+  background: rgba(7, 18, 31, 0.82);
+  border-color: var(--be-border);
+}
+
+/* CueScore link */
+.competition-cuescore-link {
+  background: linear-gradient(145deg, rgba(17, 35, 57, 0.96), rgba(8, 20, 34, 0.96));
+  border-color: var(--be-border);
+}
+
+.competition-cuescore-link:hover {
+  background: rgba(20, 42, 68, 0.96);
+  border-color: var(--be-border-strong);
+}
+
+/* INPUTS / FORMULIEREN */
+.reservation-game-card,
+.reservation-calendar-day,
+.reservation-back-button,
+.reservation-calendar-nav button,
+.reservation-time-button,
+.reservation-duration-button,
+.reservation-field input,
+.reservation-field textarea,
+.moneygames-auth-tab,
+#moneygamesLoginForm input,
+#moneygamesRegisterForm input {
+  background: rgba(14, 30, 49, 0.88);
+  border-color: var(--be-border);
+}
+
+.moneygames-auth-tab.active,
+.moneygames-primary-btn,
+.modal-btn.primary {
+  background: var(--be-orange);
+  border-color: var(--be-orange);
+  color: #08111e;
+}
+
+/* FILTERS / ACCENTEN */
+.mvp-filter,
+.matches-filter {
+  background: rgba(14, 30, 49, 0.9);
+  border-color: var(--be-border);
+}
+
+.mvp-filter:has(input:checked),
+.matches-filter:has(input:checked) {
+  background: var(--be-orange-soft);
+  border-color: var(--be-orange);
+  color: #ffb26a;
+}
+
+/* BOTTOM NAV */
+.bottom-nav {
+  background: rgba(6, 16, 29, 0.94);
+  border-top: 1px solid var(--be-border);
+  box-shadow: 0 -12px 30px rgba(0,0,0,0.20);
+}
+
+.nav-item {
+  color: #8292aa;
+}
+
+.nav-item.active {
+  color: var(--be-orange);
+}
+
+.nav-item.active .nav-icon-image {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(70%) sepia(77%) saturate(1238%) hue-rotate(330deg) brightness(104%) contrast(102%);
+}
+
+/* Rode legacy-accenten visueel omzetten naar oranje waar mogelijk */
+.individual-match-player.winner,
+.match-detail-team.winner,
+.player-stat-card:last-child strong {
+  color: var(--be-orange);
+}
+
+.match-detail-status.planned {
+  color: #ffb26a;
+  background: var(--be-orange-soft);
+  border-color: rgba(255,155,61,0.34);
+}
+
+.standings-row.balenzo-team {
+  background: rgba(255,155,61,0.10);
+}
+
+.standings-row.balenzo-team .standings-team,
+.standings-row.balenzo-team .standings-points {
+  color: #ffad5d;
+}
+
+.standings-row.balenzo-team > div:nth-child(1),
+.standings-row.balenzo-team > div:nth-child(2) {
+  background: #182234;
+}
+
+/* Mobiel: iets ruimere, premium spacing zonder layoutlogica te wijzigen */
+@media (max-width: 430px) {
+  .content {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .quick-action-card {
+    min-height: 178px;
+  }
+
+  .quick-action-content {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* =========================================================
+   HOME V2 — compactere high-end layout
+   Doel: dichter bij gekozen mockup, zonder app-logica te wijzigen
+========================================================= */
+
+#homeScreen .section-block {
+  padding: 18px 18px 0;
+}
+
+#homeScreen .section-header {
+  margin-bottom: 10px;
+}
+
+#homeScreen .section-header h2 {
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+#homeScreen .link-btn {
+  font-size: 13px;
+}
+
+/* FAVORIETEN — compacter zoals in de mockup */
+#homeScreen .favorites-row {
+  gap: 10px;
+  padding: 0 0 3px;
+}
+
+#homeScreen .favorite-card {
+  width: 96px;
+  min-width: 96px;
+  height: 82px;
+  min-height: 82px;
+  padding: 9px 8px !important;
+  border-radius: 15px;
+  gap: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.025),
+    0 8px 20px rgba(0,0,0,0.16);
+}
+
+#homeScreen .favorite-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin: 0 0 5px;
+}
+
+#homeScreen .favorite-title {
+  font-size: 12px;
+  line-height: 1.15;
+  font-weight: 700;
+  white-space: normal;
+}
+
+/* SNELLE ACTIES — alle vier exact dezelfde compacte hoogte */
+#homeScreen .quick-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+#homeScreen .quick-action-card {
+  width: 100%;
+  height: 160px;
+  min-height: 160px !important;
+  max-height: 160px;
+  border-radius: 17px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Zowel gewone foto's als de Sparring Match-wrapper vullen exact de kaart */
+#homeScreen .quick-action-card > img,
+#homeScreen .quick-action-card > .moneygames-home-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#homeScreen .moneygames-home-image {
+  overflow: hidden;
+  z-index: -2;
+}
+
+#homeScreen .quick-action-card img,
+#homeScreen .moneygames-home-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+}
+
+/* Foto -> donkere overgang -> tekst */
+#homeScreen .quick-action-card::after {
+  background: linear-gradient(
+    180deg,
+    rgba(3, 9, 18, 0.00) 0%,
+    rgba(4, 11, 20, 0.04) 34%,
+    rgba(5, 14, 25, 0.44) 54%,
+    rgba(6, 16, 29, 0.90) 73%,
+    rgba(6, 16, 29, 0.99) 100%
+  );
+}
+
+#homeScreen .quick-action-content {
+  min-height: 66px;
+  padding: 24px 12px 11px;
+}
+
+#homeScreen .quick-action-title {
+  margin: 0 0 3px !important;
+  padding-right: 18px;
+  font-size: 13px !important;
+  line-height: 1.15;
+  font-weight: 750 !important;
+}
+
+#homeScreen .quick-action-subtitle {
+  padding-right: 17px;
+  font-size: 9.5px !important;
+  line-height: 1.25;
+  color: #9eacc0 !important;
+}
+
+#homeScreen .quick-action-external {
+  right: 11px;
+  bottom: 12px;
+  font-size: 1rem !important;
+}
+
+/* Badge blijft bruikbaar zonder de fotolayout te beïnvloeden */
+#homeScreen .moneygames-notification-badge {
+  z-index: 4;
+}
+
+/* Kleinere telefoons */
+@media (max-width: 380px) {
+  #homeScreen .section-block {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  #homeScreen .quick-grid {
+    gap: 9px;
+  }
+
+  #homeScreen .quick-action-card {
+    height: 150px;
+    min-height: 150px !important;
+    max-height: 150px;
+  }
+
+  #homeScreen .favorite-card {
+    width: 90px;
+    min-width: 90px;
+  }
+}
+
+/* =========================================
+   HIGH-END BOTTOM NAV ICONS
+========================================= */
+
+.bottom-nav .nav-icon-svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: #8292aa;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+        stroke 0.2s ease,
+        filter 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* 8-ball */
+.bottom-nav .nav-icon-ball text {
+    fill: #8292aa;
+    stroke: none;
+    font-size: 6px;
+    font-weight: 800;
+    font-family: Arial, sans-serif;
+}
+
+/* Actieve knop */
+.bottom-nav .nav-item.active .nav-icon-svg {
+    stroke: #ff9d42;
+    filter: drop-shadow(0 0 5px rgba(255, 157, 66, 0.22));
+}
+
+.bottom-nav .nav-item.active .nav-icon-ball text {
+    fill: #ff9d42;
+}
+
+/* Labels */
+.bottom-nav .nav-item .nav-label {
+    color: #8292aa;
+    transition: color 0.2s ease;
+}
+
+.bottom-nav .nav-item.active .nav-label {
+    color: #ff9d42;
+}
+
+/* Start2Pool-logo iets rustiger wanneer niet actief */
+.bottom-nav .nav-icon-image {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    opacity: 0.62;
+    transition:
+        opacity 0.2s ease,
+        filter 0.2s ease;
+}
+
+.bottom-nav .nav-item.active .nav-icon-image {
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 157, 66, 0.18));
+}
+
+/* =========================================
+   ACTIVE NAV GLOW
+========================================= */
+
+.bottom-nav .nav-item {
+    position: relative;
+    isolation: isolate;
+}
+
+.bottom-nav .nav-item::before {
+    content: "";
+    position: absolute;
+
+    width: 58px;
+    height: 58px;
+
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -54%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 157, 66, 0) 0%,
+            rgba(255, 157, 66, 0) 70%
+        );
+
+    z-index: -1;
+    pointer-events: none;
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.bottom-nav .nav-item.active::before {
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 157, 66, 0.18) 0%,
+            rgba(255, 157, 66, 0.08) 38%,
+            rgba(255, 157, 66, 0) 72%
+        );
+
+    box-shadow:
+        0 0 24px rgba(255, 157, 66, 0.08);
+}
+
+.bottom-nav .nav-item.active .nav-icon-svg {
+    filter:
+        drop-shadow(0 0 4px rgba(255, 157, 66, 0.38));
+}
+
+/* =========================================
+   PREMIUM NAVBAR TOP GLOW
+========================================= */
+
+.bottom-nav {
+    position: fixed;
+    overflow: visible;
+}
+
+/* Algemene zachte gloed over de bovenrand */
+.bottom-nav::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+
+    left: -10%;
+    top: -32px;
+
+    width: 120%;
+    height: 48px;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 157, 66, 0.10) 0%,
+            rgba(255, 157, 66, 0.045) 22%,
+            rgba(67, 111, 170, 0.035) 55%,
+            rgba(67, 111, 170, 0) 100%
+        );
+
+    filter: blur(18px);
+}
+
+/* Dunne premium lijn boven de navigatie */
+.bottom-nav::after {
+    content: "";
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 157, 66, 0.30) 0%,
+            rgba(92, 124, 166, 0.22) 30%,
+            rgba(92, 124, 166, 0.12) 70%,
+            rgba(92, 124, 166, 0.04) 100%
+        );
+
+    pointer-events: none;
+}
+
+/* =========================================================
+   BAL ENZO HIGH-END FINAL OVERRIDES
+   Visuele laag bovenop de bestaande app.
+   Geen wijziging aan functionaliteit of layoutlogica.
+========================================================= */
+
+:root {
+  --be-bg: #06101d;
+  --be-bg-deep: #030a13;
+  --be-panel: #0b1929;
+  --be-panel-2: #0e2034;
+  --be-border: rgba(126, 164, 209, 0.16);
+  --be-border-strong: rgba(126, 164, 209, 0.28);
+  --be-text: #f5f8fc;
+  --be-muted: #91a2ba;
+  --be-orange: #ff9d42;
+  --be-orange-light: #ffb568;
+  --be-orange-soft: rgba(255, 157, 66, 0.12);
+  --be-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+html,
+body {
+  background: #02070d;
+  color: var(--be-text);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+}
+
+.screen,
+#homeScreen {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(28, 65, 104, 0.20), transparent 36%),
+    linear-gradient(180deg, #071422 0%, #06111e 52%, #040c16 100%);
+}
+
+/* HOME HERO: bestaande foto en logo behouden */
+#homeScreen .hero {
+  height: 218px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 8, 15, 0.03) 0%,
+      rgba(3, 10, 18, 0.08) 52%,
+      rgba(6, 17, 30, 0.98) 100%
+    ),
+    url("hero.jpg") center center / cover no-repeat;
+}
+
+#homeScreen .hero-logo {
+  top: 28px;
+  width: 150px;
+  max-width: 47%;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.34));
+}
+
+/* HOME SECTIES */
+#homeScreen .section-block {
+  padding: 17px 18px 0;
+}
+
+#homeScreen .section-header {
+  margin-bottom: 10px;
+}
+
+#homeScreen .section-header h2 {
+  margin: 0;
+  color: #a8b8ce;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+#homeScreen .link-btn {
+  color: var(--be-orange);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+/* FAVORIETEN */
+#homeScreen .favorites-row {
+  gap: 10px;
+  padding: 0 0 4px;
+  scrollbar-width: none;
+}
+
+#homeScreen .favorites-row::-webkit-scrollbar {
+  display: none;
+}
+
+#homeScreen .favorite-card {
+  flex: 0 0 96px;
+  width: 96px;
+  min-width: 96px;
+  height: 82px;
+  min-height: 82px;
+  padding: 9px 7px !important;
+  gap: 3px;
+  border: 1px solid var(--be-border);
+  border-radius: 15px;
+  background:
+    linear-gradient(145deg, rgba(15, 34, 56, 0.98), rgba(8, 22, 38, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+#homeScreen .favorite-icon {
+  margin: 0 0 5px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+#homeScreen .favorite-title {
+  color: #f7f9fc;
+  font-size: 12px;
+  line-height: 1.15;
+  font-weight: 750;
+  white-space: normal;
+}
+
+/* SNELLE ACTIES: originele foto's + vloeiende overgang naar tekst */
+#homeScreen .quick-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
+}
+
+#homeScreen .quick-action-card {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: 100%;
+  height: 160px;
+  min-height: 160px !important;
+  max-height: 160px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--be-border);
+  border-radius: 17px;
+  background: #0a1727;
+  box-shadow: var(--be-shadow);
+  transform: none;
+}
+
+#homeScreen .quick-action-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--be-border-strong);
+}
+
+#homeScreen .quick-action-card > img,
+#homeScreen .quick-action-card > .moneygames-home-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#homeScreen .moneygames-home-image {
+  overflow: hidden;
+  z-index: -2;
+}
+
+#homeScreen .quick-action-card img,
+#homeScreen .moneygames-home-image img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: center;
+  z-index: -2;
+}
+
+#homeScreen .quick-action-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(3, 9, 18, 0.00) 0%,
+      rgba(4, 11, 20, 0.03) 34%,
+      rgba(5, 14, 25, 0.40) 54%,
+      rgba(6, 16, 29, 0.91) 74%,
+      rgba(6, 16, 29, 0.995) 100%
+    );
+}
+
+#homeScreen .quick-action-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 66px;
+  padding: 24px 12px 11px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: transparent;
+}
+
+#homeScreen .quick-action-title {
+  margin: 0 0 3px !important;
+  padding-right: 18px;
+  color: #fff !important;
+  font-size: 13px !important;
+  line-height: 1.15 !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.1px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.48);
+}
+
+#homeScreen .quick-action-subtitle {
+  display: block !important;
+  padding-right: 17px;
+  color: #9eacc0 !important;
+  font-size: 9.5px !important;
+  line-height: 1.25 !important;
+}
+
+#homeScreen .quick-action-external {
+  position: absolute;
+  right: 11px;
+  bottom: 12px;
+  margin: 0 !important;
+  color: var(--be-orange) !important;
+  font-size: 1rem !important;
+}
+
+#homeScreen .moneygames-notification-badge {
+  z-index: 4;
+}
+
+/* ALGEMENE HIGH-END KAARTEN */
+.competition-card,
+.team-detail-card,
+.player-stat-card,
+.player-discipline-card,
+.team-player-card,
+.competition-match-card,
+.individual-match-card,
+.competition-overview-section,
+.competition-cuescore-link,
+.moneygames-auth-card {
+  background:
+    linear-gradient(145deg, rgba(15, 33, 54, 0.97), rgba(8, 21, 36, 0.97));
+  border-color: var(--be-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 12px 28px rgba(0, 0, 0, 0.17);
+}
+
+.page-header {
+  color: #f7f9fc;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.competition-subtitle,
+.reservation-subtitle {
+  color: var(--be-muted);
+}
+
+.competition-arrow {
+  color: #8292aa;
+}
+
+/* TABS */
+.tab,
+.competition-detail-tab {
+  background: linear-gradient(145deg, rgba(16, 35, 57, 0.94), rgba(9, 23, 39, 0.94));
+  border-color: var(--be-border);
+  color: #c4cedc;
+}
+
+.tab.active,
+.competition-detail-tab.active {
+  background:
+    linear-gradient(145deg, rgba(255, 157, 66, 0.22), rgba(255, 157, 66, 0.08));
+  border-color: rgba(255, 157, 66, 0.78);
+  color: var(--be-orange-light);
+  box-shadow:
+    0 0 24px rgba(255, 157, 66, 0.09),
+    inset 0 0 20px rgba(255, 157, 66, 0.04);
+}
+
+/* Oranje accenten */
+.individual-match-player.winner,
+.match-detail-team.winner,
+.player-stat-card:last-child strong {
+  color: var(--be-orange);
+}
+
+.match-detail-status.planned {
+  color: var(--be-orange-light);
+  background: var(--be-orange-soft);
+  border-color: rgba(255, 157, 66, 0.34);
+}
+
+.standings-row.balenzo-team {
+  background: rgba(255, 157, 66, 0.09);
+}
+
+.standings-row.balenzo-team .standings-team,
+.standings-row.balenzo-team .standings-points {
+  color: var(--be-orange-light);
+}
+
+.mvp-filter:has(input:checked),
+.matches-filter:has(input:checked) {
+  background: var(--be-orange-soft);
+  border-color: var(--be-orange);
+  color: var(--be-orange-light);
+}
+
+/* =========================================================
+   BOTTOM NAV — brede premium gloed zoals de gekozen mockup
+========================================================= */
+
+.bottom-nav {
+  position: fixed;
+  overflow: visible;
+  background: rgba(5, 15, 27, 0.965);
+  border-top: 1px solid rgba(115, 151, 196, 0.18);
+  box-shadow:
+    0 -10px 28px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* brede gloed BOVEN de balk, niet als cirkel rond het icoon */
+.bottom-nav::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: rgba(121, 154, 196, 0.12);
+  box-shadow:
+    0 -4px 10px rgba(255, 157, 66, 0.12),
+    0 -11px 24px rgba(255, 157, 66, 0.065),
+    0 -20px 40px rgba(255, 157, 66, 0.028);
+}
+
+/* Geen tweede legacy pseudo-element op de navbar */
+.bottom-nav::after {
+  content: none !important;
+}
+
+/* Verwijder de oude ronde active glow volledig */
+.bottom-nav .nav-item::before,
+.bottom-nav .nav-item.active::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.bottom-nav .nav-item {
+  position: relative;
+  isolation: auto;
+  color: #8292aa;
+  padding: 10px 6px 9px;
+  gap: 3px;
+}
+
+.bottom-nav .nav-icon-svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: #8292aa;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: none;
+}
+
+.bottom-nav .nav-icon-ball text {
+  fill: #8292aa;
+  stroke: none;
+}
+
+.bottom-nav .nav-item .nav-label {
+  color: #8292aa;
+  font-size: 10.5px;
+  font-weight: 650;
+}
+
+.bottom-nav .nav-item.active,
+.bottom-nav .nav-item.active .nav-label {
+  color: var(--be-orange);
+}
+
+.bottom-nav .nav-item.active .nav-icon-svg {
+  stroke: var(--be-orange);
+  filter: drop-shadow(0 0 4px rgba(255, 157, 66, 0.30));
+}
+
+.bottom-nav .nav-item.active .nav-icon-ball text {
+  fill: var(--be-orange);
+}
+
+.bottom-nav .nav-icon-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 0.66;
+  filter: none;
+}
+
+.bottom-nav .nav-item.active .nav-icon-image {
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(255, 157, 66, 0.20));
+}
+
+/* Kleine telefoons */
+@media (max-width: 380px) {
+  #homeScreen .section-block {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  #homeScreen .quick-grid {
+    gap: 9px;
+  }
+
+  #homeScreen .quick-action-card {
+    height: 150px;
+    min-height: 150px !important;
+    max-height: 150px;
+  }
+
+  #homeScreen .favorite-card {
+    flex-basis: 90px;
+    width: 90px;
+    min-width: 90px;
+  }
+}
+
+/* =========================================
+   PREMIUM NAV - ACTIEVE GLOED
+========================================= */
+
+.bottom-nav {
+    overflow: visible !important;
+}
+
+.bottom-nav .nav-item {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Actieve knop: licht straalt naar boven */
+.bottom-nav .nav-item.active {
+    background: transparent !important;
+
+    box-shadow:
+        0 -10px 18px -10px rgba(255, 157, 66, 0.55),
+        0 -22px 32px -16px rgba(255, 157, 66, 0.30),
+        0 -34px 46px -24px rgba(255, 157, 66, 0.15) !important;
+}
+
+/* Geen oude pseudo-element-glows */
+.bottom-nav .nav-item::before,
+.bottom-nav .nav-item::after {
+    content: none !important;
+}
+
+/* Actief icoon */
+.bottom-nav .nav-item.active .nav-icon-svg {
+    stroke: #ff9d42 !important;
+    filter: drop-shadow(
+        0 0 5px rgba(255, 157, 66, 0.35)
+    ) !important;
+}
+
+/* Actieve tekst */
+.bottom-nav .nav-item.active .nav-label {
+    color: #ff9d42 !important;
+}
+
+/* =========================================
+   FAVORIETEN - PREMIUM OUTLINE ICONEN
+========================================= */
+
+.favorite-icon {
+    height: 28px;
+    margin-bottom: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.favorite-icon-svg {
+    width: 25px;
+    height: 25px;
+
+    fill: none;
+    stroke: #ff9d42;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter: drop-shadow(
+        0 0 5px rgba(255, 157, 66, 0.18)
+    );
+}
+
+/* 8-ball icoon */
+.favorite-icon-ball text {
+    fill: #ff9d42;
+    stroke: none;
+
+    font-size: 6px;
+    font-weight: 800;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================================
+   COMPETITIES - PREMIUM OUTLINE ICONEN
+========================================= */
+
+.competition-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.competition-icon-svg {
+    width: 27px;
+    height: 27px;
+
+    fill: none;
+    stroke: #ff9d42;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter: drop-shadow(
+        0 0 5px rgba(255, 157, 66, 0.18)
+    );
+}
+
+/* Competities - titelicoon */
+
+.competitions-page-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.competitions-header-icon {
+    width: 29px;
+    height: 29px;
+
+    fill: none;
+    stroke: #ff9d42;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    flex-shrink: 0;
+
+    filter: drop-shadow(
+        0 0 6px rgba(255, 157, 66, 0.22)
+    );
+}
+
+/* Break & Play competitie-icoon */
+
+.competition-breakplay-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+
+    opacity: 0.85;
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(58%)
+        sepia(14%)
+        saturate(641%)
+        hue-rotate(176deg)
+        brightness(92%)
+        contrast(88%);
+}
+
+/* =========================================
+   BREAK & PLAY - DETAIL HEADER
+========================================= */
+
+.competition-detail-breakplay-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.competition-detail-breakplay-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    flex-shrink: 0;
+
+    opacity: 1;
+
+    /* wit logo -> Bal Enzo oranje */
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(68%)
+        sepia(72%)
+        saturate(1645%)
+        hue-rotate(329deg)
+        brightness(104%)
+        contrast(101%);
+}
+
+/* =========================================
+   TORNOOI LAND-ICONEN
+========================================= */
+
+.competition-country-icon {
+    width: 29px;
+    height: 29px;
+
+    fill: none;
+    stroke: #8292aa;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    opacity: 0.9;
+}
+
+/* =========================================
+   FAVORIETEN - BREAK & PLAY LOGO
+========================================= */
+
+.favorite-breakplay-logo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    vertical-align: middle;
+
+    /* Bal Enzo oranje */
+    filter:
+        brightness(0)
+        saturate(100%)
+        invert(68%)
+        sepia(72%)
+        saturate(1645%)
+        hue-rotate(329deg)
+        brightness(104%)
+        contrast(101%);
+}
+
+/* =========================================
+   FAVORIETEN - START2POOL LOGO
+========================================= */
+
+.favorite-start2pool-logo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+/* =========================================
+   FAVORIETEN - LAND LABEL
+========================================= */
+
+.favorite-country-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 25px;
+    height: 25px;
+
+    color: #ff9d42;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* =========================================
+   FAVORIETEN - SOCIAL ICONEN
+========================================= */
+
+.favorite-social-icon {
+    width: 25px;
+    height: 25px;
+
+    fill: none;
+    stroke: #ff9d42;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    vertical-align: middle;
+
+    filter: drop-shadow(
+        0 0 5px rgba(255, 157, 66, 0.18)
+    );
+}
+
+/* =========================================
+   CLUB - BAL ENZO LOGO
+========================================= */
+
+.club-page-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.club-header-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+/* Bal Enzo-logo in onderste navigatie */
+.nav-club-logo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+}
+
+/* =========================================
+   CLUB - SOCIAL ICONEN
+========================================= */
+
+.club-social-icon {
+    width: 27px;
+    height: 27px;
+
+    fill: none;
+    stroke: #8fa3bd;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    flex-shrink: 0;
+
+    filter: drop-shadow(
+        0 0 5px rgba(255, 157, 66, 0.18)
+    );
+}
+/* =========================================================
+   FINAL PREMIUM CONSISTENCY PASS — 2026-09-21
+========================================================= */
+
+/* Competities: Bal Enzo herkenbaar zonder rode/bruine vlakken */
+.standings-row.balenzo-team {
+  background: rgba(255, 157, 66, 0.035) !important;
+  box-shadow: inset 3px 0 0 rgba(255, 157, 66, 0.72);
+}
+.standings-row.balenzo-team .standings-team {
+  color: var(--be-orange-light) !important;
+}
+.standings-row.balenzo-team .standings-points { color: inherit !important; }
+.standings-row.balenzo-team > div:nth-child(1),
+.standings-row.balenzo-team > div:nth-child(2) { background: transparent !important; }
+.competition-match-card.balenzo-match {
+  background: linear-gradient(145deg, rgba(15,33,54,.97), rgba(8,21,36,.97)) !important;
+  border-color: rgba(255,157,66,.42) !important;
+  box-shadow: inset 3px 0 0 rgba(255,157,66,.72), 0 12px 28px rgba(0,0,0,.17) !important;
+}
+
+/* Live Scores branding */
+.live-scores-title { display:flex; align-items:center; gap:10px; }
+.live-scores-brand-logo { width:28px; height:28px; object-fit:contain; flex-shrink:0; }
+
+/* Favorieten: divisienamen op één regel */
+.favorite-title { white-space: nowrap !important; font-size: 13px !important; letter-spacing: -0.15px; }
+.favorite-card { min-width: 118px !important; }
+
+/* Start2Pool: legacy rood -> Bal Enzo oranje */
+.start2pool-level-tab.active {
+  background: var(--be-orange) !important;
+  color: #08111e !important;
+  box-shadow: 0 0 20px rgba(255,157,66,.12);
+}
+.start2pool-exercise-number { color: var(--be-orange) !important; }
+.start2pool-info-card { background: rgba(14,30,49,.9) !important; border-color: var(--be-border) !important; }
+.start2pool-info-card.start2pool-warning { border-color: rgba(255,157,66,.35) !important; box-shadow: inset 3px 0 0 rgba(255,157,66,.65); }
+
+/* Profiel: dezelfde outline-taal als Club/Competities */
+.profile-page-header { display:flex; align-items:center; gap:11px; }
+.profile-header-icon, .profile-card-icon {
+  width:29px; height:29px; fill:none; stroke:#8fa3bd; stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;
+}
+.profile-header-icon { stroke: var(--be-orange); filter: drop-shadow(0 0 5px rgba(255,157,66,.18)); }
+.profile-card-icon { width:27px; height:27px; }
+.language-selector { background: rgba(14,30,49,.92) !important; border-color: var(--be-border) !important; color:#f7f9fc !important; }
+
+/* Sparring Matches: volledige visuele omzetting van legacy rood */
+.moneygames-brand-title { display:flex; align-items:center; gap:10px; }
+.moneygames-brand-logo { width:28px; height:28px; object-fit:contain; }
+#moneygamesScreen .moneygames-auth-card,
+#moneygamesScreen .moneygames-open-card,
+#moneygamesScreen .moneygames-history-card,
+#moneygamesScreen .moneygames-form-card,
+#moneygamesScreen .moneygames-stat-card,
+#moneygamesScreen .moneygames-account-card,
+#moneygamesScreen .moneygames-club-match-card {
+  background: linear-gradient(145deg, rgba(15,33,54,.97), rgba(8,21,36,.97)) !important;
+  border-color: var(--be-border) !important;
+}
+#moneygamesScreen .moneygames-primary-btn,
+#moneygamesScreen .moneygames-place-btn,
+#moneygamesScreen .moneygames-react-btn,
+#moneygamesScreen .moneygames-create-btn {
+  background: var(--be-orange) !important;
+  border-color: var(--be-orange) !important;
+  color: #08111e !important;
+  box-shadow: none !important;
+}
+#moneygamesScreen .moneygames-filter-btn.active,
+#moneygamesScreen .moneygames-type-btn.active,
+#moneygamesScreen .moneygames-auth-tab.active,
+#moneygamesScreen .active {
+  border-color: var(--be-orange);
+}
+#moneygamesScreen .moneygames-filter-btn.active,
+#moneygamesScreen .moneygames-type-btn.active {
+  background: var(--be-orange-soft) !important;
+  color: var(--be-orange-light) !important;
+}
+#moneygamesScreen .moneygames-badge,
+#moneygamesScreen .moneygames-type-badge {
+  background: var(--be-orange) !important;
+  color: #08111e !important;
+}
+#moneygamesScreen input:focus,
+#moneygamesScreen select:focus,
+#moneygamesScreen textarea:focus { border-color: var(--be-orange) !important; outline:none; }
+
+/* Onze Club: native appscherm i.p.v. website-in-iframe */
+.our-club-native { display:flex; flex-direction:column; gap:14px; }
+.our-club-hero {
+  display:flex; align-items:center; gap:16px; padding:18px;
+  background:linear-gradient(145deg,rgba(15,33,54,.97),rgba(8,21,36,.97));
+  border:1px solid var(--be-border); border-radius:18px;
+}
+.our-club-logo { width:62px; height:62px; object-fit:contain; flex-shrink:0; }
+.our-club-hero h2 { margin:0 0 5px; font-size:18px; }
+.our-club-hero p { margin:0; color:var(--be-muted); font-size:13px; }
+.our-club-info-card, .our-club-action {
+  width:100%; display:flex; align-items:center; gap:13px; padding:16px;
+  background:linear-gradient(145deg,rgba(15,33,54,.97),rgba(8,21,36,.97));
+  border:1px solid var(--be-border); border-radius:16px; color:#f7f9fc;
+  text-decoration:none; font:inherit; text-align:left;
+}
+.our-club-info-card > div:last-child { display:flex; flex-direction:column; gap:4px; }
+.our-club-info-card span { color:var(--be-muted); font-size:13px; }
+.our-club-info-icon { color:var(--be-orange); font-size:24px; }
+.our-club-action { justify-content:space-between; cursor:pointer; font-weight:700; }
+.our-club-action > span:last-child { color:var(--be-orange); font-size:20px; }
+
+/* =========================================
+   SPARRING MATCHES — PREMIUM ORANJE OVERRIDE
+   Legacy rood volledig vervangen
+========================================= */
+#moneygamesScreen .moneygames-main-tab.active,
+#moneygamesScreen .moneygames-new-btn,
+#moneygamesScreen .moneygames-choice-btn.active,
+#moneygamesScreen .moneygames-filter-btn.active,
+#moneygamesScreen .moneygames-primary-btn,
+#moneygamesScreen .moneygames-place-btn,
+#moneygamesScreen .moneygames-react-btn,
+#moneygamesScreen .moneygames-create-btn,
+#moneygamesScreen .moneygames-submit-result-btn,
+#moneygamesScreen .moneygames-confirm-result-btn,
+#moneygamesScreen .moneygames-select-opponent-btn {
+  background: #ff9d42 !important;
+  border-color: #ff9d42 !important;
+  color: #08111e !important;
+  box-shadow: none !important;
+}
+
+#moneygamesScreen .moneygames-main-tab,
+#moneygamesScreen .moneygames-choice-btn,
+#moneygamesScreen .moneygames-filter-btn {
+  background: rgba(20, 25, 31, 0.96) !important;
+  border-color: rgba(143, 163, 189, 0.22) !important;
+  color: #b7c4d4 !important;
+}
+
+#moneygamesScreen .moneygames-main-tab.active,
+#moneygamesScreen .moneygames-choice-btn.active,
+#moneygamesScreen .moneygames-filter-btn.active {
+  background: rgba(255, 157, 66, 0.14) !important;
+  border-color: #ff9d42 !important;
+  color: #ffb568 !important;
+}
+
+#moneygamesScreen .moneygames-new-btn {
+  background: #ff9d42 !important;
+  color: #08111e !important;
+}
+
+#moneygamesScreen .moneygames-form-card,
+#moneygamesScreen .moneygames-open-card,
+#moneygamesScreen .moneygames-history-card,
+#moneygamesScreen .moneygames-account-card,
+#moneygamesScreen .moneygames-stat-card,
+#moneygamesScreen .moneygames-club-match-card {
+  background: linear-gradient(145deg, rgba(15, 33, 54, 0.97), rgba(8, 21, 36, 0.97)) !important;
+  border-color: rgba(143, 163, 189, 0.22) !important;
+}
+
+#moneygamesScreen .moneygames-form-card input,
+#moneygamesScreen .moneygames-form-card select,
+#moneygamesScreen .moneygames-picker-field {
+  background: #0b1017 !important;
+  border-color: rgba(143, 163, 189, 0.28) !important;
+  color: #f7f9fc !important;
+}
+
+#moneygamesScreen .moneygames-form-card input:focus,
+#moneygamesScreen .moneygames-form-card select:focus,
+#moneygamesScreen .moneygames-picker-field:focus-within {
+  border-color: #ff9d42 !important;
+  outline: none !important;
+}
+
+#moneygamesScreen .moneygames-type-badge,
+#moneygamesScreen .moneygames-badge {
+  background: rgba(255, 157, 66, 0.14) !important;
+  border: 1px solid rgba(255, 157, 66, 0.42) !important;
+  color: #ffb568 !important;
+}
+
+#moneygamesScreen .moneygames-open-card,
+#moneygamesScreen .moneygames-history-card {
+  border-color: rgba(143, 163, 189, 0.20) !important;
+}
+
+#moneygamesScreen .moneygames-open-card:hover,
+#moneygamesScreen .moneygames-history-card:hover {
+  border-color: rgba(255, 157, 66, 0.38) !important;
+}
+
+/* Sparring Matches - Singles/Doubles badge */
+#moneygamesScreen .moneygames-game-type {
+    background: rgba(255, 157, 66, 0.14) !important;
+    border: 1px solid rgba(255, 157, 66, 0.42) !important;
+    color: #ffb568 !important;
+}
+/* =========================================
+   FINAL POLISH — SUBTIELE ACTIES + MIJN PROFIEL
+========================================= */
+
+/* Sparring Matches: grote primaire acties niet meer vol oranje */
+#moneygamesScreen .moneygames-new-btn,
+#moneygamesScreen .moneygames-primary-btn,
+#moneygamesScreen .moneygames-place-btn,
+#moneygamesScreen .moneygames-react-btn,
+#moneygamesScreen .moneygames-create-btn,
+#moneygamesScreen .moneygames-submit-result-btn,
+#moneygamesScreen .moneygames-confirm-result-btn,
+#moneygamesScreen .moneygames-select-opponent-btn {
+  background: rgba(255, 157, 66, 0.08) !important;
+  border: 1px solid rgba(255, 157, 66, 0.55) !important;
+  color: #ffb568 !important;
+  box-shadow: none !important;
+}
+
+#moneygamesScreen .moneygames-new-btn:hover,
+#moneygamesScreen .moneygames-primary-btn:hover,
+#moneygamesScreen .moneygames-place-btn:hover,
+#moneygamesScreen .moneygames-react-btn:hover,
+#moneygamesScreen .moneygames-create-btn:hover,
+#moneygamesScreen .moneygames-submit-result-btn:hover,
+#moneygamesScreen .moneygames-confirm-result-btn:hover,
+#moneygamesScreen .moneygames-select-opponent-btn:hover {
+  background: rgba(255, 157, 66, 0.14) !important;
+  border-color: rgba(255, 157, 66, 0.75) !important;
+}
+
+/* Actieve keuzes/tabs: zachte oranje selectie */
+#moneygamesScreen .moneygames-main-tab.active,
+#moneygamesScreen .moneygames-choice-btn.active,
+#moneygamesScreen .moneygames-filter-btn.active,
+#moneygamesScreen .moneygames-auth-tab.active {
+  background: rgba(255, 157, 66, 0.12) !important;
+  border: 1px solid rgba(255, 157, 66, 0.65) !important;
+  color: #ffb568 !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 157, 66, 0.03) !important;
+}
+
+/* Mijn profiel: tabs in dezelfde premium appstijl */
+#myProfileScreen .my-profile-tabs {
+  gap: 8px;
+}
+
+#myProfileScreen .my-profile-tab {
+  background: linear-gradient(145deg, rgba(15, 33, 54, 0.94), rgba(8, 21, 36, 0.94)) !important;
+  border: 1px solid rgba(143, 163, 189, 0.22) !important;
+  color: #c4cfdd !important;
+  box-shadow: none !important;
+}
+
+#myProfileScreen .my-profile-tab.active {
+  background: rgba(255, 157, 66, 0.10) !important;
+  border-color: rgba(255, 157, 66, 0.62) !important;
+  color: #ffb568 !important;
+}
+
+#myProfileScreen .my-profile-tab.active .my-profile-tab-icon {
+  color: #ffb568 !important;
+}
+
+/* Gepland / Gespeeld */
+#myProfileScreen .my-profile-match-tab {
+  background: rgba(14, 30, 49, 0.92) !important;
+  border: 1px solid rgba(143, 163, 189, 0.22) !important;
+  color: #b7c4d4 !important;
+  box-shadow: none !important;
+}
+
+#myProfileScreen .my-profile-match-tab.active {
+  background: rgba(255, 157, 66, 0.10) !important;
+  border-color: rgba(255, 157, 66, 0.62) !important;
+  color: #ffb568 !important;
+}
+
+/* Profiel wedstrijdkaarten aansluiten bij de rest van de app */
+#myProfileScreen .my-profile-match-card {
+  background: linear-gradient(145deg, rgba(15, 33, 54, 0.97), rgba(8, 21, 36, 0.97)) !important;
+  border-color: rgba(143, 163, 189, 0.20) !important;
+}
+
+#myProfileScreen .my-profile-match-date,
+#myProfileScreen .my-profile-match-info {
+  color: #8fa3bd !important;
+}
+
+/* Meer laden: eveneens subtiel */
+#myProfileScreen .my-profile-load-more {
+  background: rgba(255, 157, 66, 0.08) !important;
+  border: 1px solid rgba(255, 157, 66, 0.50) !important;
+  color: #ffb568 !important;
+}
+
+/* CueScore-tab/logo niet oranje vervormen */
+#myProfileScreen .my-profile-cuescore-logo {
+  filter: none !important;
+}
+
+/* =========================================
+   MIJN PROFIEL - STRAKKERE WEDSTRIJDKAARTEN
+========================================= */
+
+.profile-match-card,
+.profile-match-card * {
+    font-family: -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+/* Naam tegenstander */
+.profile-match-card strong,
+.profile-match-opponent,
+.profile-match-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.15px !important;
+}
+
+/* Datum + uur */
+.profile-match-date {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.1px !important;
+    color: #8fa3bd !important;
+}
+
+/* Matchnummer / secundaire info */
+.profile-match-meta,
+.profile-match-number {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: #8fa3bd !important;
+}
+
+/* =========================================
+   MIJN PROFIEL - STRAKKERE WEDSTRIJDTEKST
+========================================= */
+
+.my-profile-match-card {
+    font-family: -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+/* Datum + uur */
+.my-profile-match-date {
+    margin-bottom: 6px !important;
+
+    color: #8fa3bd !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.25 !important;
+    letter-spacing: 0 !important;
+}
+
+/* Tegenstander */
+.my-profile-match-opponent {
+    color: #ffffff !important;
+
+    font-family: -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, Arial, sans-serif !important;
+
+    font-size: 16px !important;
+    font-weight: 650 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.2px !important;
+}
+
+/* Matchnummer */
+.my-profile-match-info {
+    margin-top: 5px !important;
+
+    color: #8fa3bd !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+}
+
+/* =========================================
+   MIJN PROFIEL - NIEUWE TAB ICONEN
+========================================= */
+
+.my-profile-tab-icon {
+    width: 19px;
+    height: 19px;
+
+    fill: none;
+    stroke: #8fa3bd;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    flex-shrink: 0;
+}
+
+.my-profile-tab-icon text {
+    fill: #8fa3bd;
+    stroke: none;
+    font-size: 6px;
+    font-weight: 800;
+    font-family: Arial, sans-serif;
+}
+
+/* Alleen actieve tab oranje */
+.my-profile-tab.active .my-profile-tab-icon {
+    stroke: #ff9d42;
+}
+
+.my-profile-tab.active .my-profile-tab-icon text {
+    fill: #ff9d42;
+}
+
+/* =========================================
+   START2POOL - SUBTIELE ACTIEVE LEVEL TAB
+========================================= */
+
+.start2pool-level-tab.active {
+    background: rgba(255, 157, 66, 0.08) !important;
+    border: 1px solid rgba(255, 157, 66, 0.55) !important;
+    color: #ffb568 !important;
+    box-shadow: none !important;
+}

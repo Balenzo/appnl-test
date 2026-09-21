@@ -290,50 +290,104 @@ function getNextCompetitionRound(matches) {
 // FAVORIETEN
 // ===============================
 
+function favoriteIcon(type) {
+
+  const icons = {
+
+    profile: `
+      <svg class="favorite-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4.5 21c.7-4.2 3.2-6.5 7.5-6.5s6.8 2.3 7.5 6.5"></path>
+      </svg>
+    `,
+
+    trophy: `
+      <svg class="favorite-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 4h8v5a4 4 0 0 1-8 0V4z"></path>
+        <path d="M8 6H4v2a4 4 0 0 0 4 4"></path>
+        <path d="M16 6h4v2a4 4 0 0 1-4 4"></path>
+        <path d="M12 13v4"></path>
+        <path d="M8 21h8"></path>
+        <path d="M9 17h6v4H9z"></path>
+      </svg>
+    `,
+
+    pool: `
+      <svg class="favorite-icon-svg favorite-icon-ball" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <circle cx="12" cy="9" r="3.2"></circle>
+        <text x="12" y="10.4" text-anchor="middle">8</text>
+      </svg>
+    `,
+
+    live: `
+      <svg class="favorite-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="13" rx="2"></rect>
+        <path d="M8 22h8"></path>
+        <path d="M12 18v4"></path>
+        <path d="M10 9l5 2.5-5 2.5z"></path>
+      </svg>
+    `,
+
+    table: `
+      <svg class="favorite-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="6" width="18" height="11" rx="2"></rect>
+        <circle cx="7" cy="10" r="1"></circle>
+        <circle cx="17" cy="13" r="1"></circle>
+        <path d="M6 17v3"></path>
+        <path d="M18 17v3"></path>
+      </svg>
+    `
+
+  };
+
+  return icons[type] || icons.pool;
+}
+
 const favoriteOptions = {
   myProfile: {
-    icon: '👤',
+    icon: favoriteIcon('profile'),
     title: tr('favorites.myProfile', 'Mijn profiel'),
     url: null
   },
   'club-live': {
-    icon: '📺',
+    icon: favoriteIcon('live'),
     title: 'Live Scores',
     url: 'https://cuescore.com/venue/table/jumbotron/?venueId=1280972&branchId=1'
   },
   'club-reservation': {
-    icon: '🪑',
+    icon: favoriteIcon('table'),
     title: tr('favorites.reserveTable', 'Tafel reserveren'),
     url: 'https://www.bal-enzo.be/reservaties/'
   },
   'club-page': {
-    icon: '🎱',
+    icon: favoriteIcon('pool'),
     title: tr('favorites.clubPage', 'Clubpagina'),
     url: 'https://cuescore.com/bal-enzobilliardsdarts'
   },
   'competition-first': {
-    icon: '🏆',
+    icon: favoriteIcon('trophy'),
     title: tr('competition.firstDivision', 'Eerste Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130085")
 },
 
 'competition-second': {
-    icon: '🏆',
+    icon: favoriteIcon('trophy'),
     title: tr('competition.secondDivision', 'Tweede Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130109")
 },
 
 'competition-third': {
-    icon: '🏆',
+    icon: favoriteIcon('trophy'),
     title: tr('competition.thirdDivision', 'Derde Klasse'),
     url: null,
     action: () => openCompetitionDetail("74130127")
 },
 
 'competition-cup': {
-    icon: '🏆',
+    icon: favoriteIcon('trophy'),
     title: tr('competition.cup', 'Beker'),
     url: null,
     action: () => openCompetitionDetail("74130139")
@@ -341,7 +395,7 @@ const favoriteOptions = {
 
 // START COMPETITIE NL FAVORIET - VERWIJDEREN IN APP
 'competition-nl': {
-    icon: '🇳🇱',
+    icon: '<span class="favorite-country-label">NL</span>',
     title: tr('competition.netherlands', 'Competitie NL'),
     url: null,
     action: () => openCompetitionDetail("83574892")
@@ -349,51 +403,61 @@ const favoriteOptions = {
 // EINDE COMPETITIE NL FAVORIET - VERWIJDEREN IN APP
 
 'breakplay-1': {
-    icon: '🎱',
+    icon: '<img src="breakplayicon.png" alt="" class="favorite-breakplay-logo">',
     title: tr('competition.breakPlay1', 'Break & Play Reeks 1'),
     url: null,
     action: () => openCompetitionDetail("85928236")
 },
 
 'breakplay-2': {
-    icon: '🎱',
+    icon: '<img src="breakplayicon.png" alt="" class="favorite-breakplay-logo">',
     title: tr('competition.breakPlay2', 'Break & Play Reeks 2'),
     url: null,
     action: () => openCompetitionDetail("85928569")
 },
 
 'breakplay-3': {
-    icon: '🎱',
+    icon: '<img src="breakplayicon.png" alt="" class="favorite-breakplay-logo">',
     title: tr('competition.breakPlay3', 'Break & Play Reeks 3'),
     url: null,
     action: () => openCompetitionDetail("85928635")
 },
 
 'breakplay-4': {
-    icon: '🎱',
+    icon: '<img src="breakplayicon.png" alt="" class="favorite-breakplay-logo">',
     title: tr('competition.breakPlay4', 'Break & Play Reeks 4'),
     url: null,
     action: () => openCompetitionDetail("85928797")
 },
 
 'breakplay-5': {
-    icon: '🎱',
+    icon: '<img src="breakplayicon.png" alt="" class="favorite-breakplay-logo">',
     title: tr('competition.breakPlay5', 'Break & Play Reeks 5'),
     url: null,
     action: () => openCompetitionDetail("85929085")
 },
   facebook: {
-    icon: '📘',
+    icon: `
+      <svg class="favorite-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v6h4v-6h3l1-4h-4V9c0-.7.3-1 1-1z"></path>
+      </svg>
+    `,
     title: 'Facebook',
     url: 'https://www.facebook.com/billiardsendarts'
-  },
-  instagram: {
-    icon: '📸',
+},
+instagram: {
+    icon: `
+      <svg class="favorite-social-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="1"></circle>
+      </svg>
+    `,
     title: 'Instagram',
     url: 'https://www.instagram.com/balenzo_billiards_darts/'
-  },
+},
  start2pool: {
-  icon: '🎱',
+  icon: '<img src="start2pool.png" alt="" class="favorite-start2pool-logo">',
   title: 'Start2Pool',
   url: '#'
 }
@@ -1222,13 +1286,55 @@ function renderCountryTournaments() {
   "
 >
             <div class="competition-icon">
-              ${
-                currentTournamentCountry ===
-                "netherlands"
-                  ? "🇳🇱"
-                  : "🇧🇪"
-              }
-            </div>
+  ${
+    currentTournamentCountry === "netherlands"
+      ? `
+        <svg class="competition-country-icon" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M13 5
+                   L18 6
+                   L21 10
+                   L26 11
+                   L28 15
+                   L27 20
+                   L30 23
+                   L27 27
+                   L24 26
+                   L22 31
+                   L17 34
+                   L14 31
+                   L15 26
+                   L11 23
+                   L12 18
+                   L9 14
+                   L11 10
+                   Z"></path>
+        </svg>
+      `
+      : `
+        <svg class="competition-country-icon" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M13 7
+                   L18 6
+                   L21 9
+                   L25 8
+                   L28 12
+                   L27 16
+                   L31 19
+                   L28 23
+                   L29 28
+                   L25 31
+                   L21 30
+                   L18 34
+                   L14 31
+                   L15 27
+                   L11 25
+                   L12 20
+                   L9 17
+                   L12 13
+                   Z"></path>
+        </svg>
+      `
+  }
+</div>
 
             <div class="competition-info">
 
@@ -1589,10 +1695,44 @@ if (String(tournamentId) === "74130139") {
     "85929085": tr("competition.breakPlay5", "Break & Play Reeks 5")
 };
 
-document.getElementById("competitionDetailTitle").textContent =
-    isTournamentDetailSource(detailSource)
-        ? "Tornooi"
-        : "Competitie";
+const breakAndPlayTournamentIds = [
+    "85928236",
+    "85928569",
+    "85928635",
+    "85928797",
+    "85929085"
+];
+
+const isBreakAndPlayDetail =
+    breakAndPlayTournamentIds.includes(String(tournamentId));
+
+const competitionDetailTitle =
+    document.getElementById("competitionDetailTitle");
+
+if (competitionDetailTitle) {
+
+    if (isTournamentDetailSource(detailSource)) {
+
+        competitionDetailTitle.textContent = "Tornooi";
+
+    } else if (isBreakAndPlayDetail) {
+
+        competitionDetailTitle.innerHTML = `
+            <span class="competition-detail-breakplay-title">
+                <img
+                    src="breakplayicon.png"
+                    alt=""
+                    class="competition-detail-breakplay-logo"
+                >
+                <span>Break & Play</span>
+            </span>
+        `;
+
+    } else {
+
+        competitionDetailTitle.textContent = "Competitie";
+    }
+}
 
         document.getElementById("competitionName").textContent =
             data.name.replace(/\*/g, "");
