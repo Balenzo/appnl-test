@@ -6505,3 +6505,40 @@ body {
     color: #ffb568 !important;
     box-shadow: none !important;
 }
+
+/* =========================================
+   COMPETITIEKAART - SUBTIELE ACHTERGRONDFOTO
+========================================= */
+
+.competition-card-photo {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.competition-card-photo::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 55%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #0b1828 0%,
+            rgba(11, 24, 40, 0.78) 28%,
+            rgba(11, 24, 40, 0.30) 100%
+        ),
+        var(--competition-bg) center / cover no-repeat;
+
+    opacity: 0.38;
+}
+
+.competition-card-photo > * {
+    position: relative;
+    z-index: 1;
+}
