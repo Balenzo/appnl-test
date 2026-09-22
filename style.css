@@ -6827,3 +6827,412 @@ filter:
     object-fit: contain !important;
     transform: none !important;
 }
+
+/* =========================================
+   TORNOOI - PODIUM
+========================================= */
+
+.tournament-podium {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "first first"
+        "second third";
+    gap: 10px;
+    margin: 6px 0 22px;
+    align-items: end;
+}
+
+.tournament-podium-place {
+    background: linear-gradient(180deg, #1a1a1a, #111);
+    border: 1px solid rgba(255, 157, 66, 0.16);
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    min-width: 0;
+}
+
+.tournament-podium-first {
+    grid-area: first;
+    width: 58%;
+    justify-self: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.tournament-podium-second {
+    grid-area: second;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.tournament-podium-third {
+    grid-area: third;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.tournament-podium-medal {
+    font-size: 30px;
+    line-height: 1;
+    margin-bottom: 7px;
+}
+
+.tournament-podium-first .tournament-podium-medal {
+    font-size: 36px;
+}
+
+.tournament-podium-name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.tournament-podium-third .tournament-podium-name + .tournament-podium-name {
+    margin-top: 4px;
+}
+
+.tournament-podium-number {
+    margin-top: 7px;
+    color: #ff9d42;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* =========================================
+   TORNOOIEN - MEER LADEN
+========================================= */
+
+.country-tournament-load-more {
+    background: rgba(255, 157, 66, 0.08) !important;
+    border: 1px solid rgba(255, 157, 66, 0.50) !important;
+    border-radius: 10px !important;
+    color: #ffb568 !important;
+
+    padding: 12px 16px !important;
+    margin: 16px 0 8px !important;
+}
+
+.country-tournament-load-more .competition-title {
+    color: #ffb568 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}     
+
+/* =========================================
+   TORNOOI - SPELERSPROFIEL
+========================================= */
+
+#playerDetailScreen .team-detail-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 18px 16px;
+}
+
+#playerDetailScreen #playerDetailImage {
+    width: 96px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 0 12px;
+}
+
+#playerDetailScreen #playerDetailName {
+    margin: 0;
+    text-align: center;
+}
+
+#playerDetailScreen .player-stats-section {
+    margin-top: 18px;
+}
+
+#playerDetailScreen .player-stats-section > .competition-title {
+    margin-bottom: 10px;
+}
+
+#playerDetailScreen #playerDetailStats .my-profile-ratings {
+    margin: 0;
+}
+
+#playerDetailScreen #playerDetailStats .my-profile-rating {
+    padding: 16px;
+    border: 1px solid rgba(255, 157, 66, 0.25);
+    border-radius: 12px;
+    background: rgba(255, 157, 66, 0.06);
+    text-align: center;
+}
+
+#playerDetailScreen #playerDetailStats .my-profile-rating-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+    margin-bottom: 7px;
+}
+
+#playerDetailScreen #playerDetailStats .my-profile-rating-name {
+    font-size: 13px;
+    color: #ffb568;
+}
+
+/* =========================================
+   COMPETITIES - SPELER ZOEKEN
+========================================= */
+
+.player-search-card {
+  margin-top: 26px;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.055),
+      rgba(255, 255, 255, 0.025)
+    );
+
+  border: 1px solid rgba(190, 198, 208, 0.18) !important;
+}
+
+.player-search-icon {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #9ca5af;
+}
+
+.player-search-icon svg {
+  width: 25px;
+  height: 25px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.player-search-card .competition-subtitle {
+  color: #8f98a3;
+}
+
+.player-search-card .competition-arrow {
+  color: #7f8892;
+}
+
+/* =========================================
+   SPELER ZOEKEN - SCHERM
+========================================= */
+
+.player-search-back {
+  width: 34px;
+  height: 34px;
+  margin-right: 10px;
+  padding: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  color: #fff;
+
+  font: inherit;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.player-search-intro {
+  margin-bottom: 18px;
+
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.player-search-form {
+  display: flex;
+  gap: 9px;
+  align-items: stretch;
+}
+
+.player-search-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.player-search-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+
+  width: 20px;
+  height: 20px;
+
+  transform: translateY(-50%);
+
+  fill: none;
+  stroke: #8f98a3;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
+
+.player-search-input {
+  width: 100%;
+  height: 48px;
+
+  padding: 0 14px 0 44px;
+
+  background: #151515;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+
+  outline: none;
+}
+
+.player-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.player-search-input:focus {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.player-search-submit {
+  height: 48px;
+  padding: 0 18px;
+
+  background: #30343a;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.player-search-status {
+  display: none;
+
+  padding: 22px 4px 8px;
+
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 14px;
+  text-align: center;
+}
+
+.player-search-results {
+  margin-top: 18px;
+}
+
+/* SPELER ZOEKEN - RESULTATEN */
+
+.player-search-result {
+  width: 100%;
+  min-height: 72px;
+  margin-bottom: 10px;
+  padding: 10px 14px 10px 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: linear-gradient(180deg, #181818, #101010);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+
+  color: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.player-search-result-image-wrap {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  background: #252525;
+}
+
+.player-search-result-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-search-result-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 22px;
+}
+
+.player-search-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-search-result-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.player-search-result-country {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 13px;
+}
+
+.player-search-verified {
+  width: 17px;
+  height: 17px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #3787ff;
+
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}

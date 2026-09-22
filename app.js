@@ -5,6 +5,7 @@ let currentCompetitionTournamentId = null;
 let competitionLiveRefreshTimer = null;
 let playerDetailSource = "team";
 let currentMvpPercentage = null;
+let playerDetailLoadId = 0;
 
 function tr(key, fallback, params = {}) {
   if (typeof t !== "function") {
@@ -1004,10 +1005,10 @@ function closeTournamentRanking() {
 
 let currentTournamentCountry = null;
 let currentTournamentView = "upcoming";
-
 let countryTournamentItems = [];
 let countryTournamentVisibleCount = 10;
 let countryTournamentOffset = 0;
+const countryTournamentCache = {};
 
 function openCountryTournaments(country) {
   currentTournamentCountry = country;
@@ -1106,8 +1107,24 @@ async function loadCountryTournaments() {
   }
 
   countryTournamentItems = [];
-  countryTournamentVisibleCount = 10;
-  countryTournamentOffset = 0;
+
+countryTournamentVisibleCount =
+    currentTournamentView === "past"
+        ? 5
+        : 10;
+
+countryTournamentOffset = 0;
+
+const cacheKey =
+    `${currentTournamentCountry}:${currentTournamentView}`;
+
+if (countryTournamentCache[cacheKey]) {
+    countryTournamentItems =
+        countryTournamentCache[cacheKey];
+
+    renderCountryTournaments();
+    return;
+}
 
   list.innerHTML = `
     <div class="competition-loading">
@@ -1117,7 +1134,11 @@ async function loadCountryTournaments() {
 
   try {
     await loadCountryTournamentPage(0);
-    renderCountryTournaments();
+
+countryTournamentCache[cacheKey] =
+    [...countryTournamentItems];
+
+renderCountryTournaments();
 
   } catch (error) {
     console.error(
@@ -1337,25 +1358,25 @@ function renderCountryTournaments() {
       .join("");
 
   const moreButton = `
-    <button
-      type="button"
-      class="competition-card"
-      onclick="loadMoreCountryTournaments()"
-      style="
-        width: 100%;
-        border: none;
-        cursor: pointer;
-        justify-content: center;
-      "
+  <button
+    type="button"
+    class="competition-card country-tournament-load-more"
+    onclick="loadMoreCountryTournaments()"
+    style="
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      justify-content: center;
+    "
+  >
+    <div
+      class="competition-title"
+      style="text-align: center;"
     >
-      <div
-        class="competition-title"
-        style="text-align: center;"
-      >
-        Meer tornooien laden
-      </div>
-    </button>
-  `;
+      Meer tornooien laden
+    </div>
+  </button>
+`;
 
   list.innerHTML =
     cards +
@@ -1387,9 +1408,13 @@ async function loadMoreCountryTournaments() {
     countryTournamentVisibleCount <
     countryTournamentItems.length
   ) {
-    countryTournamentVisibleCount += 10;
-    renderCountryTournaments();
-    return;
+    countryTournamentVisibleCount +=
+    currentTournamentView === "past"
+        ? 5
+        : 10;
+
+renderCountryTournaments();
+return;
   }
 
   /*
@@ -1410,8 +1435,12 @@ async function loadMoreCountryTournaments() {
       return;
     }
 
-    countryTournamentVisibleCount += 10;
-    renderCountryTournaments();
+    countryTournamentVisibleCount +=
+    currentTournamentView === "past"
+        ? 5
+        : 10;
+
+renderCountryTournaments();
 
   } catch (error) {
     console.error(
@@ -1841,13 +1870,57 @@ if (isTournamentDetailSource(detailSource)) {
                 return;
             }
 
-            container.innerHTML = `
-                <div class="profile-tournament-standings">
-                    ${standings.map(player => `
-                        <div class="profile-tournament-standing-row">
+            const firstPlace =
+    standings.find(player => Number(player.position) === 1);
+
+const secondPlace =
+    standings.find(player => Number(player.position) === 2);
+
+const thirdPlaces =
+    standings.filter(player => Number(player.position) === 3);
+
+container.innerHTML = `
+
+    <div class="tournament-podium">
+
+        <div class="tournament-podium-place tournament-podium-first">
+            <div class="tournament-podium-medal">🥇</div>
+            <div class="tournament-podium-name">
+                ${firstPlace ? firstPlace.player : ""}
+            </div>
+            <div class="tournament-podium-number">1</div>
+        </div>
+
+        <div class="tournament-podium-place tournament-podium-second">
+            <div class="tournament-podium-medal">🥈</div>
+            <div class="tournament-podium-name">
+                ${secondPlace ? secondPlace.player : ""}
+            </div>
+            <div class="tournament-podium-number">2</div>
+        </div>
+
+        <div class="tournament-podium-place tournament-podium-third">
+            <div class="tournament-podium-medal">🥉</div>
+
+            ${thirdPlaces.map(player => `
+                <div class="tournament-podium-name">
+                    ${player.player}
+                </div>
+            `).join("")}
+
+            <div class="tournament-podium-number">
+                    3
+                </div>
+                </div>
+
+            </div>
+
+    <div class="profile-tournament-standings">
+        ${standings.map(player => `
+                     <div class="profile-tournament-standing-row">
                             <div class="profile-tournament-standing-position">
-                                ${player.position}
-                            </div>
+    ${player.position}
+</div>
                             <div class="profile-tournament-standing-player">
                                 <div class="profile-tournament-standing-name ${
                                     isLinkedProfilePlayer(
@@ -2239,19 +2312,30 @@ if (!tournamentPlayers.size) {
         teamsContainer.innerHTML =
             sortedTournamentPlayers.map(player => `
 
-                <div class="competition-card">
+    <div
+        class="competition-card"
+        onclick="openTournamentPlayerDetail(
+            '${String(player.id || "").replace(/'/g, "\\'")}',
+            '${String(player.name || "").replace(/'/g, "\\'")}'
+        )"
+        style="cursor:pointer;"
+    >
 
-                    <div class="competition-info">
+        <div class="competition-info">
 
-                        <div class="competition-title">
-                            ${player.name}
-                        </div>
+            <div class="competition-title">
+                ${player.name}
+            </div>
 
-                    </div>
+        </div>
 
-                </div>
+        <div class="competition-arrow">
+            ›
+        </div>
 
-            `).join("");
+    </div>
+
+`).join("");
     }
 
 } else {
@@ -3676,6 +3760,149 @@ showMyProfileMatchTab(
 }
 
 /* ===========================
+   OPEN PROFILE TEAM
+=========================== */
+
+async function openProfileTeam(teamId, teamName) {
+
+    sessionStorage.setItem("teamDetailSource", "profileTeams");
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("teamDetailScreen")
+        .classList.add("active");
+
+    document.getElementById("teamDetailTitle").textContent =
+        teamName || tr("common.team", "Team");
+
+    document.getElementById("teamDetailName").textContent =
+        teamName || tr("common.team", "Team");
+
+    const positionElement =
+        document.getElementById("teamDetailPosition");
+
+    if (positionElement) {
+        positionElement.textContent = "";
+        positionElement.style.display = "none";
+    }
+
+    const venueElement =
+        document.getElementById("teamDetailVenue");
+
+    if (venueElement) {
+        venueElement.textContent = "";
+        venueElement.style.display = "none";
+    }
+
+    const playersContainer =
+        document.getElementById("teamDetailPlayers");
+
+    playersContainer.innerHTML =
+        tr("team.loadingPlayers", "Spelers laden...");
+
+    try {
+
+        const response = await fetch(
+            `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=teamParticipants&teamId=${encodeURIComponent(teamId)}`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                `Teamleden konden niet geladen worden (${response.status}).`
+            );
+        }
+
+        const data = await response.json();
+
+        if (
+            !data.success ||
+            !Array.isArray(data.participants)
+        ) {
+            throw new Error("Geen geldige teamleden ontvangen.");
+        }
+
+        const players =
+            data.participants
+                .filter(player => player?.name)
+                .sort((a, b) =>
+                    a.name.localeCompare(b.name, "nl")
+                );
+
+        playersContainer.innerHTML =
+            players.length
+                ? players.map(player => `
+                    <div
+                        class="team-player-card"
+                        onclick="openProfileTeamPlayer(
+                            '${String(player.id || "").replace(/'/g, "\\'")}',
+                            '${String(player.name || "").replace(/'/g, "\\'")}',
+                            '${String(teamName || "").replace(/'/g, "\\'")}'
+                        )"
+                    >
+                        <span>${player.name}</span>
+
+                        <span class="team-player-arrow">
+                            ›
+                        </span>
+                    </div>
+                `).join("")
+                : `
+                    <div class="my-profile-empty">
+                        Geen spelers gevonden.
+                    </div>
+                `;
+
+    } catch (error) {
+
+        console.error(
+            "Profielteam laden mislukt:",
+            error
+        );
+
+        playersContainer.innerHTML =
+            `<div class="my-profile-empty">
+                Spelers konden niet geladen worden.
+            </div>`;
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function openProfileTeamPlayer(playerId, playerName, teamName) {
+
+    if (!playerId) {
+        return;
+    }
+
+    sessionStorage.setItem(
+        "profileTeamPlayerTeamName",
+        teamName || ""
+    );
+
+    openTournamentPlayerDetail(
+        playerId,
+        playerName
+    );
+
+    playerDetailSource = "profileTeam";
+
+    const teamElement =
+        document.getElementById("playerDetailTeam");
+
+    if (teamElement) {
+        teamElement.textContent = teamName || "";
+        teamElement.style.display =
+            teamName ? "block" : "none";
+    }
+}
+
+/* ===========================
    OPEN TEAM DETAIL
 =========================== */
 
@@ -3708,8 +3935,15 @@ async function openTeamDetail(teamId) {
     document.getElementById("teamDetailName").textContent =
         team.player?.name || tr("common.unknown", "Onbekend");
 
-    document.getElementById("teamDetailPosition").textContent =
+    const positionElement =
+        document.getElementById("teamDetailPosition");
+
+    positionElement.textContent =
         `${team.position}${tr("competition.placeSuffix", "e")} ${tr("competition.place", "plaats")}`;
+
+    positionElement.style.display = "block";
+
+    sessionStorage.removeItem("teamDetailSource");
 
     const venueElement =
         document.getElementById("teamDetailVenue");
@@ -3754,44 +3988,60 @@ async function openTeamDetail(teamId) {
 
 
         const playerNames = new Set();
+const playerIdsByName = new Map();
 
-    try {
+try {
 
-        /*
-         * Competitie NL start later in het seizoen.
-         * Daarom halen we daar de vaste spelerslijst
-         * rechtstreeks uit de CueScore-teampagina.
-         */
+    /*
+     * CueScore-teamleden ophalen.
+     * Voor alle competities gebruiken we deze gegevens
+     * om de CueScore playerId aan de speler te koppelen.
+     *
+     * Voor Competitie NL gebruiken we deze lijst ook
+     * als spelerslijst, omdat die competitie later start
+     * en er nog geen gespeelde wedstrijden hoeven te zijn.
+     */
+    const rosterResponse = await fetch(
+        `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=teamParticipants&teamId=${encodeURIComponent(teamId)}`
+    );
+
+    if (rosterResponse.ok) {
+
+        const rosterData =
+            await rosterResponse.json();
+
         if (
-            String(currentCompetitionData.tournamentId) ===
-            "83574892"
+            rosterData.success &&
+            Array.isArray(rosterData.participants)
         ) {
-            const rosterResponse = await fetch(
-                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=teamParticipants&teamId=${encodeURIComponent(teamId)}`
-            );
 
-            if (!rosterResponse.ok) {
-                throw new Error(
-                    `Teamspelers konden niet geladen worden (${rosterResponse.status}).`
-                );
-            }
+            rosterData.participants.forEach(player => {
 
-            const rosterData =
-                await rosterResponse.json();
+                if (!player?.name) {
+                    return;
+                }
 
-            if (
-                rosterData.success &&
-                Array.isArray(rosterData.participants)
-            ) {
-                rosterData.participants.forEach(player => {
-                    if (player?.name) {
-                        playerNames.add(player.name);
-                    }
-                });
-            }
+                if (player.id) {
+                    playerIdsByName.set(
+                        player.name.trim().toLowerCase(),
+                        String(player.id)
+                    );
+                }
+
+                if (
+                    String(currentCompetitionData.tournamentId) ===
+                    "83574892"
+                ) {
+                    playerNames.add(player.name);
+                }
+
+            });
+
         }
 
-        const results = await Promise.all(
+    }
+
+    const results = await Promise.all(
 
             teamMatches.map(async match => {
 
@@ -4024,20 +4274,33 @@ const sortedPlayers =
 
 
         playersContainer.innerHTML =
-    sortedPlayers.map(player => `
+    sortedPlayers.map(player => {
 
-        <div
-            class="team-player-card"
-            onclick="openPlayerDetail('${player.replace(/'/g, "\\'")}', '${teamId}')"
-        >
-            <span>${player}</span>
+        const playerId =
+            playerIdsByName.get(
+                player.trim().toLowerCase()
+            ) || "";
 
-            <span class="team-player-arrow">
-                ›
-            </span>
-        </div>
+        return `
 
-    `).join("");
+            <div
+                class="team-player-card"
+                onclick="openPlayerDetail(
+                    '${player.replace(/'/g, "\\'")}',
+                    '${teamId}',
+                    '${playerId}'
+                )"
+            >
+                <span>${player}</span>
+
+                <span class="team-player-arrow">
+                    ›
+                </span>
+            </div>
+
+        `;
+
+    }).join("");
 
 
     } catch (error) {
@@ -4059,6 +4322,28 @@ function closeTeamDetail() {
         screen.classList.remove("active");
     });
 
+    if (
+        sessionStorage.getItem("teamDetailSource") ===
+        "profileTeams"
+    ) {
+
+        document
+            .getElementById("myProfileScreen")
+            .classList.add("active");
+
+        const teamsTab =
+            document.querySelector(
+                '.my-profile-tab[data-profile-tab="teams"]'
+            );
+
+        showMyProfileTab(
+            "teams",
+            teamsTab
+        );
+
+        return;
+    }
+
     document
         .getElementById("competitionDetailScreen")
         .classList.add("active");
@@ -4068,11 +4353,182 @@ function closeTeamDetail() {
    OPEN PLAYER DETAIL
 =========================== */
 
-async function openPlayerDetail(playerName, teamId) {
+async function openTournamentPlayerDetail(playerId, playerName) {
+
+    if (!playerId) {
+        console.error("Geen playerId gevonden voor tornooispeler:", playerName);
+        return;
+    }
+
+    playerDetailSource = "tournament";
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("playerDetailScreen")
+        .classList.add("active");
+
+    document.getElementById("playerDetailTitle").textContent =
+        playerName;
+
+    document.getElementById("playerDetailName").textContent =
+        playerName;
+
+    /* Teamtekst verbergen bij tornooispeler */
+    const teamElement =
+        document.getElementById("playerDetailTeam");
+
+    teamElement.textContent = "";
+    teamElement.style.display = "none";
+
+    /* Foto resetten tijdens laden */
+    const image =
+        document.getElementById("playerDetailImage");
+
+    image.removeAttribute("src");
+    image.alt = "";
+    image.style.display = "none";
+
+const statsTitle =
+    document.querySelector(
+        "#playerDetailScreen .player-stats-section .competition-title"
+    );
+
+if (statsTitle) {
+    statsTitle.textContent = "Rating";
+}
+
+    const statsContainer =
+        document.getElementById("playerDetailStats");
+
+    const ratingsContainer =
+        document.getElementById("playerDetailRatings");
+
+    if (ratingsContainer) {
+        ratingsContainer.innerHTML = "";
+    }
+
+    statsContainer.innerHTML =
+        "Rating laden...";
+
+    try {
+
+        /* Speler + ratings tegelijk ophalen */
+        const [
+            participantResponse,
+            ratingsResponse
+        ] = await Promise.all([
+
+            fetch(
+                `https://api.cuescore.com/participant/?id=${encodeURIComponent(playerId)}`
+            ),
+
+            fetch(
+                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileRatings&playerId=${encodeURIComponent(playerId)}`
+            )
+
+        ]);
+
+        if (!participantResponse.ok) {
+            throw new Error(
+                `Speler kon niet geladen worden (${participantResponse.status}).`
+            );
+        }
+
+        const player =
+            await participantResponse.json();
+
+        const ratingsData =
+            ratingsResponse.ok
+                ? await ratingsResponse.json()
+                : { ratings: [] };
+
+        /* NAAM */
+        const displayName =
+            player.name ||
+            `${player.firstname || ""} ${player.lastname || ""}`.trim() ||
+            playerName;
+
+        document.getElementById("playerDetailTitle").textContent =
+            displayName;
+
+        document.getElementById("playerDetailName").textContent =
+            displayName;
+
+        /* FOTO */
+        if (player.image) {
+
+            image.src = player.image;
+            image.alt = displayName;
+            image.style.display = "";
+
+        }
+
+        /* RATINGS */
+        const ratings =
+            Array.isArray(ratingsData.ratings)
+                ? ratingsData.ratings
+                : [];
+
+        if (ratings.length) {
+
+            statsContainer.innerHTML = `
+                <div class="my-profile-ratings">
+
+                    ${ratings.map(rating => `
+
+                        <div class="my-profile-rating">
+
+                            <div class="my-profile-rating-value">
+                                ${rating.value}
+                            </div>
+
+                            <div class="my-profile-rating-name">
+                                ${
+                                    rating.name === "KNBB Pool Rating"
+                                        ? "🇳🇱 "
+                                        : rating.name === "P-B-B Pool Rating"
+                                            ? "🇧🇪 "
+                                            : ""
+                                }
+                                ${rating.name}
+                            </div>
+
+                        </div>
+
+                    `).join("")}
+
+                </div>
+            `;
+
+        } else {
+
+            statsContainer.innerHTML =
+                `<div class="competition-subtitle">Geen rating beschikbaar</div>`;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Tornooispeler laden mislukt:",
+            error
+        );
+
+        statsContainer.innerHTML =
+            `<div class="competition-subtitle">Profiel kon niet geladen worden.</div>`;
+    }
+}
+
+async function openPlayerDetail(playerName, teamId, playerId = "") {
 
     if (!currentCompetitionData) {
         return;
     }
+
+    const loadId = ++playerDetailLoadId;
 
         function normalizePlayerName(name) {
 
@@ -4111,11 +4567,146 @@ async function openPlayerDetail(playerName, teamId) {
     document.getElementById("playerDetailTeam").textContent =
         team.player?.name || tr("common.team", "Team");
 
+    const statsTitle =
+        document.querySelector(
+            "#playerDetailScreen .player-stats-section .competition-title"
+        );
+
+    if (statsTitle) {
+        statsTitle.textContent = "Statistieken";
+    }
+
     const statsContainer =
         document.getElementById("playerDetailStats");
 
     statsContainer.innerHTML =
         tr("player.loadingStats", "Statistieken laden...");
+
+    const ratingsContainer =
+        document.getElementById("playerDetailRatings");
+
+    if (ratingsContainer) {
+        ratingsContainer.innerHTML = "";
+    }
+
+    const image =
+    document.getElementById("playerDetailImage");
+
+if (image) {
+    image.removeAttribute("src");
+    image.alt = "";
+    image.style.display = "none";
+}
+
+if (playerId) {
+
+    try {
+
+        const [
+            participantResponse,
+            ratingsResponse
+        ] = await Promise.all([
+
+            fetch(
+                `https://api.cuescore.com/participant/?id=${encodeURIComponent(playerId)}`
+            ),
+
+            fetch(
+                `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileRatings&playerId=${encodeURIComponent(playerId)}`
+            )
+
+        ]);
+
+        if (loadId !== playerDetailLoadId) {
+            return;
+        }
+
+        if (participantResponse.ok) {
+
+            const player =
+                await participantResponse.json();
+
+            const displayName =
+                player.name ||
+                `${player.firstname || ""} ${player.lastname || ""}`.trim() ||
+                playerName;
+
+            document.getElementById("playerDetailTitle").textContent =
+                displayName;
+
+            document.getElementById("playerDetailName").textContent =
+                displayName;
+
+            if (image && player.image) {
+
+                image.src = player.image;
+                image.alt = displayName;
+                image.style.display = "";
+
+            }
+
+        }
+
+        if (ratingsResponse.ok) {
+
+            const ratingsData =
+                await ratingsResponse.json();
+
+            const ratings =
+                Array.isArray(ratingsData.ratings)
+                    ? ratingsData.ratings
+                    : [];
+
+            const ratingsContainer =
+                document.getElementById("playerDetailRatings");
+
+            if (ratingsContainer) {
+
+                if (ratings.length) {
+
+                    ratingsContainer.innerHTML = ratings.map(rating => `
+
+                        <div class="my-profile-rating">
+
+                            <div class="my-profile-rating-value">
+                                ${rating.value}
+                            </div>
+
+                            <div class="my-profile-rating-name">
+                                ${
+                                    rating.name === "KNBB Pool Rating"
+                                        ? "🇳🇱 "
+                                        : rating.name === "P-B-B Pool Rating"
+                                            ? "🇧🇪 "
+                                            : ""
+                                }
+                                ${rating.name}
+                            </div>
+
+                        </div>
+
+                    `).join("");
+
+                } else {
+
+                    ratingsContainer.innerHTML = "";
+
+                }
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Spelerprofiel laden mislukt:",
+            error
+        );
+
+    }
+
+}    
 
 
     const teamMatches =
@@ -4149,6 +4740,10 @@ async function openPlayerDetail(playerName, teamId) {
             })
 
         );
+
+        if (loadId !== playerDetailLoadId) {
+            return;
+        }
 
 
         let played = 0;
@@ -4422,20 +5017,29 @@ function closePlayerDetail() {
         screen.classList.remove("active");
     });
 
-    if (playerDetailSource === "mvp") {
+    if (playerDetailSource === "playerSearch") {
 
-    document
-        .getElementById("competitionDetailScreen")
-        .classList.add("active");
+        document
+            .getElementById("playerSearchScreen")
+            .classList.add("active");
 
-} else {
+    } else if (
+        playerDetailSource === "mvp" ||
+        playerDetailSource === "tournament"
+    ) {
 
-    document
-        .getElementById("teamDetailScreen")
-        .classList.add("active");
+        document
+            .getElementById("competitionDetailScreen")
+            .classList.add("active");
 
+    } else {
+
+        document
+            .getElementById("teamDetailScreen")
+            .classList.add("active");
+
+    }
 }
-}   
 
 function openLiveScores() {
 
@@ -5284,6 +5888,10 @@ async function openMyProfile() {
       `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileMatches&playerId=${playerId}&page=1`
     );
 
+    const teamsRequest = fetch(
+      `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=profileTeams&playerId=${playerId}`
+    );
+
     const response = await participantRequest;
 
     if (!response.ok) {
@@ -5416,12 +6024,14 @@ async function openMyProfile() {
       ratingsResponse,
       upcomingResponse,
       tournamentsResponse,
-      matchesResponse
+      matchesResponse,
+      teamsResponse
     ] = await Promise.all([
       ratingsRequest,
       upcomingRequest,
       tournamentsRequest,
-      matchesRequest
+      matchesRequest,
+      teamsRequest
     ]);
 
     if (!ratingsResponse.ok) {
@@ -5448,16 +6058,24 @@ async function openMyProfile() {
       );
     }
 
+    if (!teamsResponse.ok) {
+      throw new Error(
+        `Profielteams konden niet geladen worden (${teamsResponse.status}).`
+      );
+    }
+
     const [
       ratingsData,
       upcomingData,
       tournamentsData,
-      matchesData
+      matchesData,
+      teamsData
     ] = await Promise.all([
       ratingsResponse.json(),
       upcomingResponse.json(),
       tournamentsResponse.json(),
-      matchesResponse.json()
+      matchesResponse.json(),
+      teamsResponse.json()
     ]);
 
     if (
@@ -5493,6 +6111,15 @@ async function openMyProfile() {
     ) {
       throw new Error(
         "Geen geldige profielwedstrijden ontvangen."
+      );
+    }
+
+    if (
+      !teamsData.success ||
+      !Array.isArray(teamsData.teams)
+    ) {
+      throw new Error(
+        "Geen geldige profielteams ontvangen."
       );
     }
 
@@ -5668,6 +6295,39 @@ async function openMyProfile() {
             Meer wedstrijden laden
           </button>
         </div>
+      `;
+    }
+
+    const teamsPanel =
+      document.getElementById("myProfileTabTeams");
+
+    if (teamsPanel) {
+      const teams = teamsData.teams;
+
+      teamsPanel.innerHTML = `
+        ${
+          teams.length
+            ? teams.map(team => `
+                <div
+                  class="team-player-card"
+                  onclick="openProfileTeam(
+                    '${String(team.id || "").replace(/'/g, "\\'")}',
+                    '${String(team.name || "Team").replace(/'/g, "\\'")}'
+                  )"
+                >
+                  <span>${team.name || "Team"}</span>
+
+                  <span class="team-player-arrow">
+                    ›
+                  </span>
+                </div>
+              `).join("")
+            : `
+                <div class="my-profile-empty">
+                  Geen teams gevonden.
+                </div>
+              `
+        }
       `;
     }
 
@@ -7410,3 +8070,228 @@ document.addEventListener("keydown", event => {
     closeStart2PoolImage();
   }
 });
+
+/* ===========================
+   SPELER ZOEKEN
+=========================== */
+
+function openPlayerSearch() {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("playerSearchScreen")
+        .classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    const input =
+        document.getElementById("playerSearchInput");
+
+    if (input) {
+        setTimeout(() => input.focus(), 100);
+    }
+}
+
+
+function closePlayerSearch() {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document
+        .getElementById("competitionsScreen")
+        .classList.add("active");
+}
+
+
+async function searchPlayers() {
+
+    const input =
+        document.getElementById("playerSearchInput");
+
+    const status =
+        document.getElementById("playerSearchStatus");
+
+    const results =
+        document.getElementById("playerSearchResults");
+
+    const query =
+        input.value.trim();
+
+    if (query.length < 2) {
+
+        status.style.display = "block";
+        status.textContent =
+            "Vul minstens 2 tekens in.";
+
+        results.innerHTML = "";
+
+        return;
+    }
+
+    status.style.display = "block";
+    status.textContent = "Spelers zoeken...";
+
+    results.innerHTML = "";
+
+    try {
+
+        const response = await fetch(
+            `https://balenzo-cuescore.nicolasmintjens.workers.dev/?type=playerSearch&q=${encodeURIComponent(query)}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.error || "Spelers zoeken mislukt."
+            );
+        }
+
+        const players =
+            Array.isArray(data.players)
+                ? data.players
+                : [];
+
+        if (!players.length) {
+
+            status.textContent =
+                "Geen spelers gevonden.";
+
+            return;
+        }
+
+        status.style.display = "none";
+
+        results.innerHTML =
+            players.map(player => {
+
+                const playerId =
+                    String(player.playerId || "");
+
+                const playerName =
+                    String(player.name || "");
+
+                const image =
+                    String(player.image || "");
+
+                const country =
+                    String(player.country || "");
+
+                const verified =
+                    player.badge === "claimed";
+
+                return `
+                    <button
+                        type="button"
+                        class="player-search-result"
+                        onclick="openPlayerSearchResult(
+                            '${playerId}',
+                            ${JSON.stringify(playerName).replace(/"/g, "&quot;")}
+                        )"
+                    >
+
+                        <div class="player-search-result-image-wrap">
+
+                            ${
+                                image
+                                    ? `
+                                        <img
+                                            class="player-search-result-image"
+                                            src="${image}"
+                                            alt=""
+                                        >
+                                    `
+                                    : `
+                                        <div class="player-search-result-placeholder">
+                                            👤
+                                        </div>
+                                    `
+                            }
+
+                        </div>
+
+                        <div class="player-search-result-info">
+
+                            <div class="player-search-result-name">
+                                ${escapePlayerSearchHtml(playerName)}
+
+                                ${
+                                    verified
+                                        ? `<span class="player-search-verified">✓</span>`
+                                        : ""
+                                }
+                            </div>
+
+                            <div class="player-search-result-country">
+                                ${escapePlayerSearchHtml(country)}
+                            </div>
+
+                        </div>
+
+                        <div class="competition-arrow">
+                            ›
+                        </div>
+
+                    </button>
+                `;
+
+            }).join("");
+
+    } catch (error) {
+
+        status.style.display = "block";
+        status.textContent =
+            "Spelers konden niet geladen worden.";
+
+        results.innerHTML = "";
+    }
+}
+
+
+function escapePlayerSearchHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function openPlayerSearchResult(playerId, playerName) {
+
+    openTournamentPlayerDetail(
+        playerId,
+        playerName
+    );
+
+    playerDetailSource = "playerSearch";
+}
+
+
+/* Zoekknop + Enter-toets */
+
+document
+    .getElementById("playerSearchSubmit")
+    ?.addEventListener("click", searchPlayers);
+
+document
+    .getElementById("playerSearchInput")
+    ?.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            searchPlayers();
+        }
+    });
