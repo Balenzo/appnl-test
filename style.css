@@ -6992,6 +6992,10 @@ filter:
     white-space: normal;
 }
 
+#playerDetailScreen #playerDetailStats > .my-profile-ratings {
+    grid-column: 1 / -1;
+}
+
 /* =========================================
    COMPETITIES - SPELER ZOEKEN
 ========================================= */
