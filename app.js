@@ -2695,19 +2695,47 @@ if (String(tournamentId) === "74130139") {
 
     sortedMatches = [...matchesToShow].sort((a, b) => {
 
-        const orderA =
-            getCupRoundOrder(a.roundName);
+    const getTournamentRoundName = match => {
 
-        const orderB =
-            getCupRoundOrder(b.roundName);
+        const roundCode =
+            String(
+                match.roundCode ||
+                match.roundType ||
+                match.stage ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
 
-        if (orderA !== orderB) {
-            return orderA - orderB;
+        if (roundCode === "winnerqualification") {
+            return "Winners qualification";
         }
 
-        return (a.matchno || 0) - (b.matchno || 0);
+        if (roundCode === "loserqualification") {
+            return "Losers qualification";
+        }
 
-    });
+        return match.roundName;
+    };
+
+    const orderA =
+        getProfileTournamentRoundOrder(
+            getTournamentRoundName(a),
+            a.round
+        );
+
+    const orderB =
+        getProfileTournamentRoundOrder(
+            getTournamentRoundName(b),
+            b.round
+        );
+
+    if (orderA !== orderB) {
+        return orderA - orderB;
+    }
+
+    return (a.matchno || 0) - (b.matchno || 0);
+});
 
 } else if (isTournamentDetailSource(detailSource)) {
 
@@ -2735,21 +2763,22 @@ if (String(tournamentId) === "74130139") {
         }
 
         const specialRounds = {
-            "winners qualification": 900,
-            "winner qualification": 900,
-            "losers qualification": 910,
-            "loser qualification": 910,
-            "last 32": 920,
-            "last 16": 930,
-            "round of 16": 930,
-            "quarter final": 940,
-            "quarter finals": 940,
-            "semi final": 950,
-            "semi finals": 950,
-            "third place": 960,
-            "bronze final": 960,
-            "final": 970
-        };
+    "winners qualification": 900,
+    "winner qualification": 900,
+    "losers qualification": 910,
+    "loser qualification": 910,
+    "last 32": 920,
+    "last 16": 930,
+    "last sixteen": 930,
+    "round of 16": 930,
+    "quarter final": 940,
+    "quarter finals": 940,
+    "semi final": 950,
+    "semi finals": 950,
+    "third place": 960,
+    "bronze final": 960,
+    "final": 970
+};
 
         if (specialRounds[name] != null) {
             return specialRounds[name];
@@ -2765,18 +2794,47 @@ if (String(tournamentId) === "74130139") {
 
     sortedMatches = [...matchesToShow].sort((a, b) => {
 
-        const orderA =
-            getProfileTournamentRoundOrder(a.roundName, a.round);
+    const getTournamentRoundName = match => {
 
-        const orderB =
-            getProfileTournamentRoundOrder(b.roundName, b.round);
+        const roundCode =
+            String(
+                match.roundCode ||
+                match.roundType ||
+                match.stage ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
 
-        if (orderA !== orderB) {
-            return orderA - orderB;
+        if (roundCode === "winnerqualification") {
+            return "Winners qualification";
         }
 
-        return (a.matchno || 0) - (b.matchno || 0);
-    });
+        if (roundCode === "loserqualification") {
+            return "Losers qualification";
+        }
+
+        return match.roundName;
+    };
+
+    const orderA =
+        getProfileTournamentRoundOrder(
+            getTournamentRoundName(a),
+            a.round
+        );
+
+    const orderB =
+        getProfileTournamentRoundOrder(
+            getTournamentRoundName(b),
+            b.round
+        );
+
+    if (orderA !== orderB) {
+        return orderA - orderB;
+    }
+
+    return (a.matchno || 0) - (b.matchno || 0);
+});
 
 } else {
 
@@ -2792,8 +2850,30 @@ const matchesByRound = {};
 
 sortedMatches.forEach(match => {
 
-    const roundName =
-        match.roundName || `${tr("competition.round", "Speelronde")} ${match.round || ""}`;
+    let roundName =
+        match.roundName ||
+        `${tr("competition.round", "Speelronde")} ${match.round || ""}`;
+
+    if (isTournamentDetailSource(detailSource)) {
+
+        const roundCode =
+            String(
+                match.roundCode ||
+                match.roundType ||
+                match.stage ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
+
+        if (roundCode === "winnerqualification") {
+            roundName = "Winners qualification";
+        }
+
+        if (roundCode === "loserqualification") {
+            roundName = "Losers qualification";
+        }
+    }
 
     if (!matchesByRound[roundName]) {
         matchesByRound[roundName] = [];
