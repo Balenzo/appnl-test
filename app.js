@@ -653,13 +653,13 @@ function showChangelogIfNeeded() {
 
   alert(
     "🎉 Wat is er nieuw?\n\n" +
-    "• 🔔 Pushmeldingen voor belangrijke acties bij Sparring Matches\n" +
-    "• ❗ Pop-up wanneer er een actie nodig is\n" +
-    "• 📅 Nieuwe overzichten voor geplande en gespeelde clubmatches\n" +
-    "• 🧹 Geannuleerde wedstrijden verwijderd uit Reacties en Historiek\n" +
-    "• ↻ Nieuwe reservatie starten vanuit het reservatiescherm\n" +
-    "• ✅ Duidelijkere bevestiging na registratie"
-  );
+    "• 👤 Profiel zichtbaar in app met alle info\n" +
+    "• 🎱 Tornooien zichtbaar in app\n" +
+    "• 🔔 Volledig nieuwe lay-out\n" +
+    "• 🔎 Spelers zoeken op CueScore en uitgebreide spelersprofielen bekijken\n" +
+    "• 🏆 Tornooien uitgebreid met standen, podium, spelers en wedstrijden\n" +
+    "• ⚡ Diverse verbeteringen in snelheid, navigatie en gebruiksgemak"
+);
 
   localStorage.setItem(
     "appChangelogVersion",
@@ -1626,10 +1626,26 @@ if (cueScoreLink) {
             ? sessionStorage.getItem("countryTournamentUrl")
             : "";
 
-    cueScoreLink.href =
-        countryTournamentUrl ||
-        cueScoreUrls[String(tournamentId)] ||
-        `https://cuescore.com/tournament/${tournamentId}`;
+    let tournamentCueScoreUrl = "";
+
+if (
+    isTournamentDetailSource(detailSource) &&
+    data.name
+) {
+    const tournamentSlug =
+        encodeURIComponent(data.name)
+            .replace(/%20/g, "+")
+            .replace(/%/g, "%25");
+
+    tournamentCueScoreUrl =
+        `https://cuescore.com/tournament/${tournamentSlug}/${tournamentId}`;
+}
+
+cueScoreLink.href =
+    countryTournamentUrl ||
+    cueScoreUrls[String(tournamentId)] ||
+    tournamentCueScoreUrl ||
+    `https://cuescore.com/tournament/${tournamentId}`;
 
 }
 
